@@ -1,0 +1,67 @@
+[{
+  "isPositive": false,
+  "name": "照本宣科"
+}, {
+  "isPositive": false,
+  "name": "枯燥无味"
+}, {
+  "isPositive": true,
+  "name": "引人入胜"
+}, {
+  "isPositive": true,
+  "name": "富有创新"
+}, {
+  "isPositive": true,
+  "name": "氛围轻松"
+}, {
+  "isPositive": false,
+  "name": "水课一门"
+}, {
+  "isPositive": true,
+  "name": "治学严谨"
+}, {
+  "isPositive": true,
+  "name": "耐心"
+}, {
+  "isPositive": true,
+  "name": "幽默"
+}, {
+  "isPositive": false,
+  "name": "僵化刻板"
+}, {
+  "isPositive": true,
+  "name": "低调"
+}, {
+  "isPositive": true,
+  "name": "仁慈"
+}, {
+  "isPositive": true,
+  "name": "认真负责"
+}, {
+  "isPositive": false,
+  "name": "冷酷无情"
+}, {
+  "isPositive": true,
+  "name": "热情"
+}, {
+  "isPositive": true,
+  "name": "和蔼"
+}, {
+  "isPositive": false,
+  "name": "冷淡"
+}, {
+  "isPositive": true,
+  "name": "博学"
+}, {
+  "isPositive": true,
+  "name": "健谈"
+}, {
+  "isPositive": false,
+  "name": "浮夸"
+}, {
+  "isPositive": true,
+  "name": "深邃"
+}, {
+  "isPositive": false,
+  "name": "张扬"
+}]
