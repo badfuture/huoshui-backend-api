@@ -1,5 +1,18 @@
 var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
+var crypto = require('crypto');
+
+
+var sha512Encode = function(password, salt) {
+  password = salt + password;
+  var result = crypto.createHash('sha512').update(password).digest();
+  for (var i = 0; i < 512; i++) {
+    result = crypto.createHash('sha512').update(result).digest();
+  }
+  return result.toString('base64');
+}
+
+
 
 module.exports = {
   secret: sails.config.jwtSettings.secret,
@@ -10,8 +23,12 @@ module.exports = {
    * Hash the password field of the passed user.
    */
   hashPassword: function(user) {
-    if (user.password) {
-      user.password = bcrypt.hashSync(user.password);
+    if (user.password && !user.salt) {
+      salt = crypto.randomBytes(36).toString('base64');
+      user.salt = salt;
+      user.password = sha512Encode(user.password, user.salt);
+    } else if (user.password && user.salt) {
+      user.password = sha512Encode(user.password, user.salt);
     }
   },
 
@@ -20,7 +37,17 @@ module.exports = {
    * @returns boolean indicating a match
    */
   comparePassword: function(password, user) {
-    return bcrypt.compareSync(password, user.password);
+    var realPassword = user.password;
+    var inputPassword = password;
+    var salt = user.salt;
+
+    hashedPassword = sha512Encode(inputPassword, salt);
+
+    sails.log.debug("input: " + inputPassword);
+    sails.log.debug("real: " + realPassword);
+    sails.log.debug("hashed: " + hashedPassword);
+
+    return (realPassword == hashedPassword) ? true : false;
   },
 
   /**

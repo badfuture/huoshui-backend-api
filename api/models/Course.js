@@ -53,7 +53,7 @@ module.exports = {
       through: 'course_tag'
     },
     stats: { // one to one
-      model: 'stat',
+      model: 'courseStat',
       defaultsTo: null
     },
     reviews: { // one to many

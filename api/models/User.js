@@ -10,20 +10,23 @@ module.exports = {
   attributes: {
     school: {
       model: 'school',
-      required: true
+      required: false
     },
     username: {
       type: 'string',
-      required: true,
+      required: false,
       unique: true
     },
     password: {
       type: 'string',
-      required: true
+      required: false
+    },
+    salt: {
+      type: 'string'
     },
     email: {
       type: 'email',
-      required: true,
+      required: false,
       unique: true
     },
     avatar: {
