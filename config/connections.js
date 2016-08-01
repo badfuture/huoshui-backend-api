@@ -56,7 +56,7 @@ module.exports.connections = {
    * Run: npm install sails-mongo                                             *
    *                                                                          *
    ***************************************************************************/
-  theMongodbServer: {
+  localMongodbServer: {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
@@ -75,8 +75,7 @@ module.exports.connections = {
     password: '921021', //optional
     database: 'huoshui' //optional
       //database: 'huoshui_temp' //optional
-
-  }
+  },
   /***************************************************************************
    *                                                                          *
    * PostgreSQL is another officially supported relational database.          *
@@ -86,13 +85,15 @@ module.exports.connections = {
    *                                                                          *
    *                                                                          *
    ***************************************************************************/
-  // somePostgresqlServer: {
-  //   adapter: 'sails-postgresql',
-  //   host: 'YOUR_POSTGRES_SERVER_HOSTNAME_OR_IP_ADDRESS',
-  //   user: 'YOUR_POSTGRES_USER', // optional
-  //   password: 'YOUR_POSTGRES_PASSWORD', // optional
-  //   database: 'YOUR_POSTGRES_DB' //optional
-  // }
+
+  localPostgresqlServer: {
+    adapter: 'sails-postgresql',
+    host: 'localhost',
+    port: 5432,
+    user: 'huoshui',
+    password: 'huoshui',
+    database: 'huoshui'
+  }
 
 
   /***************************************************************************
