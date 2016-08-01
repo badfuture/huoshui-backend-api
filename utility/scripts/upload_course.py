@@ -16,7 +16,7 @@ url_prof = 'http://localhost:1337/prof'
 json_dir = '../jsons'
 school_json = os.path.join(json_dir, 'school.json')
 tag_json =os.path.join(json_dir, 'tag.json')
-course_json =os.path.join(json_dir, 'course.json')
+course_json =os.path.join(json_dir, 'Courses.json')
 course_data = json.loads(open(course_json).read())['results']
 
 
