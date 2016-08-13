@@ -3,9 +3,11 @@ import json
 import os
 from pprint import pprint
 
-url_school = 'http://localhost:1337/school'
-url_dept = 'http://localhost:1337/dept'
-url_course = 'http://localhost:1337/course'
+url = 'http://114.55.26.28:1337/'
+
+url_school = url + 'school'
+url_dept = url + 'dept'
+url_course = url + 'course'
 
 
 json_dir = '../jsons'

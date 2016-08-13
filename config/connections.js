@@ -93,13 +93,14 @@ module.exports.connections = {
     user: 'huoshui',
     password: 'huoshui',
     database: 'huoshui'
+  },
+
+  remotePostgresqlServer: {
+    adapter: 'sails-postgresql',
+    host: '114.55.26.28',
+    port: 5432,
+    user: 'huoshui',
+    password: 'huoshui',
+    database: 'huoshui'
   }
-
-
-  /***************************************************************************
-   *                                                                          *
-   * More adapters: https://github.com/balderdashy/sails                      *
-   *                                                                          *
-   ***************************************************************************/
-
 };

@@ -6,11 +6,16 @@ import json
 import os
 from pprint import pprint
 
-url_school = 'http://localhost:1337/school'
-url_dept = 'http://localhost:1337/dept'
-url_course = 'http://localhost:1337/course'
-url_position = 'http://localhost:1337/position'
-url_prof = 'http://localhost:1337/prof'
+url = 'http://114.55.26.28:1337/'
+
+url_school = url + 'school'
+url_dept = url + 'dept'
+url_course = url + 'course'
+url_position = url + 'course'
+url_prof = url + 'prof'
+url_user = url + 'signup'
+url_user = url + 'review'
+
 
 
 json_dir = '../jsons'

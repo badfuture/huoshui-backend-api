@@ -98,7 +98,7 @@ module.exports.blueprints = {
   ***************************************************************************/
 
   // prefix: '',
-
+  prefix: '/api',
   /***************************************************************************
    *                                                                          *
    * An optional mount path for all REST blueprint routes on a controller.    *
