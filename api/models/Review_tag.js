@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'review_tag',
   attributes: {
     review: {
       model: 'review',

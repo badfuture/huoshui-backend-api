@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'courseStat',
   attributes: {
     school: { // many to one
       model: 'school',

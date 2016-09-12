@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+  tableName: 'course',
   attributes: {
     school: { // many to one
       model: 'school',
@@ -51,9 +52,9 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     },
-    electiveness: { //many to many
-      collection: 'electiveness',
-      via: 'courses',
+    electiveness: { //many to one
+      model: 'electiveness',
+      defaultsTo: null
     },
     tags: { // many to many through course_tag join table
       collection: 'tag',

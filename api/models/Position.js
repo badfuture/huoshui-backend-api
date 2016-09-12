@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'position',
   attributes: {
     tableName: 'position',
     name: {
@@ -19,6 +19,6 @@ module.exports = {
       via: 'position'
     }
 
-    
+
   }
 };

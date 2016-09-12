@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'comment',
   attributes: {
     thread: {
       model: 'review',

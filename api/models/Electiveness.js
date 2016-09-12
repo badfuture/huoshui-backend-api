@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  table: "electiveness",
   attributes: {
     name: {
       type: 'string',
