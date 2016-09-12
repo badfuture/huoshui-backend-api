@@ -5,18 +5,15 @@ import requests
 import json
 import os
 from pprint import pprint
+import global_config as cfg
 
-url = 'http://114.55.26.28:1337/'
-
-url_school = url + 'school'
-url_dept = url + 'dept'
-url_course = url + 'course'
-url_position = url + 'course'
-url_prof = url + 'prof'
-url_user = url + 'signup'
-url_user = url + 'review'
-
-
+url_school = cfg.url_school
+url_dept = cfg.url_dept
+url_course = cfg.url_course
+url_position = cfg.url_position
+url_prof = cfg.url_prof
+url_user = cfg.url_user
+url_review = cfg.url_review
 
 json_dir = '../jsons'
 school_json = os.path.join(json_dir, 'school.json')

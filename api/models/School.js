@@ -6,12 +6,12 @@
  */
 
 module.exports = {
-
+  tableName: 'school',
   attributes: {
-    name: { //good
+    name: {
       type: 'string',
-      required: true,
-      unique: true
+      unique: true,
+      required: true
     },
     dept: { //one to many
       collection: 'dept',
@@ -19,11 +19,7 @@ module.exports = {
     },
     campus: {
       type: 'string',
-      defaultsTo: ''
-    },
-    users: {
-      collection: 'user',
-      via: 'school'
+      defaultsTo: null
     }
   }
 };

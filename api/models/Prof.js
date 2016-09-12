@@ -6,10 +6,14 @@
  */
 
 module.exports = {
-
+  tableName: 'prof',
   attributes: {
     school: { // many to one
       model: 'school',
+      required: true
+    },
+    profID: { //only unique within school
+      type: 'string',
       required: true
     },
     name: {
@@ -62,6 +66,10 @@ module.exports = {
       defaultsTo: null
     },
     group: {
+      type: 'string',
+      defaultsTo: null
+    },
+    education: {
       type: 'string',
       defaultsTo: null
     },

@@ -8,15 +8,17 @@
 module.exports = {
 
   attributes: {
+    tableName: 'position',
     name: {
       type: 'string',
+      unique: true,
       required: true
     },
-    profs: {
+    profs: { // one to many
       collection: 'prof',
       via: 'position'
     }
 
-
+    
   }
 };

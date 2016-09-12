@@ -23,13 +23,12 @@ module.exports = {
    * Hash the password field of the passed user.
    */
   hashPassword: function(user) {
-    if (user.origin == 'leancloud') {
-      //do nothing
-    } else if (user.password && !user.salt) {
+    if (user.password && !user.salt) {
       salt = crypto.randomBytes(36).toString('base64');
       user.salt = salt;
       user.password = sha512Encode(user.password, user.salt);
-    } else if (user.password && user.salt) {
+    } else if (user.origin == 'leancloud' &&
+      user.password && user.salt) { //leancloud user migration
       user.password = sha512Encode(user.password, user.salt);
     }
   },

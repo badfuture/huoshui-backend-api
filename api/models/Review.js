@@ -6,17 +6,17 @@
  */
 
 module.exports = {
-
+  tableName: 'review',
   attributes: {
     school: { // many to one
       model: 'school',
       required: true
     },
-    course: {
+    course: { // many to one
       model: 'course',
       required: true
     },
-    author: {
+    author: { // many to one
       model: 'user',
       required: true
     },
@@ -33,7 +33,7 @@ module.exports = {
       type: 'integer',
       min: 0
     },
-    comment: {
+    comment: { //one to many
       collection: 'comment',
       via: 'thread'
     },
@@ -61,19 +61,19 @@ module.exports = {
     //optional stats
     checkAttendance: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
     lotsHomework: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
     birdy: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
@@ -85,25 +85,25 @@ module.exports = {
     },
     examprep: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
     openbook: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
     oldquestion: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },
     easymark: {
       type: 'integer',
-      defaultsTo: 0,
+      defaultsTo: null,
       min: 0,
       max: 5
     },

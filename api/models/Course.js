@@ -27,9 +27,17 @@ module.exports = {
       model: 'dept',
       required: true
     },
-    offerings: { // many to many
-      collection: 'offering',
-      via: 'courses'
+    offeringYear: {
+      type: 'int',
+      max: 2020,
+      min: 2000,
+      required: true
+    },
+    offeringSeason: {
+      type: 'int',
+      max: 4,
+      min: 1,
+      required: true
     },
     homepage: { //good
       type: 'string',
@@ -59,10 +67,6 @@ module.exports = {
     reviews: { // one to many
       collection: 'review',
       via: 'course'
-    },
-    metrics: { //many to many
-      collection: 'metric',
-      via: 'courses'
     },
     followers: { //many to many
       collection: 'user',

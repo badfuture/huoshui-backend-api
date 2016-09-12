@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'dept',
   attributes: {
     school: { // many to one
       model: 'school',
@@ -14,10 +14,12 @@ module.exports = {
     },
     shortname: {
       type: 'string',
+      unique: true,
       required: true
     },
     longname: {
       type: 'string',
+      unique: true,
       required: true
     },
     courses: { // one to many

@@ -11,7 +11,30 @@
 
 module.exports.bootstrap = function(cb) {
 
+  User.count().exec(function(err, numUsers){
+    if (err) {
+      return cb(err);
+    }
+
+    console.log("numUsers", numUsers);
+    return cb();
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+  //cb();
 };

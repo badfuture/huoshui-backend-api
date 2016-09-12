@@ -20,6 +20,9 @@ module.exports = {
    models: {
      connection: 'remoteMongodbServer',
      schema: true,
+     autoPK: true,
+     autoCreatedAt: true,
+     autoUpdatedAt: true,
      migrate: 'drop'
    },
 

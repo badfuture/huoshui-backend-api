@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-
+  tableName: 'tag',
   attributes: {
     name: {
       type: "string",
@@ -15,6 +15,11 @@ module.exports = {
     isPositive: {
       type: "boolean",
       required: null
+    },
+    type: {
+      type: "string",
+      enum: ["course_review","article"],
+      required: true
     },
     courses: {
       collection: "course",

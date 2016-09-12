@@ -14,15 +14,16 @@ module.exports = {
     },
     username: {
       type: 'string',
-      required: true,
-      unique: true
+      unique: true,
+      required: true
     },
     password: {
       type: 'string',
       required: true
     },
     salt: {
-      type: 'string'
+      type: 'string',
+      defaultsTo: null
     },
     email: {
       type: 'email',
@@ -31,31 +32,31 @@ module.exports = {
     },
     avatar: {
       type: 'string',
-      defaultsTo: ''
+      defaultsTo: null
     },
-    year: {
+    firstYear: {
       type: 'integer',
-      defaultsTo: 2015,
+      defaultsTo: 2016,
       min: 2000,
       max: 2020
     },
-    myReviews: {
+    myReviews: { // one to many
       collection: 'review',
       via: 'author'
     },
-    likedReviews: {
+    likedReviews: { // one to many
       collection: 'review',
       via: 'author'
     },
-    dislikedReviews: {
+    dislikedReviews: { // one to many
       collection: 'review',
       via: 'author'
     },
-    followedCourses: {
+    followedCourses: { // one to many
       collection: 'course',
       via: 'followers'
     },
-    dept: {
+    dept: { // many to one
       model: 'dept',
       defaultsTo: null
     },
