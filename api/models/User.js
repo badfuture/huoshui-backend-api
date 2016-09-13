@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
     school: {
       model: 'school',
-      required: true
+      //required: true
     },
     username: {
       type: 'string',

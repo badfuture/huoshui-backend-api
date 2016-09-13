@@ -59,12 +59,26 @@ module.exports = {
     return jwt.sign({
         user: user.toJSON()
       },
-      sails.config.jwtSettings.secret, {
+      sails.config.jwtSettings.secret,
+      {
         algorithm: sails.config.jwtSettings.algorithm,
         expiresIn: sails.config.jwtSettings.expiresInMinutes,
         issuer: sails.config.jwtSettings.issuer,
         audience: sails.config.jwtSettings.audience
       }
     );
-  }
+  },
+
+  /**
+   * verify the token
+   */
+   verifyToken: function(token, callback) {
+     return jwt.verify(
+       token, // The token to be verified
+       sails.config.jwtSettings.secret, // Same token used to sign
+       {}, // No Option
+       callback //Pass errors or decoded token to callback
+     );
+   }
+
 };

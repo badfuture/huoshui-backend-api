@@ -50,6 +50,7 @@ module.exports.policies = {
   // }
   //'*': ['isAuthenticated'],
 
+  '*': ['isAuthorized'], // Everything resctricted by default
   AuthController: {
     '*': true
   }
