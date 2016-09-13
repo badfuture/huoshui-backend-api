@@ -6,7 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 
-var EXPIRES_IN_MINUTES = 60 * 24;
+var EXPIRES_IN_MINUTES = 60 * 24 * 30; // one month
 var SECRET = process.env.tokenSecret || "zerocks";
 var ALGORITHM = "HS256";
 var ISSUER = "huoshui.org";

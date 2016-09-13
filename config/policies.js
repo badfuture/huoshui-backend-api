@@ -48,9 +48,10 @@ module.exports.policies = {
   // before letting any users feed our rabbits
   // feed : ['isNiceToAnimals', 'hasRabbitFood']
   // }
-  //'*': ['isAuthenticated'],
 
-  '*': ['isAuthorized'], // Everything resctricted by default
+
+  //remember to enable this for jwt
+  //'*': ['isAuthorized'], // Everything resctricted by default
   AuthController: {
     '*': true
   }

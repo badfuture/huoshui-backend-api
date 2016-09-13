@@ -1,6 +1,7 @@
 
 
-
+//set to production model
+export NODE_ENV=production
 
 /*****************************************
 sails console

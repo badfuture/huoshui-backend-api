@@ -9,21 +9,34 @@
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.bootstrap.html
  */
 
+var fs = require("fs");
+
 module.exports.bootstrap = function(cb) {
 
-  User.count().exec(function(err, numUsers){
-    if (err) {
-      return cb(err);
-    }
-
-    console.log("numUsers", numUsers);
+  //skip seeding if production mode
+  if (sails.config.environment === 'production') {
     return cb();
+  }
 
+  //seed data if dev mode
+  console.log("Test mode: seeding db ...");
+
+  path_common = sails.config.appPath + "/migration/data_common/";
+
+  var positionData = JSON.parse(fs.readFileSync(path_common + "position.json"));
+  Position.create(positionData).exec(function(err, results){
+    console.log("seeded: position");
   });
 
+  var schoolData = JSON.parse(fs.readFileSync(path_common + "school.json"));
+  School.create(schoolData).exec(function(err, results){
+    console.log("seeded: school");
+  });
 
-
-
+  var tagData = JSON.parse(fs.readFileSync(path_common + "tag.json"));
+  Tag.create(tagData).exec(function(err, results){
+    console.log("seeded: tag");
+  });
 
 
 
@@ -36,5 +49,5 @@ module.exports.bootstrap = function(cb) {
 
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  //cb();
+  cb();
 };
