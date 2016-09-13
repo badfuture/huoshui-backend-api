@@ -24,12 +24,11 @@ module.exports = {
     courses: {
       collection: "course",
       via: "tags",
-      through: "course_tag"
+      through: "meta_course_tag"
     },
     reviews: {
       collection: "review",
-      via: "tags",
-      through: "review_tag"
+      via: "tags"
     }
   }
 };

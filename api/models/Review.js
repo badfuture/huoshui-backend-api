@@ -111,8 +111,7 @@ module.exports = {
     //tags
     tags: { // many to many
       collection: 'tag',
-      via: 'reviews',
-      through: 'review_tag'
+      via: 'reviews'
     }
 
   }

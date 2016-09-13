@@ -59,7 +59,7 @@ module.exports = {
     tags: { // many to many through course_tag join table
       collection: 'tag',
       via: 'courses',
-      through: 'course_tag'
+      through: 'meta_course_tag'
     },
     stats: { // one to one
       model: 'courseStat',
