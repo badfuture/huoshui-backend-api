@@ -14,12 +14,11 @@ module.exports = {
     },
     isPositive: {
       type: "boolean",
-      required: null
+      required: true
     },
     type: {
       type: "string",
       enum: ["course_review","article"],
-      required: true
     },
     courses: {
       collection: "course",

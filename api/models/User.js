@@ -7,10 +7,14 @@
 
 module.exports = {
 
-  attributes: {
+  attributes: { //many to one
     school: {
       model: 'school',
-      //required: true
+      defaultsTo: null
+    },
+    dept: { // many to one
+      model: 'dept',
+      defaultsTo: null
     },
     username: {
       type: 'string',
@@ -55,10 +59,6 @@ module.exports = {
     followedCourses: { // one to many
       collection: 'course',
       via: 'followers'
-    },
-    dept: { // many to one
-      model: 'dept',
-      defaultsTo: null
     },
     toJSON: function() {
       var obj = this.toObject();

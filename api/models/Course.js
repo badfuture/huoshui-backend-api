@@ -12,11 +12,7 @@ module.exports = {
       model: 'school',
       required: true
     },
-    code: { //good <- change to required when ready
-      type: 'string',
-      defaultsTo: ''
-    },
-    name: { //good
+    name: {
       type: 'string',
       required: true
     },

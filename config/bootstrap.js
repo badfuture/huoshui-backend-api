@@ -10,6 +10,7 @@
  */
 
 var fs = require("fs");
+var async = require("async");
 
 module.exports.bootstrap = function(cb) {
 
@@ -19,35 +20,158 @@ module.exports.bootstrap = function(cb) {
   }
 
   //seed data if dev mode
-  console.log("Test mode: seeding db ...");
-
   path_common = sails.config.appPath + "/migration/data_common/";
+  path_leancloud = sails.config.appPath + "/migration/data_leancloud/";
 
-  var positionData = JSON.parse(fs.readFileSync(path_common + "position.json"));
-  Position.create(positionData).exec(function(err, results){
-    console.log("seeded: position");
+  file_position = "position.json";
+  file_school = "school.json";
+  file_tag = "tag.json";
+
+  file_user = "_User.json";
+  file_course = "Courses.json";
+  file_review = "Reviews.json";
+
+  //common data
+  var positionData = JSON.parse(fs.readFileSync(path_common + file_position));
+  var schoolData = JSON.parse(fs.readFileSync(path_common + file_school));
+  var deptData = schoolData[0].depts;
+  var tagData = JSON.parse(fs.readFileSync(path_common + file_tag));
+
+  //leancloud Data
+  var userData = JSON.parse(fs.readFileSync(path_leancloud + file_user));
+
+
+
+  var seedPositions = function(callback) {
+    sails.log.debug("seeding positions");
+    Position.create(positionData).then(function(results){
+      sails.log.info("seeded: position");
+      callback(null); return null;
+    }).catch(function(err){
+      sails.log.error("seeding failure: position");
+      callback(null); return null;
+    });
+  };
+
+  var seedSchools = function(callback) {
+    sails.log.debug("seeding schools");
+    School.create(schoolData).then(function(results){
+      sails.log.info("seeded: school");
+      callback(null); return null;
+    }).catch(function(err){
+      sails.log.error("seeding failure: school");
+      callback(null); return null;
+    });
+  };
+
+  var seedDepts = function(callback) {
+    sails.log.debug("seeding dept");
+    async.eachSeries(deptData, function(entry, callback){
+      var dept = {};
+      var prepDept = function(callback) {
+        dept.shortname = entry.shortname;
+        dept.longname = entry.longname;
+        callback(null);
+      };
+      var insertSchool = function(callback){
+        School.findOne({"name": "西南交通大学"}).exec(function(err, school){
+          dept.school = school.id;
+          callback(null);
+        });
+      };
+      var saveDept = function(callback){
+        Dept.create(dept).exec(function(err, results){
+          callback(null);
+        });
+      };
+      async.waterfall([prepDept, insertSchool, saveDept]);
+      callback(null);
+    }, function (err) {
+      sails.log.info("seeded: depts");
+      setTimeout(function(){
+        callback(null);
+      }, 5000);
+    });
+  };
+
+
+
+  var seedTags = function (callback) {
+    sails.log.debug("seeding tags");
+    Tag.create(tagData).then(function(results){
+      sails.log.info("seeded: tag");
+      callback(null); return null;
+    }).catch(function(err){
+      sails.log.error("seeding failure: tag");
+      callback(null); return null;
+    });
+  };
+
+
+  var seedUsers = function(callback) {
+    sails.log.debug("seeding users");
+    async.eachSeries(userData.results, function(entry, callback){
+      var user = {};
+      var prepUser = function(callback) {
+        user.username = entry.username;
+        user.password = entry.password;
+        user.salt = entry.salt;
+        user.email = entry.email;
+        user.firstYear = entry.year;
+        callback(null);
+      };
+      var insertSchool = function(callback){
+        School.findOne({"name": "西南交通大学"}).exec(function(err, school){
+          user.school = school.id;
+          callback(null);
+        });
+      };
+      var insertDept = function(callback) {
+        Dept.findOne({"shortname": entry.dept}).exec(function(err, results){
+          user.dept = results.id;
+          callback(null);
+        });
+      };
+      var saveUser = function(callback) {
+        User.create(user).exec(function(err, results){
+          callback(null);
+        });
+      };
+      async.waterfall([prepUser, insertSchool, insertDept, saveUser]);
+      callback(null);
+    }, function (err) {
+      sails.log.info("seeded: user");
+      callback(null);
+    });
+  };
+
+
+
+/*
+
+  var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
+  var courseDataParsed = [];
+  courseData.results.forEach(function(entry, index, arr) {
+    var course = {};
+
   });
-
-  var schoolData = JSON.parse(fs.readFileSync(path_common + "school.json"));
-  School.create(schoolData).exec(function(err, results){
-    console.log("seeded: school");
+  Course.create(courseDataParsed).exec(function(err, results){
+    console.log("seeded: course");
   });
+*/
+  var seedDB = function() {
+    async.series([
+      seedSchools,
+      seedDepts,
+      seedPositions,
+      seedTags,
+      seedUsers,
+    ], function(err) {
+      sails.log.info("seeding compeleted");
+    });
+  }
+  seedDB();
 
-  var tagData = JSON.parse(fs.readFileSync(path_common + "tag.json"));
-  Tag.create(tagData).exec(function(err, results){
-    console.log("seeded: tag");
-  });
-
-
-
-
-
-
-
-
-
-
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+  // must call this, otherwise won't return
   cb();
 };
