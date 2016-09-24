@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  table: "electiveness",
+  table: "elective",
   attributes: {
     name: {
       type: 'string',
@@ -14,7 +14,7 @@ module.exports = {
     },
     courses: {
       collection: 'course',
-      via: 'electiveness'
+      via: 'elective'
     }
   }
 };

@@ -30,7 +30,7 @@ module.exports = {
       defaultsTo: null
     },
     email: {
-      type: 'email',
+      type: 'string',
       required: true,
       unique: true
     },

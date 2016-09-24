@@ -12,9 +12,9 @@ module.exports = {
       model: 'school',
       required: true
     },
-    profID: { //only unique within school
+    code: { //only unique within school
       type: 'string',
-      required: true
+      defaultsTo: null
     },
     name: {
       type: 'string',
@@ -27,8 +27,8 @@ module.exports = {
     },
     birth: {
       type: 'integer',
-      min: 1900,
-      max: 2050,
+      min: 1930,
+      max: 2010,
       defaultsTo: null
     },
     exp: {
@@ -69,6 +69,10 @@ module.exports = {
       type: 'string',
       defaultsTo: null
     },
+    intro: {
+      type: 'string',
+      defaultsTo: null
+    },
     education: {
       type: 'string',
       defaultsTo: null
@@ -78,6 +82,10 @@ module.exports = {
       defaultsTo: null
     },
     achievement: {
+      type: 'string',
+      defaultsTo: null
+    },
+    legacyCourses: { // one to many
       type: 'string',
       defaultsTo: null
     },

@@ -17,9 +17,9 @@ module.exports.models = {
    * connections (see `config/connections.js`)                                *
    *                                                                          *
    ***************************************************************************/
-  // connection: 'localDiskDb',
-  //connection: 'theMongodbServer',
-  connection: 'remoteMongodbServer',
+  //connection: 'localDiskDb',
+  connection: 'theMongodbServer',
+  //connection: 'remoteMongodbServer',
   //connection: 'localPostgresqlServer',
   //connection: 'remotePostgresqlServer',
   schema: true,

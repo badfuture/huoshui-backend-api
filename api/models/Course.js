@@ -48,8 +48,8 @@ module.exports = {
       type: 'float',
       defaultsTo: 0
     },
-    electiveness: { //many to one
-      model: 'electiveness',
+    elective: { //many to one
+      model: 'elective',
       defaultsTo: null
     },
     tags: { // many to many through course_tag join table
