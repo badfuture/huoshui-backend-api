@@ -12,7 +12,7 @@ module.exports = {
       model: 'school',
       required: true
     },
-    code: { //only unique within school
+    code: {
       type: 'string',
       defaultsTo: null
     },

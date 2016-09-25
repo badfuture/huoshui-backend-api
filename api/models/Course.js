@@ -12,41 +12,32 @@ module.exports = {
       model: 'school',
       required: true
     },
+    dept: { // many to one
+      model: 'dept',
+      required: false,
+      defaultsTo: null
+    },
     name: {
       type: 'string',
       required: true
     },
     prof: { // many to one
       model: 'prof',
-      required: true
-    },
-    dept: { // many to one
-      model: 'dept',
-      required: true
-    },
-    offeringYear: {
-      type: 'int',
-      max: 2020,
-      min: 2000,
-      required: true
-    },
-    offeringSeason: {
-      type: 'int',
-      max: 4,
-      min: 1,
-      required: true
+      required: false,
+      defaultsTo: null
+      //required: true
     },
     homepage: { //good
       type: 'string',
-      defaultsTo: ''
+      defaultsTo: null
     },
     textbook: { //good
       type: 'string',
-      defaultsTo: ''
+      defaultsTo: null
     },
     credit: {
       type: 'float',
-      defaultsTo: 0
+      defaultsTo: null
     },
     elective: { //many to one
       model: 'elective',

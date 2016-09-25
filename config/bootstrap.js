@@ -13,6 +13,7 @@ var fs = require("fs");
 var async = require("async");
 var csv_parse = require('csv-parse/lib/sync');
 
+var timeout = 3000; //wait 3s for db population
 
 module.exports.bootstrap = function(cb) {
 
@@ -44,7 +45,6 @@ module.exports.bootstrap = function(cb) {
   var profData = fs.readFileSync(path_common + file_prof);
   var profData = csv_parse(profData, {columns: true});
   profData.splice(0, 2);
-  //profData = [profData[2]];
 
 
   //leancloud Data
@@ -155,7 +155,9 @@ module.exports.bootstrap = function(cb) {
     }, function (err) {
       if (err) sails.log.error("error", err);
       sails.log.info("seeded: user");
-      next();
+      setTimeout(function(){
+        next();
+      }, timeout);
     });
   };
 
@@ -219,17 +221,6 @@ module.exports.bootstrap = function(cb) {
           next();
         });
       };
-      var insertPosition = function(next) {
-        Position.findOne({"name": entry.position}).exec(function(err, results){
-          if (err) sails.log.error("error", err);
-          if (results) {
-            prof.position = results.id;
-          } else {
-            prof.position = null;
-          }
-          next();
-        });
-      };
       var saveProf = function(next) {
         Prof.create(prof).exec(function(err, results){
           if (err) {
@@ -238,36 +229,192 @@ module.exports.bootstrap = function(cb) {
           next();
         });
       };
-      //async.waterfall([prepProf,saveProf]);
-      async.waterfall([prepProf, insertSchool, insertDept, insertPosition, saveProf]);
+      async.waterfall([prepProf, insertSchool, insertDept, saveProf]);
       next();
     }, function (err) {
       if (err) sails.log.error("error", err);
       sails.log.info("seeded: prof");
+      setTimeout(function(){
+        next();
+      }, timeout);
+    });
+  };
+
+  //must constant: name,
+  //must relation: school,dept,prof,
+  //optional: rate1,rate2,rate3,rateOverall,reviewGoodCount,attendanceCount,attendanceOverall,reviewCount,homeworkCount,homeworkOverall,examCount,birdOverall,birdCount,examOverall
+  //not sure: tags, stats, reviews, followers
+  var seedCourses = function(next) {
+    sails.log.debug("seeding course");
+    async.eachSeries(courseData.results, function(entry, next){
+    //async.eachSeries([courseData.results[0]], function(entry, next){
+      var course = {};
+      var prepCourse = function(next) {
+        course.name = entry.name;
+        next();
+      };
+      var insertSchool = function(next){
+        School.findOne({"name": entry.school}).exec(function(err, school){
+          if (err) sails.log.error("error", err);
+          course.school = school.id;
+          next();
+        });
+      };
+      var insertDept = function(next) {
+        Dept.findOne({"shortname": entry.dept}).exec(function(err, results){
+          if (err) sails.log.error("error", err);
+          if (results) {
+            course.dept = results.id;
+          } else {
+            course.dept = null;
+          }
+          next();
+        });
+      };
+      var insertProf = function(next) {
+        Prof.findOne({"name": entry.prof}).exec(function(err, results){
+          if (err) sails.log.error("error", err);
+          if (results) {
+            course.prof = results.id;
+            next();
+          } else {
+            //create prof if not found
+            Prof.create({name: entry.prof, school: course.school}).then(function(results){
+              return results;
+            }).then(function(prof){
+              course.prof = prof.id;
+              next();
+              return null;
+            })
+            .catch(function(err){
+              next();
+              return null;
+            });
+          }
+        });
+      };
+      var saveCourse = function(next) {
+        Course.create(course).exec(function(err, results){
+          if (err) sails.log.error("error", err);
+          next();
+        });
+      };
+      async.waterfall([prepCourse, insertSchool, insertDept, insertProf, saveCourse]);
       next();
+    }, function (err) {
+      if (err) sails.log.error("error", err);
+      sails.log.info("seeded: course");
+      setTimeout(function(){
+        next();
+      }, timeout);
     });
   };
 
 
+
+//review
 /*
-  prof
-  course
+{
+ "tags": [
+   {
+     "id": "4",
+     "positive": true,
+     "value": "氛围轻松",
+     "checked": true
+   },
+   {
+     "id": "8",
+     "positive": true,
+     "value": "幽默",
+     "checked": true
+   },
+   {
+     "id": "14",
+     "positive": true,
+     "value": "热情",
+     "checked": true
+   }
+ ],
+ "attendance": {
+   "id": "4",
+   "name": "多",
+   "value": 4
+ },
+ "bird": {
+   "id": "2",
+   "name": "正常水平",
+   "value": 2
+ },
+ "authorId": {
+   "__type": "Pointer",
+   "className": "_User",
+   "objectId": "5699ca3f60b21c048738cc47"
+ },
+ "downVote": 0,
+ "ACL": {
+   "*": {
+     "read": true,
+     "write": true
+   }
+ },
+ "upVote": 0,
+ "profName": "甘霖",
+ "exam": {
+   "touched": true,
+   "examprep": {
+     "id": "0",
+     "name": "划重点",
+     "checked": false,
+     "touched": false
+   },
+   "openbook": {
+     "id": "1",
+     "name": "开卷",
+     "checked": true,
+     "touched": true
+   },
+   "oldquestion": {
+     "id": "2",
+     "name": "原题",
+     "checked": false,
+     "touched": false
+   },
+   "easiness": {
+     "id": "3",
+     "name": "给分",
+     "checked": false,
+     "touched": true
+   }
+ },
+ "comment": "既能学到东西，又能提起兴趣学，这门课我很少翘也很满意，教民族乐少一点",
+ "homework": {
+   "id": "1",
+   "name": "无",
+   "value": 1
+ },
+ "courseName": "音乐与人生",
+ "courseId": {
+   "__type": "Pointer",
+   "className": "Courses",
+   "objectId": "561da599e4b0d98abf28123e"
+ },
+ "rating": {
+   "rate1": 5,
+   "rate2": 5,
+   "rate3": 5,
+   "overall": 15
+ },
+ "objectId": "5699cbc160b2b80a9ea62dce",
+ "createdAt": "2016-01-16T04:49:05.753Z",
+ "updatedAt": "2016-09-25T13:48:03.624Z"
+}
+
+*/
+/*
   courseStat
   review
 */
 
-/*
-
-  var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
-  var courseDataParsed = [];
-  courseData.results.forEach(function(entry, index, arr) {
-    var course = {};
-
-  });
-  Course.create(courseDataParsed).exec(function(err, results){
-    console.log("seeded: course");
-  });
-*/
   var seedDB = function() {
     async.series([
       seedSchools,
@@ -277,6 +424,7 @@ module.exports.bootstrap = function(cb) {
       seedTags,
       seedUsers,
       seedProfs,
+      seedCourses,
     ], function(err) {
       if (err) sails.log.error("error", err);
       sails.log.debug("seeding compeleted");

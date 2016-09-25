@@ -1,0 +1,127 @@
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug will use /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/en.json
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug read /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/en.json for locale: en
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug will use /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/es.json
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug read /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/es.json for locale: es
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug will use /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/fr.json
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug read /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/fr.json for locale: fr
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug will use /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/de.json
+Sun, 25 Sep 2016 13:38:52 GMT i18n:debug read /Users/ze/Desktop/huoshui/huoshui-backend-sailsjs/config/locales/de.json for locale: de
+[34mdebug: [39mseeding schools
+[34mdebug: [39m-------------------------------------------------------
+[34mdebug: [39m:: Sun Sep 25 2016 09:38:59 GMT-0400 (EDT)
+[34mdebug: [39mEnvironment : development
+[34mdebug: [39mPort        : 1337
+[34mdebug: [39m-------------------------------------------------------
+[34mdebug: [39mseeding dept
+[34mdebug: [39mseeding positions
+[34mdebug: [39mseeding elective
+[34mdebug: [39mseeding tags
+[34mdebug: [39mseeding users
+[34mdebug: [39mseeding profs
+[34mdebug: [39mseeding course
+[31merror: [39merror 王一帆
+[31merror: [39merror 黄德明
+[31merror: [39merror 王琳
+[31merror: [39merror 赵世春
+[31merror: [39merror 钱永久
+[31merror: [39merror 张异
+[31merror: [39merror 赵彦辉
+[31merror: [39merror 高凡 
+[31merror: [39merror 王国良
+[31merror: [39merror 李婧
+[31merror: [39merror 孙彦文
+[31merror: [39merror 赵梨利
+[31merror: [39merror 孙洪伟
+[31merror: [39merror 谢彬
+[31merror: [39merror 齐文浦
+[31merror: [39merror Joe
+[34mdebug: [39mseeding compeleted
+[31merror: [39merror 赵梨利
+[31merror: [39merror 纺松
+[31merror: [39merror 杨婧
+[31merror: [39merror 姚亚琼
+[31merror: [39merror 王健
+[31merror: [39merror 牛韶斐
+[31merror: [39merror 肖芃
+[31merror: [39merror 李慕尧
+[31merror: [39merror Janie
+[31merror: [39merror 景徐
+[31merror: [39merror 张程崧
+[31merror: [39merror Janie
+[31merror: [39merror 龙艳秋
+[31merror: [39merror 李若珺
+[31merror: [39merror 柳栋均
+[31merror: [39merror Janie
+[31merror: [39merror 沈昌祥
+[31merror: [39merror 门满洲
+[31merror: [39merror 王秩文
+[31merror: [39merror Janie
+[31merror: [39merror 肖芃
+[31merror: [39merror 赵彦辉
+[31merror: [39merror 陈娅
+[31merror: [39merror 杨颖慧
+[31merror: [39merror 黄国庆
+[31merror: [39merror 郭庭鸿
+[31merror: [39merror 赵峥
+[31merror: [39merror 孙洪伟
+[31merror: [39merror 蒋小忠
+[31merror: [39merror 辛毅
+[31merror: [39merror 冯淑琴
+[31merror: [39merror 梁东
+[31merror: [39merror 门满洲
+[31merror: [39merror 陈骊珠
+[31merror: [39merror 陈骊珠
+[31merror: [39merror 方瀚
+[31merror: [39merror 张哲
+[31merror: [39merror 施焕训
+[31merror: [39merror 任凯利
+[31merror: [39merror 侯鑫尧
+[31merror: [39merror 叶嘉莹
+[31merror: [39merror 宋美龄
+[31merror: [39merror 姚亚琼
+[31merror: [39merror 李明水
+[31merror: [39merror 黄德明
+[31merror: [39merror 陈骊珠
+[31merror: [39merror 赵峥
+[31merror: [39merror 不详
+[31merror: [39merror Joe
+[31merror: [39merror 侯鑫尧
+[31merror: [39merror 靳聪毅
+[31merror: [39merror Joe
+[31merror: [39merror 杨颖慧
+[31merror: [39merror 任凯利
+[31merror: [39merror Jenni
+[31merror: [39merror 周虹霞
+[31merror: [39merror 易恬
+[31merror: [39merror 张异
+[31merror: [39merror 王秩文
+[31merror: [39merror 潘东
+[31merror: [39merror 王应良
+[31merror: [39merror 靳聪毅
+[31merror: [39merror 洪辰玥
+[31merror: [39merror 智蹇明
+[31merror: [39merror 张程崧
+[31merror: [39merror Jenni
+[31merror: [39merror 张惠民
+[31merror: [39merror 郭庭鸿
+[31merror: [39merror 林锦煌
+[31merror: [39merror 李婧
+[31merror: [39merror 陈骊珠
+[31merror: [39merror 蔡新鹏
+[31merror: [39merror 赵才
+[31merror: [39merror 吴彦妮
+[31merror: [39merror 牛韶斐
+[31merror: [39merror 郭庭鸿
+[31merror: [39merror 教学团队
+[31merror: [39merror 候磊
+[31merror: [39merror 龚志勇
+[31merror: [39merror 张程崧
+[31merror: [39merror 陈仲丹
+[31merror: [39merror 张哲
+[31merror: [39merror 韩瑞
+[31merror: [39merror 王朝阳
+[31merror: [39merror 方瀚
+[31merror: [39merror 林静音
+[31merror: [39merror 辛毅
+[31merror: [39merror 赵烨
+[31merror: [39merror 赵世春

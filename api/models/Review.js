@@ -23,7 +23,6 @@ module.exports = {
     text: {
       type: 'text',
       required: true
-        //minLength
     },
     downVote: {
       type: 'integer',
