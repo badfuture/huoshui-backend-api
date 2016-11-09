@@ -18,9 +18,12 @@ var timeout = 10000; //wait 3s for db population
 module.exports.bootstrap = function(cb) {
 
   //skip seeding if production mode
-  if (sails.config.environment === 'production') {
+  if (sails.config.environment === 'production' || sails.config.environment === 'development') {
     return cb();
   }
+
+  // 底下的暂时封印
+
 
   //seed data if dev mode
   path_common = sails.config.appPath + "/migration/data_common/";
