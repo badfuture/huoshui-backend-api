@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  tableName: 'meta_course_tag',
+  tableName: 'joint_course_tag',
   attributes: {
     course: {
       model: 'course',

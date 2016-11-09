@@ -23,7 +23,7 @@ module.exports = {
     courses: {
       collection: "course",
       via: "tags",
-      through: "meta_course_tag"
+      through: "join_course_tag"
     },
     reviews: {
       collection: "review",

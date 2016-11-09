@@ -7,21 +7,21 @@
 
 module.exports = {
   tableName: 'review',
+  migrate: 'drop',
   attributes: {
-    school: { // many to one
-      model: 'school',
-      required: true
-    },
     course: { // many to one
       model: 'course',
+      //required: true
       required: true
     },
     author: { // many to one
       model: 'user',
-      required: true
+      //required: true
+      required: false
+
     },
     text: {
-      type: 'text',
+      type: 'string',
       required: true
     },
     downVote: {
@@ -83,28 +83,20 @@ module.exports = {
       defaultsTo: null
     },
     examprep: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      type: 'boolean',
+      defaultsTo: null
     },
     openbook: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      type: 'boolean',
+      defaultsTo: null
     },
     oldquestion: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      type: 'boolean',
+      defaultsTo: null
     },
     easymark: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      type: 'boolean',
+      defaultsTo: null
     },
 
     //tags

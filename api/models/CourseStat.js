@@ -8,40 +8,27 @@
 module.exports = {
   tableName: 'courseStat',
   attributes: {
-    school: { // many to one
-      model: 'school',
-      required: true
-    },
     course: { // one to one
       collection: 'course',
       via: 'stats'
     },
-    followerCount: {
-      type: 'int',
-      defaultsTo: 0,
-      min: 0
-    },
-    rate1: {
+    professional: {
       type: 'float',
-      required: true,
       min: 0,
       max: 5
     },
-    rate2: {
+    expressive: {
       type: 'float',
-      required: true,
       min: 0,
       max: 5
     },
-    rate3: {
+    kind: {
       type: 'float',
-      required: true,
       min: 0,
       max: 5
     },
     rateOverall: {
       type: 'float',
-      required: true,
       min: 0,
       max: 5
     },
@@ -88,6 +75,11 @@ module.exports = {
       type: 'float',
       min: 0,
       max: 5
-    }
+    },
+    followerCount: {
+      type: 'int',
+      defaultsTo: 0,
+      min: 0
+    },
   }
 };

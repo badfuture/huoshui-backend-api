@@ -23,9 +23,7 @@ module.exports = {
     },
     prof: { // many to one
       model: 'prof',
-      required: false,
-      defaultsTo: null
-      //required: true
+      required: true,
     },
     homepage: { //good
       type: 'string',
@@ -43,10 +41,10 @@ module.exports = {
       model: 'elective',
       defaultsTo: null
     },
-    tags: { // many to many through course_tag join table
+    tags: { // many to many
       collection: 'tag',
       via: 'courses',
-      through: 'meta_course_tag'
+      through: 'join_course_tag'
     },
     stats: { // one to one
       model: 'courseStat',
