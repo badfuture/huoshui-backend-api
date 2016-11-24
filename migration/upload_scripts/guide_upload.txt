@@ -1,5 +1,0 @@
-upload_school
-upload_user
-upload_position
-upload_course
-//upload_review

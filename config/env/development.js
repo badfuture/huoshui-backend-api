@@ -23,7 +23,7 @@ module.exports = {
      autoPK: true,
      autoCreatedAt: true,
      autoUpdatedAt: true,
-     migrate: 'drop'
+     migrate: 'safe'
    },
 
 };
