@@ -18,12 +18,12 @@ module.exports = {
    ***************************************************************************/
 
    models: {
-     connection: 'remoteMongodbServer',
+     connection: 'localPostgresqlServer',
      schema: true,
      autoPK: true,
      autoCreatedAt: true,
      autoUpdatedAt: true,
-     migrate: 'safe'
+     migrate: 'drop'
    },
 
 };

@@ -457,9 +457,7 @@ var seedReviews = function(next) {
    "checked": true
  }
 ],
-
 }
-
 */
 /*
 review
@@ -468,14 +466,14 @@ review
 module.exports = {
   seedDB: function() {
     async.series([
-      /*seedSchools,
+      seedSchools,
       seedDepts,
       seedPositions,
       seedElective,
       seedTags,
       seedUsers,
       seedProfs,
-      seedCourses,*/
+      seedCourses,
       seedReviews,
     ], function(err) {
       if (err) sails.log.error("error", err);
