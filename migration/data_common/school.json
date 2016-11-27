@@ -12,7 +12,8 @@
     "longname": "力学与工程学院"
   }, {
     "shortname": "运输",
-    "longname": "交通运输与物流学院"
+    "longname": "交通运输与物流学院",
+    "alias": ["交运"]
   }, {
     "shortname": "地学",
     "longname": "地球科学与环境工程学院"
@@ -48,7 +49,8 @@
     "longname": "人文学院"
   }, {
     "shortname": "外语",
-    "longname": "外国语学院"
+    "longname": "外国语学院",
+    "alias": ["外院"]
   }, {
     "shortname": "工业",
     "longname": "工业设计"

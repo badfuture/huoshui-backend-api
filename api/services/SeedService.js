@@ -2,8 +2,15 @@ var fs = require("fs");
 var async = require("async");
 var csv_parse = require('csv-parse/lib/sync');
 
-var timeout = 10000; //wait 3s for db population
-
+//replace all roman numerals with regular English characters
+var replace_roman = function(roman) {
+    var eng_char = roman;
+    var eng_char = eng_char.replace(/Ⅰ/gi, "I");
+    eng_char = eng_char.replace(/Ⅱ/gi, "II");
+    eng_char = eng_char.replace(/Ⅲ/gi, "III");
+    eng_char = eng_char.replace(/Ⅳ/gi, "IV");
+    return eng_char;
+};
 
 //seed the db with leancloud data
 var path_common = sails.config.appPath + "/migration/data_common/";
@@ -35,6 +42,7 @@ var userData = JSON.parse(fs.readFileSync(path_leancloud + file_user));
 var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
 var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
 
+//functions for seeding
 var seedSchools = function(next) {
   sails.log.debug("seeding schools");
   School.create(schoolData).then(function(res){
@@ -54,6 +62,9 @@ var seedDepts = function(next) {
     var prepDept = function(next) {
       dept.shortname = entry.shortname;
       dept.longname = entry.longname;
+      if (entry.hasOwnProperty("alias")) {
+        dept.alias = entry.alias;
+      }
       next();
     };
     var insertSchool = function(next){
@@ -127,7 +138,22 @@ var seedUsers = function(next) {
       Dept.findOne({"shortname": entry.dept}).exec(function(err, dept){
         if (err) sails.log.error("error", err);
         if (!dept) {
-          sails.log.error("seed user error: " + entry.username + " : " + entry.dept);
+          Dept.find({}).exec(function(err, depts){
+            var deptFound = false;
+            depts.forEach(function(dept, index, arr){
+              if (dept.hasOwnProperty("alias") && dept.alias ) {
+                dept.alias.forEach(function(alias, index, arr) {
+                  if (alias == entry.dept) {
+                    user.dept = dept.id;
+                    deptFound = true;
+                  }
+                })
+              }
+            })
+            if (!deptFound) {
+              sails.log.error("seed user error, dept not exist: " + entry.username + " : " + entry.dept);
+            }
+          })
         } else {
           user.dept = dept.id;
         }
@@ -245,6 +271,7 @@ var seedCourses = function(next) {
     var stat = {};
     var prepCourse = function(next) {
       course.name = entry.name;
+      course.name = replace_roman(course.name);
 
       // core stats
       stat.professional = entry.rate1;
@@ -317,7 +344,6 @@ var seedCourses = function(next) {
         courses.push(course);
         Course.create(course)
         .then(function(res){
-          sails.log.info("stat id", stat.id);
           sails.log.info("seed course" + courses.length + ": " + course.name);
           next(); return res;
         }).catch(function(err){
@@ -369,12 +395,18 @@ var seedReviews = function(next) {
       next();
     };
     var insertCourse = function(next){
+
+      entry.courseName = replace_roman(entry.courseName);
+
       console.log("course",entry.courseName);
       console.log("prof",entry.profName);
 
       Course.find({name: entry.courseName})
       .populate('prof')
       .then(function(courses){
+        if (courses.length == 0) {
+          sails.log.warn("Found no course with same name");
+        }
         var match = [];
         courses.forEach(function(course, index, arr){
           var prof = course.prof;
@@ -384,9 +416,10 @@ var seedReviews = function(next) {
           }
         })
         if (match.length >= 2) {
-          sails.log.warn("Found same course with same prof", review.course);
+
+          sails.log.warn("Found duplicate course with same prof", review.course);
         } else if (match.length == 0) {
-          sails.log.warn("Found no course with same prof", review.course);
+          sails.log.warn("Found no course with same prof as review");
           review.course = null;
         }
         next();return null;

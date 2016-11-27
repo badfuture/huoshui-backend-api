@@ -22,6 +22,11 @@ module.exports = {
       unique: true,
       required: true
     },
+    alias: {
+      type: 'array',
+      unique: false,
+      required: false
+    },
     courses: { // one to many
       collection: 'course',
       via: 'dept'
