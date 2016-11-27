@@ -28,6 +28,8 @@ module.exports.connections = {
    * Installed by default.                                                    *
    *                                                                          *
    ***************************************************************************/
+  // for temporary testing ONLY
+  // not suitable for production
   localDiskDb: {
     adapter: 'sails-disk'
   },
@@ -40,13 +42,13 @@ module.exports.connections = {
    * Run: npm install sails-mysql                                             *
    *                                                                          *
    ***************************************************************************/
-  // someMysqlServer: {
-  //   adapter: 'sails-mysql',
-  //   host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
-  //   user: 'YOUR_MYSQL_USER', //optional
-  //   password: 'YOUR_MYSQL_PASSWORD', //optional
-  //   database: 'YOUR_MYSQL_DB' //optional
-  // },
+  localMysqlServer: {
+     adapter: 'sails-mysql',
+     host: 'localhost',
+     user: 'admin', //optional
+     password: 'huoshui', //optional
+     database: 'huoshui' //optional
+  },
 
   /***************************************************************************
    *                                                                          *
@@ -60,13 +62,13 @@ module.exports.connections = {
     adapter: 'sails-mongo',
     host: 'localhost',
     port: 27017,
-    //   user: 'username', //optional
-    //   password: 'password', //optional
-    database: 'huoshui_dev' //optional
-      //database: 'huoshui_temp' //optional
+    user: 'huoshui', //optional
+    password: 'huoshui', //optional
+    database: 'huoshui' //optional
 
   },
 
+  //oversee MongoDB lab dev account, anybody can use this for testing
   remoteMongodbServer: {
     adapter: 'sails-mongo',
     host: 'ds056698.mlab.com',
@@ -74,7 +76,6 @@ module.exports.connections = {
     user: 'paladinze', //optional
     password: '921021', //optional
     database: 'huoshui' //optional
-      //database: 'huoshui_temp' //optional
   },
   /***************************************************************************
    *                                                                          *
@@ -95,6 +96,7 @@ module.exports.connections = {
     database: 'huoshui'
   },
 
+  //hosted on aliyun, remember to modify the credentials locally
   remotePostgresqlServer: {
     adapter: 'sails-postgresql',
     host: '114.55.26.28',
