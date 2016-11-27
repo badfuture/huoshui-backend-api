@@ -3,3 +3,5 @@ node_modules
 .tmp
 temp.out
 temp.txt
+config/connections.js
+config/local.js
