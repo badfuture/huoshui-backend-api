@@ -1,10 +1,22 @@
+/*****************************************
+* Reference document for SailsJs commands
+******************************************/
 
+
+/**********************************
+commands
+***********************************/
+sails new project_name
+sails lift
+sails generate api user
+sails generate controller user
+npm install package_name --save
 
 //set to production model
 export NODE_ENV=production
 
 /*****************************************
-sails console
+SailsJs console
 ******************************************/
 //start sails console
 sails console
@@ -27,11 +39,34 @@ User.create({email: 'sailsinaction@gmail.com',username:'sailsinaction', deleted:
 School.count().exec(function(err, count){if (err) console.log(err); console.log(count);});
 
 
-/**********************************
-commands
-***********************************/
-sails new brushfire
-sails lift
-sails generate api user
-sails generate controller user
-npm install the‐ultimate‐question –save
+/*****************************************
+SailsJs Concepts
+******************************************/
+routing
+  custom routes
+    match explict route
+    then trigger controller/action
+  shadow routes
+    blueprint routes: auto generated as long as model and controller with same name exist
+    shortcut routes: rest-like routes access from browsers
+    cross-site request forgery (CSRF) token route
+  asset routes
+    map directly to file system
+
+policy
+  executed before controller action is executed
+  access control system
+    user identity management (create account)
+    front-end personalization (choose what the user sees)
+    authentication ()
+    backend-end api access
+
+controller: aggregates actions under a common resource
+
+model: representing a table
+  attributes: table columns
+  methods: building function for manipulating records (find, create, update, destroy)
+  settings: configurable properties (connection, tableName, migrate, schema)
+  adapter:
+
+localjs: override existing configuration
