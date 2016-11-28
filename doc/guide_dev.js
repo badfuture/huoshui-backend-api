@@ -38,6 +38,8 @@ User.create({email: 'sailsinaction@gmail.com',username:'sailsinaction', deleted:
 //count
 School.count().exec(function(err, count){if (err) console.log(err); console.log(count);});
 
+//retrieve param from req
+req.param('username')
 
 /*****************************************
 SailsJs Concepts
@@ -70,3 +72,15 @@ model: representing a table
   adapter:
 
 localjs: override existing configuration
+
+/***********************************
+operation flow
+***********************************/
+incoming request
+matches explicit route
+router
+  triggers a controller/action
+  triggers a server rendered view
+gathers incoming params
+using the params to manipulate data
+returns a response code depends on the status
