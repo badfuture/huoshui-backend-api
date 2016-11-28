@@ -1,4 +1,6 @@
 #!/bin/bash
+
+
 LOG_DIR="logs"
 
 #log directory setup
@@ -9,4 +11,4 @@ else
 fi
 
 #Bootstrap using forever daemon
-forever -l ${LOG_DIR}/forever.log start -o ${LOG_DIR}/out.log -e ${LOG_DIR}/err.log app.js
+forever start -o ${LOG_DIR}/out.log -e ${LOG_DIR}/err.log app.js
