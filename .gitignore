@@ -5,3 +5,5 @@ temp.out
 temp.txt
 config/connections.js
 config/local.js
+*.log
+logs
