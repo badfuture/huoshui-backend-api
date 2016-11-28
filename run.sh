@@ -1,3 +1,12 @@
+#!/bin/bash
+LOG_DIR="logs"
 
-#node --stack-size=32000 app.js
-forever start -o out.log -e err.log app.js
+#log directory setup
+if [ ! -d "$LOG_DIR" ]; then
+  mkdir $LOG_DIR
+else
+  rm -rf $LOG_DIR
+fi
+
+#Bootstrap using forever daemon
+forever -l ${LOG_DIR}/forever.log start -o ${LOG_DIR}/out.log -e ${LOG_DIR}/err.log app.js
