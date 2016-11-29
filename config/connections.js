@@ -47,7 +47,9 @@ module.exports.connections = {
      host: 'localhost',
      user: 'admin', //optional
      password: 'huoshui', //optional
-     database: 'huoshui' //optional
+     database: 'huoshui', //optional
+     charset: 'utf8',
+     collation : 'utf8_unicode_ci'
   },
 
   /***************************************************************************

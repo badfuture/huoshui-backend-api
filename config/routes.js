@@ -24,6 +24,7 @@ module.exports.routes = {
     view: 'homepage'
   },
 
+  'post /seeddb': 'SeedController.seedDB',
   'post /auth/signup': 'AuthController.signup',
   'post /auth/login': 'AuthController.login'
 };

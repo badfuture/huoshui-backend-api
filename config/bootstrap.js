@@ -13,13 +13,6 @@
 
 module.exports.bootstrap = function(cb) {
 
-  //skip seeding if production mode
-  if (sails.config.environment === 'production') {
-    return cb();
-  } else {
-    SeedService.seedDB();
-    //return cb();
-  }
   //need this otherwise won't return
   cb();
 };

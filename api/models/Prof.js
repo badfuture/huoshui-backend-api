@@ -70,23 +70,23 @@ module.exports = {
       defaultsTo: null
     },
     intro: {
-      type: 'string',
+      type: 'text',
       defaultsTo: null
     },
     education: {
-      type: 'string',
+      type: 'text',
       defaultsTo: null
     },
     research: {
-      type: 'string',
+      type: 'text',
       defaultsTo: null
     },
     achievement: {
-      type: 'string',
+      type: 'text',
       defaultsTo: null
     },
     legacyCourses: { // one to many
-      type: 'string',
+      type: 'text',
       defaultsTo: null
     },
     courses: { // one to many
