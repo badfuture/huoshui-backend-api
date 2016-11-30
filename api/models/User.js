@@ -56,7 +56,7 @@ module.exports = {
       collection: 'review',
       via: 'author'
     },
-    followedCourses: { // one to many
+    followedCourses: { // many to many
       collection: 'course',
       via: 'followers'
     },
