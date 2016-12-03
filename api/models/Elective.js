@@ -1,20 +1,27 @@
-/**
- * Electiveness.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  table: "elective",
   attributes: {
-    name: {
-      type: 'string',
-      required: true
-    },
-    courses: {
-      collection: 'course',
-      via: 'elective'
+    type: {
+      field: "type",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: true,
+      comment: "type of elective",
     }
+
+  },
+  associations: function() {
+    Elective.hasMany(Course); //course: 1:n
+  },
+  options: {
+    tableName: 'elective',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

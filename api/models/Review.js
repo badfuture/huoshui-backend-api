@@ -1,109 +1,150 @@
-/**
- * Reviews.js
- *
- * @description :: all reviews and stats
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'review',
-  migrate: 'drop',
   attributes: {
-    course: { // many to one
-      model: 'course',
-      //required: true
-      required: true
-    },
-    author: { // many to one
-      model: 'user',
-      //required: true
-      required: false
-
-    },
     text: {
-      type: 'string',
-      required: true
+      field: "text",
+      type: Sequelize.TEXT,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "review text body",
     },
     downVote: {
-      type: 'integer',
-      min: 0
+      field: "downVote",
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "# of down vote",
     },
     upVote: {
-      type: 'integer',
-      min: 0
-    },
-    comment: { //one to many
-      collection: 'comment',
-      via: 'thread'
+      field: "upVote",
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "# of up vote",
     },
 
     //core stats
     professional: {
-      type: 'integer',
-      required: true,
-      min: 0,
-      max: 5
+      field: "professional",
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof professional",
     },
     expressive: {
-      type: 'integer',
-      required: true,
-      min: 0,
-      max: 5
+      field: "expressive",
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof expressive",
     },
     kind: {
-      type: 'integer',
-      required: true,
-      min: 0,
-      max: 5
+      field: "kind",
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
 
     //optional stats
     checkAttendance: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      field: "checkAttendance",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "does the prof check attendance",
     },
     lotsHomework: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      field: "lotsHomework",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "does the prof assign lots of homework",
     },
     birdy: {
-      type: 'integer',
-      defaultsTo: null,
-      min: 0,
-      max: 5
+      field: "birdy",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the course birdy",
     },
 
     //exam related
     hasExam: {
-      type: 'boolean',
-      defaultsTo: null
+      field: "hasExam",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "does the course has exam",
     },
     examprep: {
-      type: 'boolean',
-      defaultsTo: null
+      field: "examprep",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "does the course has examprep",
     },
     openbook: {
-      type: 'boolean',
-      defaultsTo: null
+      field: "openbook",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "is the course open book",
     },
     oldquestion: {
-      type: 'boolean',
-      defaultsTo: null
+      field: "oldquestion",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "does exam contain old question",
     },
     easymark: {
-      type: 'boolean',
-      defaultsTo: null
+      field: "easymark",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "does exam contain easy question",
     },
 
-    //tags
-    tags: { // many to many
-      collection: 'tag',
-      via: 'reviews'
-    }
 
+  },
+  associations: function() {
+    Review.belongsTo(Course);//course: n:1
+    Review.belongsTo(User);//author: n:1
+    Review.hasMany(ReviewComment);//comment: 1:n
+
+    //tag: m:n
+  },
+  options: {
+    tableName: 'review',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

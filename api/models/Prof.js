@@ -1,97 +1,160 @@
-/**
- * Profs.js (done)
- *
- * @description :: prof model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'prof',
   attributes: {
-    school: { // many to one
-      model: 'school',
-      required: true
+    //personal info
+    name: {
+      field: "name",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "prof name",
     },
     code: {
-      type: 'string',
-      defaultsTo: null
-    },
-    name: {
-      type: 'string',
-      required: true
+      field: "code",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof code number, specific to school",
     },
     gender: {
-      type: 'string',
-      enum: ['male','female'],
-      defaultsTo: null
+      field: "gender",
+      type: Sequelize.ENUM('male 1', 'female'),
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof code number, specific to school",
     },
     birth: {
-      type: 'integer',
-      min: 1930,
-      max: 2010,
-      defaultsTo: null
-    },
-    exp: {
-      type: 'integer',
-      min: 0,
-      max: 100,
-      defaultsTo: null
+      field: "birth",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 1930, max: 2010},
+      comment: "prof year of birth",
     },
     hometown: {
-      type: 'string',
-      defaultsTo: null
-    },
-    dept: {
-      model: 'dept',
-      defaultsTo: null
-    },
-    email: {
-      type: 'string',
-      defaultsTo: null
-    },
-    phone: {
-      type: 'string',
-      defaultsTo: null
-    },
-    homepage: {
-      type: 'string',
-      defaultsTo: null
+      field: "hometown",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof hometown",
     },
     motto: {
-      type: 'string',
-      defaultsTo: null
+      field: "motto",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof motto",
     },
-    position: { // many to one
-      model: 'position',
-      defaultsTo: null
+
+    //contact info
+    email: {
+      field: "email",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof email",
     },
-    group: {
-      type: 'string',
-      defaultsTo: null
+    phone: {
+      field: "phone",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof phone",
     },
+    homepage: {
+      field: "homepage",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof homepage",
+    },
+
+    //professional background
+    exp: {
+      field: "exp",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 100},
+      comment: "prof research group",
+    },
+    researchGroup: {
+      field: "researchGroup",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof research group",
+    },
+
     intro: {
-      type: 'text',
-      defaultsTo: null
+      field: "intro",
+      type: Sequelize.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof personal introduction",
     },
     education: {
-      type: 'text',
-      defaultsTo: null
+      field: "education",
+      type: Sequelize.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof education",
     },
     research: {
-      type: 'text',
-      defaultsTo: null
+      field: "research",
+      type: Sequelize.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof research",
     },
     achievement: {
-      type: 'text',
-      defaultsTo: null
+      field: "achievement",
+      type: Sequelize.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof achievement",
     },
-    legacyCourses: { // one to many
-      type: 'text',
-      defaultsTo: null
-    },
-    courses: { // one to many
-      collection: 'course',
-      via: 'prof'
+    pastCourses: {
+      field: "pastCourses",
+      type: Sequelize.TEXT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "prof past Courses",
     }
+  },
+  associations: function() {
+    Prof.belongsTo(School); //school: n:1
+    Prof.belongsTo(Position); //position: n:1
+    Prof.hasMany(Course) //course: 1:n
+
+
+    //dept: m:n
+
+  },
+  options: {
+    tableName: 'prof',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

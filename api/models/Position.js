@@ -1,24 +1,27 @@
-/**
- * Position.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'position',
   attributes: {
-    tableName: 'position',
     name: {
-      type: 'string',
+      field: "name",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
       unique: true,
-      required: true
+      comment: "Position name",
     },
-    profs: { // one to many
-      collection: 'prof',
-      via: 'position'
-    }
 
-
+  },
+  associations: function() {
+    Position.hasMany(Prof) //prof: 1:n
+  },
+  options: {
+    tableName: 'position',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

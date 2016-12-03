@@ -1,77 +1,67 @@
-/**
- * User.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-
-  attributes: { //many to one
-    school: {
-      model: 'school',
-      defaultsTo: null
-    },
-    dept: { // many to one
-      model: 'dept',
-      defaultsTo: null
-    },
+  attributes: {
     username: {
-      type: 'string',
+      field: "username",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
       unique: true,
-      required: true
+      comment: "username",
     },
     password: {
-      type: 'string',
-      required: true
+      field: "password",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "password",
     },
     salt: {
-      type: 'string',
-      defaultsTo: null
+      field: "salt",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "salt for password",
     },
     email: {
-      type: 'string',
-      required: true,
-      unique: true
-    },
-    avatar: {
-      type: 'string',
-      defaultsTo: null
+      field: "email",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: true,
+      comment: "email",
     },
     firstYear: {
-      type: 'integer',
-      defaultsTo: 2016,
-      min: 2000,
-      max: 2020
+      field: "firstYear",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: { min: 2000, max: 2020},
+      comment: "the year admitted to the school",
     },
-    myReviews: { // one to many
-      collection: 'review',
-      via: 'author'
-    },
-    likedReviews: { // one to many
-      collection: 'review',
-      via: 'author'
-    },
-    dislikedReviews: { // one to many
-      collection: 'review',
-      via: 'author'
-    },
-    followedCourses: { // many to many
-      collection: 'course',
-      via: 'followers'
-    },
-    toJSON: function() {
-      var obj = this.toObject();
-      delete obj.password;
-      return obj;
-    }
   },
-  beforeUpdate: function(values, next) {
-    CipherService.hashPassword(values);
-    next();
+  associations: function() {
+    User.belongsTo(School);
+    User.belongsTo(Dept);
+    User.hasMany(Review);//myReviews: 1:n
+    User.hasMany(ReviewComment); //ReviewComment: 1:n
+
+    //TODO
+    //major
+    //likedReviews: 1:n
+    //dislikedReviews: 1:n
+    //followedCourses: n:m
   },
-  beforeCreate: function(values, next) {
-    CipherService.hashPassword(values);
-    next();
+  options: {
+    tableName: 'user',
+    freezeTableName: true,
+    classMethods: {},
+    instanceMethods: {},
+    validate: {},
+    hooks: {}
   }
 };

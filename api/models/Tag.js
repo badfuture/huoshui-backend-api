@@ -1,33 +1,43 @@
-/**
- * Tag.js
- *
- * @description :: tag model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'tag',
   attributes: {
     name: {
-      type: "string",
-      required: true
+      field: "name",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: true,
+      comment: "tag name",
     },
     isPositive: {
-      type: "boolean",
-      required: true
+      field: "isPositive",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "is the tag has a positive meaning",
     },
-    type: {
-      type: "string",
-      enum: ["course_review","article"],
-    },
-    courses: {
-      collection: "course",
-      via: "tags",
-      through: "join_course_tag"
-    },
-    reviews: {
-      collection: "review",
-      via: "tags"
+    category: {
+      field: "category",
+      type: Sequelize.ENUM('course_review', 'article'),
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "category of the info the tag applies to",
     }
+  },
+  associations: function() {
+    //course: m:n
+    //review: m:n
+  },
+  options: {
+    tableName: 'tag',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

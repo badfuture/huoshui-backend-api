@@ -1,85 +1,149 @@
-/**
- * Stat.js
- *
- * @description :: stats model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'courseStat',
   attributes: {
-    course: { // one to one
-      collection: 'course',
-      via: 'stats'
-    },
+    //core stats
     professional: {
-      type: 'float',
-      min: 0,
-      max: 5
+      field: "professional",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof professional",
     },
     expressive: {
-      type: 'float',
-      min: 0,
-      max: 5
+      field: "expressive",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof expressive",
     },
     kind: {
-      type: 'float',
-      min: 0,
-      max: 5
+      field: "kind",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
     rateOverall: {
-      type: 'float',
-      min: 0,
-      max: 5
+      field: "rateOverall",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
-    countReview: {
-      type: 'integer',
-      min: 0
-    },
-    countGoodReview: {
-      type: 'integer',
-      min: 0
-    },
-    countHomework: {
-      type: 'integer',
-      min: 0
-    },
+
+    //secondary stats
     rateHomework: {
-      type: 'float',
-      min: 0,
-      max: 5
-    },
-    countAttend: {
-      type: 'integer',
-      min: 0
+      field: "rateHomework",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
     rateAttend: {
-      type: 'float',
-      min: 0,
-      max: 5
-    },
-    countExam: {
-      type: 'integer',
-      min: 0
+      field: "rateAttend",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
     rateExam: {
-      type: 'float',
-      min: 0,
-      max: 5
-    },
-    countBird: {
-      type: 'integer',
-      min: 0
+      field: "rateExam",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
     rateBird: {
-      type: 'float',
-      min: 0,
-      max: 5
+      field: "rateBird",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "is the prof kind",
     },
-    followerCount: {
-      type: 'int',
-      defaultsTo: 0,
-      min: 0
+
+    //counters
+    countReview: {
+      field: "countReview",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
     },
+    countGoodReview: {
+      field: "countGoodReview",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
+    },
+    countHomework: {
+      field: "countHomework",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
+    },
+    countAttend: {
+      field: "countAttend",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
+    },
+    countExam: {
+      field: "countExam",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
+    },
+    countBird: {
+      field: "countBird",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "is the prof kind",
+    }
+  },
+  associations: function() {
+    CourseStat.belongsTo(Course); //course: 1:1
+  },
+  options: {
+    tableName: 'course_stat',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

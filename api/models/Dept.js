@@ -1,35 +1,45 @@
-/**
- * Dept.js (DONE)
- *
- * @description :: Depart model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'dept',
   attributes: {
-    school: { // many to one
-      model: 'school',
-      required: true
-    },
     shortname: {
-      type: 'string',
-      unique: true,
-      required: true
+      field: "shortname",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "dept name short form",
     },
     longname: {
-      type: 'string',
-      unique: true,
-      required: true
+      field: "longname",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "dept name long form",
     },
     alias: {
-      type: 'array',
+      field: "alias",
+      type: Sequelize.ARRAY(Sequelize.STRING),
+      allowNull: true,
+      defaultValue: null,
       unique: false,
-      required: false
+      comment: "alternative names for dept",
     },
-    courses: { // one to many
-      collection: 'course',
-      via: 'dept'
-    }
+    //course : 1:n
+  },
+  associations: function() {
+    Dept.belongsTo(School); // School: n:1
+    Dept.hasMany(User); // User" 1:n
+    //prof: m:n
+  },
+  options: {
+    tableName: 'dept',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };

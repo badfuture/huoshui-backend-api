@@ -1,25 +1,34 @@
-/**
- * School.js (DONE)
- *
- * @description :: school model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'school',
   attributes: {
     name: {
-      type: 'string',
+      field: "name",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
       unique: true,
-      required: true
-    },
-    dept: { //one to many
-      collection: 'dept',
-      via: 'school'
+      comment: "school name",
     },
     campus: {
-      type: 'string',
-      defaultsTo: null
+      field: "campus",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "school campus",
     }
+  },
+  associations: function() {
+    School.hasMany(User); //User: 1:n
+
+  },
+  options: {
+    tableName: 'school',
+    freezeTableName: true,
+    classMethods: {},
+    instanceMethods: {},
+    validate: {},
+    hooks: {}
   }
 };

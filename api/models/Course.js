@@ -1,62 +1,59 @@
-/**
- * Courses.js
- *
- * @description :: course model
- * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
- */
+"use strict";
 
 module.exports = {
-  tableName: 'course',
   attributes: {
-    school: { // many to one
-      model: 'school',
-      required: true
-    },
-    dept: { // many to one
-      model: 'dept',
-      required: false,
-      defaultsTo: null
-    },
     name: {
-      type: 'string',
-      required: true
+      field: "name",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "course name",
     },
-    prof: { // many to one
-      model: 'prof',
-      required: true,
+    homepage: {
+      field: "homepage",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "course homepage",
     },
-    homepage: { //good
-      type: 'string',
-      defaultsTo: null
-    },
-    textbook: { //good
-      type: 'string',
-      defaultsTo: null
+    textbook: {
+      field: "textbook",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "course textbook",
     },
     credit: {
-      type: 'float',
-      defaultsTo: null
-    },
-    elective: { //many to one
-      model: 'elective',
-      defaultsTo: null
-    },
-    tags: { // many to many
-      collection: 'tag',
-      via: 'courses',
-      through: 'join_course_tag'
-    },
-    stats: { // one to one
-      model: 'courseStat',
-      defaultsTo: null
-    },
-    reviews: { // one to many
-      collection: 'review',
-      via: 'course'
-    },
-    followers: { //many to many
-      collection: 'user',
-      via: 'followedCourses'
+      field: "credit",
+      type: Sequelize.DECIMAL(10, 2), //<==== what's this
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "course credit",
     }
+  },
+  associations: function() {
+    Course.hasMany(Review); // reviews: 1:n
+    Course.belongsTo(School); // school: n:1
+    Course.belongsTo(Prof); // prof: n:1
+    Course.belongsTo(Elective); // elective: n:1
+
+    Course.hasOne(CourseStat) // courseStat: 1:1
+
+    //dept: m:n
+    //tags: m:n
+    //followers: m:n
+  },
+  options: {
+    tableName: 'course',
+    freezeTableName: true,
+    timestamps: true,
+    paranoid: false,
+    classMethods: {},
+    instanceMethods: {},
+    hooks: {}
   }
 };
