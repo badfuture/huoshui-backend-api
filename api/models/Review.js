@@ -128,18 +128,29 @@ module.exports = {
       unique: false,
       comment: "does exam contain easy question",
     },
-
-
   },
   associations: function() {
-    Review.belongsTo(Course);//course: n:1
-    Review.belongsTo(User);//author: n:1
-    Review.hasMany(ReviewComment);//comment: 1:n
-
-    //tag: m:n
+    Review.belongsTo(Course, {
+      foreignKey: 'course_id',
+      as: 'Course'
+    }); // n:1
+    Review.belongsTo(User, {
+      foreignKey: 'author_id',
+      as: 'Author'
+    }); //author: n:1
+    Review.hasMany(ReviewComment, {
+      as: 'Comments',
+      foreignKey: 'comment_id'
+    }); // 1:n
+    Review.belongsToMany(Tag, {
+      as: 'Tags',
+      through: 'review_tag',
+      foreignKey: 'tag_id'
+    }); // m:n
   },
   options: {
     tableName: 'review',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

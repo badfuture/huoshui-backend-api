@@ -28,11 +28,20 @@ module.exports = {
     }
   },
   associations: function() {
-    //course: m:n
-    //review: m:n
+    Tag.belongsToMany(Course, {
+      as: 'Courses',
+      through: 'course_tag',
+      foreignKey: 'course_id'
+    }); // m:n
+    Tag.belongsToMany(Review, {
+      as: 'Reviews',
+      through: 'review_tag',
+      foreignKey: 'review_id'
+    }); // m:n
   },
   options: {
     tableName: 'tag',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

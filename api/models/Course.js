@@ -36,19 +36,39 @@ module.exports = {
     }
   },
   associations: function() {
-    Course.hasMany(Review); // reviews: 1:n
-    Course.belongsTo(School); // school: n:1
-    Course.belongsTo(Prof); // prof: n:1
-    Course.belongsTo(Elective); // elective: n:1
-
     Course.hasOne(CourseStat) // courseStat: 1:1
+    Course.hasMany(Review, {
+      as: 'Reviews',
+      foreignKey: 'course_id'
+    }); // 1:n
+    Course.belongsTo(School, {
+      foreignKey: 'school_id',
+      as: 'School'
+    }); // n:1
+    Course.belongsTo(Prof, {
+      foreignKey: 'prof_id',
+      as: 'Prof'
+    }); // n:1
+    Course.belongsTo(Elective, {
+      foreignKey: 'elective_id',
+      as: 'Elective'
+    }); // n:1
+    Course.belongsToMany(Tag, {
+      as: 'Tags',
+      through: 'course_tag',
+      foreignKey: 'tag_id'
+    }); // m:n
+    Course.belongsToMany(Dept, {
+      as: 'Depts',
+      through: 'course_dept',
+      foreignKey: 'dept_id'
+    }); // m:n
 
-    //dept: m:n
-    //tags: m:n
     //followers: m:n
   },
   options: {
     tableName: 'course',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

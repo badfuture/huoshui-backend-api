@@ -20,13 +20,23 @@ module.exports = {
     }
   },
   associations: function() {
-    ReviewComment.belongsTo(User);  //author: n:1
+    ReviewComment.belongsTo(User, {
+      foreignKey: 'author_id',
+      as: 'Author'
+    });  // n:1
     ReviewComment.belongsTo(Review);  //thread: 1:n
-    //ReviewComment.belongsTo(ReviewComment) //parent: 1:n
-
+    ReviewComment.belongsTo(Review, {
+      foreignKey: 'review_id',
+      as: 'Review'
+    });  // n:1
+    ReviewComment.belongsTo(ReviewComment, {
+      foreignKey: 'review_comment_id',
+      as: 'Parent'
+    }); // n:1
   },
   options: {
     tableName: 'review_comment',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

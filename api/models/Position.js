@@ -13,10 +13,14 @@ module.exports = {
 
   },
   associations: function() {
-    Position.hasMany(Prof) //prof: 1:n
+    Position.hasMany(Prof, {
+      foreignKey: 'position_id',
+      as: 'Profs'
+    }); // 1:n
   },
   options: {
     tableName: 'position',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

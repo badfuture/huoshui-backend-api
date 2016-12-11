@@ -135,10 +135,11 @@ module.exports = {
     }
   },
   associations: function() {
-    CourseStat.belongsTo(Course); //course: 1:1
+    CourseStat.belongsTo(Course); // 1:1
   },
   options: {
     tableName: 'course_stat',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

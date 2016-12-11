@@ -2,23 +2,19 @@
 
 module.exports = {
   attributes: {
-    type: {
-      field: "type",
-      type: Sequelize.STRING,
+    count: {
+      field: "count",
+      type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: null,
-      unique: true,
-      comment: "type of elective",
-    }
+      defaultValue: 0,
+      unique: false,
+      comment: "counter of how many tags are applied to a course",
+    },
   },
   associations: function() {
-    Elective.hasMany(Course, {
-      as: 'Courses',
-      foreignKey: 'elective_id'
-    }); // 1:n
   },
   options: {
-    tableName: 'elective',
+    tableName: 'course_tag',
     underscored: true,
     freezeTableName: true,
     timestamps: true,

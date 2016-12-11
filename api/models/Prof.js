@@ -140,16 +140,27 @@ module.exports = {
     }
   },
   associations: function() {
-    Prof.belongsTo(School); //school: n:1
-    Prof.belongsTo(Position); //position: n:1
-    Prof.hasMany(Course) //course: 1:n
-
-
-    //dept: m:n
-
+    Prof.belongsTo(School, {
+      as: 'School',
+      foreignKey: 'school_id',
+    }); // n:1
+    Prof.belongsTo(Position, {
+      as: 'Position',
+      foreignKey: 'position_id',
+    }); // n:1
+    Prof.hasMany(Course, {
+      as: 'Courses',
+      foreignKey: 'prof_id'
+    }); // 1:n
+    Prof.belongsToMany(Dept, {
+      as: 'Depts',
+      through: 'prof_dept',
+      foreignKey: 'dept_id'
+    }); // m:n
   },
   options: {
     tableName: 'prof',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

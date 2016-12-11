@@ -45,19 +45,34 @@ module.exports = {
     },
   },
   associations: function() {
-    User.belongsTo(School);
-    User.belongsTo(Dept);
-    User.hasMany(Review);//myReviews: 1:n
-    User.hasMany(ReviewComment); //ReviewComment: 1:n
+    User.belongsTo(School, {
+      foreignKey: 'school_id',
+      as: 'School'
+    }); // n:1
+    User.belongsTo(Role, {
+      foreignKey: 'role_id',
+      as: 'Role'
+    }); // n:1
+    User.belongsTo(Dept, {
+      foreignKey: 'dept_id',
+      as: 'Dept'
+    }); // n:1
+    User.hasMany(Review, {
+      as: 'MyRviews',
+      foreignKey: 'author_id'
+    }); // 1:n
+    User.hasMany(ReviewComment,{
+      as: 'MyComments',
+      foreignKey: 'author_id'
+    }); // 1:n
 
-    //TODO
-    //major
     //likedReviews: 1:n
     //dislikedReviews: 1:n
-    //followedCourses: n:m
+    //followedCourses: n:m => need to change this to personal course list
   },
   options: {
     tableName: 'user',
+    underscored: true,
     freezeTableName: true,
     classMethods: {},
     instanceMethods: {},

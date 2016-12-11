@@ -26,15 +26,31 @@ module.exports = {
       unique: false,
       comment: "alternative names for dept",
     },
-    //course : 1:n
   },
   associations: function() {
-    Dept.belongsTo(School); // School: n:1
-    Dept.hasMany(User); // User" 1:n
-    //prof: m:n
+    Dept.belongsTo(School, {
+      foreignKey: 'school_id',
+      as: 'School'
+    }); // n:1
+    Dept.hasMany(User, {
+      foreignKey: 'dept_id',
+      as: 'Users'
+    }); // 1:n
+    Dept.belongsToMany(Course, {
+      as: 'Courses',
+      through: 'course_dept',
+      foreignKey: 'course_id'
+    }); // m:n
+    Dept.belongsToMany(Prof, {
+      as: 'Profs',
+      through: 'prof_dept',
+      foreignKey: 'prof_id'
+    }); // m:n
+
   },
   options: {
     tableName: 'dept',
+    underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,

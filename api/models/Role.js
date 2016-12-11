@@ -2,23 +2,24 @@
 
 module.exports = {
   attributes: {
-    type: {
-      field: "type",
+    name: {
+      field: "name",
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "type of elective",
+      comment: "role name",
     }
+    //ACL
   },
   associations: function() {
-    Elective.hasMany(Course, {
-      as: 'Courses',
-      foreignKey: 'elective_id'
+    Role.hasMany(User, {
+      foreignKey: 'role_id',
+      as: 'Users'
     }); // 1:n
   },
   options: {
-    tableName: 'elective',
+    tableName: 'role',
     underscored: true,
     freezeTableName: true,
     timestamps: true,
