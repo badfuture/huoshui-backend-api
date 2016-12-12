@@ -51,6 +51,7 @@ TBD
 ### 主要技术
 
 * SailsJs - 基于ExpressJs和NodeJs上的后端框架
+* SequalizeJs - ORM对象关系映射
 * PosgreSQL - SQL结构化数据储存 （主数据库）
 * MongoDB - NoSQL读取优化（局部优化）
 * Socket.io - 实时通讯
