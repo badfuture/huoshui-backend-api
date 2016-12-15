@@ -42,6 +42,15 @@ module.exports = function(sails) {
         sequelize = new Sequelize(connection.database, connection.user, connection.password, connection.options);
       }
 
+      sequelize
+        .authenticate()
+        .then(function(err) {
+          sails.log.verbose('Database connection has been established successfully!');
+        })
+        .catch(function (err) {
+          sails.log.error('Unable to connect to the database:', err);
+        });
+
       //setup models and associations
       global['sequelize'] = sequelize;
       return sails.modules.loadModels(function(err, models) {
