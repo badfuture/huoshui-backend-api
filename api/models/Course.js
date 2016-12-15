@@ -36,7 +36,7 @@ module.exports = {
     }
   },
   associations: function() {
-    Course.hasOne(CourseStat) // courseStat: 1:1
+    Course.hasOne(CourseStat); // courseStat: 1:1
     Course.hasMany(Review, {
       as: 'Reviews',
       foreignKey: 'course_id'
