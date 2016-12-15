@@ -16,7 +16,7 @@ module.exports = function(sails) {
       hook.initModels();
 
       //setup connection
-      var cconnectName = sails.config.models.connection;
+      var connectName = sails.config.models.connection;
       var connection = sails.config.connections[connectName];
       if (connection) {
         sails.log.verbose('Using connection named ' + connectName);
