@@ -1,31 +1,48 @@
 module.exports = function(sails) {
+  var path_config = sails.config.appPath + "/config/env/"
+  var path_config_dev = path_config + "development.js";
+  var path_config_pro = path_config + "production.js";
+
   global['Sequelize'] = require('sequelize');
   Sequelize.cls = require('continuation-local-storage').createNamespace('sails-sequelize-postgresql');
+  var config_dev = require(path_config_dev);
+  var config_pro = require(path_config_pro);
+
+
   return {
     initialize: function(next) {
       var hook = this;
       hook.initAdapters();
       hook.initModels();
 
-      var connection, migrate, sequelize;
-      sails.log.verbose('Using connection named ' + sails.config.models.connection);
-      connection = sails.config.connections[sails.config.models.connection];
-      if (connection == null) {
-        throw new Error('Connection \'' + sails.config.models.connection + '\' not found in config/connections');
+      //setup connection
+      var cconnectName = sails.config.models.connection;
+      var connection = sails.config.connections[connectName];
+      if (connection) {
+        sails.log.verbose('Using connection named ' + connectName);
+      } else {
+        throw new Error('Connection \'' + sails.config.models.connection + '\' not found in config');
       }
+
       if (connection.options == null) {
         connection.options = {};
       }
-      connection.options.logging = connection.options.logging || sails.log.verbose; //A function that gets executed everytime Sequelize would log something.
+      connection.options.logging = connection.options.logging
+                                || sails.log.verbose; //executed everytime Sequelize would log something.
 
-      migrate = sails.config.models.migrate;
+      //setup migration
+      var migrate = sails.config.models.migrate;
       sails.log.verbose('Migration: ' + migrate);
 
+      //sequalize initalization
+      var sequelize;
       if (connection.url) {
         sequelize = new Sequelize(connection.url, connection.options);
       } else {
         sequelize = new Sequelize(connection.database, connection.user, connection.password, connection.options);
       }
+
+      //setup models and associations
       global['sequelize'] = sequelize;
       return sails.modules.loadModels(function(err, models) {
         var modelDef, modelName, ref;
