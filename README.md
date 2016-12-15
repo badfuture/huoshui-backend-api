@@ -58,10 +58,11 @@ TBD
 * Docker - 轻量级的、可移植的、自给自足的部署用的容器
 * Nginx - 负载均衡 / 逆伺服
 * Cloud IaaS 服务
-    * 阿里云 ECS (compute)
-    * 阿里云 RDS (data store) <=买不起
-    * 七牛云 (image store)
-    * CDN (delivery) <=买不起
+  * 阿里云 ECS (compute)
+  * 阿里云 RDS (data store) <=买不起
+  * 七牛云 (image store)
+  * CDN (delivery) <=买不起
+* Nodemailer - 邮件服务
 
 ### 其它技术
 * PassportJs - 用户鉴别与授权(Basic Auth + JWT)
