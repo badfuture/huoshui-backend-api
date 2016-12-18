@@ -1,29 +1,25 @@
-/**
- * Passport configuration file where you should configure strategies
- */
+
+// passport strategies
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 var EXPIRES_IN_MINUTES = 60 * 24 * 30; // one month
-var SECRET = process.env.tokenSecret || "zerocks";
+var SECRET = process.env.tokenSecret || "huoshui_rock";
 var ALGORITHM = "HS256";
-var ISSUER = "huoshui.org";
-var AUDIENCE = "huoshui.org";
+var ISSUER = "http://api.huoshui.org"; //issuer of the JWT
+var AUDIENCE = "http://api.huoshui.org"; //resource being acccessed
 
-/**
- * Configuration object for local strategy
- */
+
+// Configuration object for local strategy
 var LOCAL_STRATEGY_CONFIG = {
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: false
 };
 
-/**
- * Configuration object for JWT strategy
- */
+// Configuration object for JWT strategy
 var JWT_STRATEGY_CONFIG = {
   secretOrKey: SECRET,
   issuer: ISSUER,
@@ -32,9 +28,7 @@ var JWT_STRATEGY_CONFIG = {
   jwtFromRequest: ExtractJwt.fromAuthHeader()
 };
 
-/**
- * Triggers when user authenticates via local strategy
- */
+// Triggers when user authenticates via local strategy
 function _onLocalStrategyAuth(email, password, next) {
   User.findOne({
       email: email
@@ -58,9 +52,7 @@ function _onLocalStrategyAuth(email, password, next) {
     });
 }
 
-/**
- * Triggers when user authenticates via JWT strategy
- */
+// Triggers when user authenticates via JWT strategy
 function _onJwtStrategyAuth(payload, next) {
   var user = payload.user;
   return next(null, user, {});
