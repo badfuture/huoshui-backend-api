@@ -19,9 +19,6 @@ module.exports = {
   issuer: sails.config.jwtSettings.issuer,
   audience: sails.config.jwtSettings.audience,
 
-  /**
-   * Hash the password field of the passed user.
-   */
   hashPassword: function(user) {
     if (user.password && !user.salt) {
       salt = crypto.randomBytes(36).toString('base64');
@@ -33,10 +30,6 @@ module.exports = {
     }
   },
 
-  /**
-   * Compare user password hash with unhashed password
-   * @returns boolean indicating a match
-   */
   comparePassword: function(password, user) {
     var realPassword = user.password;
     var inputPassword = password;
@@ -51,10 +44,6 @@ module.exports = {
     return (realPassword == hashedPassword) ? true : false;
   },
 
-  /**
-   * Create a token based on the passed user
-   * @param user
-   */
   createToken: function(user) {
     return jwt.sign({
         user: user.toJSON()
@@ -69,9 +58,6 @@ module.exports = {
     );
   },
 
-  /**
-   * verify the token
-   */
    verifyToken: function(token, callback) {
      return jwt.verify(
        token, // The token to be verified

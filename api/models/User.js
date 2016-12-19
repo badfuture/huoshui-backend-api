@@ -77,6 +77,13 @@ module.exports = {
     classMethods: {},
     instanceMethods: {},
     validate: {},
-    hooks: {}
+    hooks: {
+      beforeCreate: function(user, options) {
+        return CipherService.hashPassword(user);
+      },
+      beforeUpdate: function(user, options) {
+        return CipherService.hashPassword(user);
+      }
+    }
   }
 };
