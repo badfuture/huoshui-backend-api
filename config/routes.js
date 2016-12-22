@@ -14,5 +14,7 @@ module.exports.routes = {
 
   //user
   'get /users': 'UserController.find',
+  'get /users/:id': 'UserController.findOne',
+
 
 };

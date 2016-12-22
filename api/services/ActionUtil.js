@@ -1,8 +1,91 @@
-
+var util = require('util');
 var _ = require('lodash');
 var flaverr = require('flaverr');
 
 module.exports = {
+
+  populateEach: function (req) {
+    var DEFAULT_POPULATE_LIMIT = req._sails.config.query.defaultLimit || 30;
+    var aliasFilter = req.param('populate');
+    var associations = [];
+    var parentModel = req.options.model;
+
+    // Convert the string representation of the filter list to an Array. We
+    // need this to provide flexibility in the request param. This way both
+    // list string representations are supported:
+    //   /model?populate=alias1,alias2,alias3
+    //   /model?populate=[alias1,alias2,alias3]
+    if (typeof aliasFilter === 'string') {
+      aliasFilter = aliasFilter.replace(/\[|\]/g, '');
+      aliasFilter = (aliasFilter) ? aliasFilter.split(',') : [];
+    }
+
+    _.each(aliasFilter, function(association){
+      var childModel = sails.models[association.toLowerCase()];
+      // iterate through parent model associations
+      _.each(sails.models[parentModel].associations, function(relation){
+        // check if association match childModel name
+        if(relation.target.name === childModel.name) {
+          var obj = { model: childModel, as: relation.options.as };
+          if(relation.associationType === 'HasMany') {
+            obj.limit = DEFAULT_POPULATE_LIMIT;
+          }
+          associations.push(obj);
+        }
+      });
+    });
+
+    return associations;
+  },
+
+  parsePk: function ( req ) {
+
+    var pk = req.options.id || (req.options.where && req.options.where.id) || req.param('id');
+
+    // TODO: make this smarter...
+    // (e.g. look for actual primary key of model and look for it
+    //  in the absence of `id`.)
+    // See coercePK for reference (although be aware it is not currently in use)
+
+    // exclude criteria on id field
+    pk = _.isPlainObject(pk) ? undefined : pk;
+    return pk;
+  },
+
+
+
+  requirePk: function (req) {
+    var pk = module.exports.parsePk(req);
+
+    // Validate the required `id` parameter
+    if ( !pk ) {
+
+      var err = new Error(
+      'No `id` parameter provided.'+
+      '(Note: even if the model\'s primary key is not named `id`- '+
+      '`id` should be used as the name of the parameter- it will be '+
+      'mapped to the proper primary key name)'
+      );
+      err.status = 400;
+      throw err;
+    }
+
+    return pk;
+  },
+
+
+
+  parseModel: function (req) {
+    // Ensure a model can be deduced from the request options.
+    var model = req.options.model || req.options.controller;
+    if (!model) { throw new Error(util.format('No "model" specified in route options.')); }
+
+    var Model = req._sails.models[model];
+    if ( !Model ) { throw new Error(util.format('Invalid route option, "model".\nI don\'t know about any models named: `%s`',model)); }
+
+    return Model;
+  },
+
 
   parseSort: function (req) {
     var sort = req.param('sort')
