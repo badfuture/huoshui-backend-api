@@ -2,21 +2,17 @@
  * SchoolController
  *
  * @description :: Server-side logic for managing Schools
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
-	hi: function(req, res) {
-		School
-			.findOneById('5741978d20c7976b9bd4503f')
-			.exec(function(err, obj) {
-				obj.campus = 'crazy';
-				obj.save(function(err, savedUser) {});
-			});
+	create: function(req,res){
+    var Model = actionUtil.parseModel(req);
+    var data = actionUtil.parseValues(req);
 
-
-
-		console.log("hi");
-		return res.send("Hi there!");
-	},
+    Model.create(data).then(function(newInstance) {
+       res.created(newInstance);
+    }).catch(function(err){
+       return res.serverError(err);
+    });
+  },
 };

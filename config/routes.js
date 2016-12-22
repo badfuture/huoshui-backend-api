@@ -16,5 +16,7 @@ module.exports.routes = {
   'get /users': 'UserController.find',
   'get /users/:id': 'UserController.findOne',
 
+  //school
+  'post /schools': 'SchoolController.create',
 
 };
