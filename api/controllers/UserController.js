@@ -90,7 +90,20 @@ module.exports = {
   },
 
   destroy: function(req,res){
+    var Model = actionUtil.parseModel(req);
+    var pk = actionUtil.requirePk(req);
 
+    Model.findById(pk, { include: req._sails.config.query.populate ? [{ all: true }] : []})
+    .then(function(record) {
+      if(!record) return res.notFound('No record found with the specified `id`.');
+      Model.destroy({ where: { id: pk }}).then(function() {
+        return res.ok(record);
+      }).catch(function(err){
+        return res.negotiate(err);
+      });
+    }).catch(function(err){
+      return res.serverError(err);
+    });
   },
 
   populate: function(req,res){
