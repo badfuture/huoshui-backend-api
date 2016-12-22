@@ -1,6 +1,9 @@
 var util = require('util');
 var _ = require('lodash');
+var mergeDefaults = require('merge-defaults');
 var flaverr = require('flaverr');
+
+var JSONP_CALLBACK_PARAM = 'callback';
 
 module.exports = {
 
@@ -73,6 +76,36 @@ module.exports = {
     return pk;
   },
 
+  parseValues: function (req) {
+
+    // Allow customizable blacklist for params NOT to include as values.
+    req.options.values = req.options.values || {};
+    req.options.values.blacklist = req.options.values.blacklist;
+
+    // Validate blacklist to provide a more helpful error msg.
+    var blacklist = req.options.values.blacklist;
+    if (blacklist && !_.isArray(blacklist)) {
+      throw new Error('Invalid `req.options.values.blacklist`. Should be an array of strings (parameter names.)');
+    }
+
+    // Merge params into req.options.values, omitting the blacklist.
+    var values = mergeDefaults(req.params.all(), _.omit(req.options.values, 'blacklist'));
+
+    // Omit values that are in the blacklist (like query modifiers)
+    values = _.omit(values, blacklist || []);
+
+    // Omit any values w/ undefined values
+    values = _.omit(values, function (p){ if (_.isUndefined(p)) return true; });
+
+    // Omit jsonp callback param (but only if jsonp is enabled)
+    var jsonpOpts = req.options.jsonp && !req.isSocket;
+    jsonpOpts = _.isObject(jsonpOpts) ? jsonpOpts : { callback: JSONP_CALLBACK_PARAM };
+    if (jsonpOpts) {
+      values = _.omit(values, [jsonpOpts.callback]);
+    }
+
+    return values;
+  },
 
 
   parseModel: function (req) {

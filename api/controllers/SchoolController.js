@@ -6,8 +6,8 @@
 
 module.exports = {
 	create: function(req,res){
-    var Model = actionUtil.parseModel(req);
-    var data = actionUtil.parseValues(req);
+    var Model = ActionUtil.parseModel(req);
+    var data = ActionUtil.parseValues(req);
 
     Model.create(data).then(function(newInstance) {
        res.created(newInstance);
