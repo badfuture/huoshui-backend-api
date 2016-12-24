@@ -97,7 +97,6 @@ module.exports = function(sails) {
       hook = this;
 
       // check if hook enabled
-      sails.log.warn("sails hook: blueprint start initializing!");
       var globalConfig = sails.config.blueprints;
       if (!globalConfig.enable) {
         sails.log.warn("sails hook: blueprint not eneabled!");
