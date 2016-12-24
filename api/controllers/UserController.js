@@ -15,7 +15,7 @@ module.exports = {
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: req._sails.config.query.populate ?
+      include: req._sails.config.blueprints.populate ?
                 (_.isEmpty(populate) ? [{ all : true}] : populate) : []
       //populate
     }).then(function(users){
@@ -31,7 +31,7 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
 
     Model.findById(pk, {
-      include: req._sails.config.query.populate ?
+      include: req._sails.config.blueprints.populate ?
                           (_.isEmpty(populate) ? [{ all : true}] : populate) : []
     }).then(function(matchingRecord) {
       if(!matchingRecord) return res.notFound('No record found with the specified `id`.');
@@ -74,7 +74,7 @@ module.exports = {
 
         var updatedRecord = pk;
 
-        var Q = Model.findById(updatedRecord, {include: req._sails.config.query.populate ? [{ all: true }] : []})
+        var Q = Model.findById(updatedRecord, {include: req._sails.config.blueprints.populate ? [{ all: true }] : []})
         .then(function(populatedRecord) {
           if (!populatedRecord) return res.serverError('Could not find record after updating!');
           res.ok(populatedRecord);
@@ -90,10 +90,10 @@ module.exports = {
   },
 
   destroy: function(req,res){
-    var Model = actionUtil.parseModel(req);
-    var pk = actionUtil.requirePk(req);
+    var Model = ActionUtil.parseModel(req);
+    var pk = ActionUtil.requirePk(req);
 
-    Model.findById(pk, { include: req._sails.config.query.populate ? [{ all: true }] : []})
+    Model.findById(pk, { include: req._sails.config.blueprints.populate ? [{ all: true }] : []})
     .then(function(record) {
       if(!record) return res.notFound('No record found with the specified `id`.');
       Model.destroy({ where: { id: pk }}).then(function() {

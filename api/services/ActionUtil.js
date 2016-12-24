@@ -8,7 +8,7 @@ var JSONP_CALLBACK_PARAM = 'callback';
 module.exports = {
 
   populateEach: function (req) {
-    var DEFAULT_POPULATE_LIMIT = req._sails.config.query.defaultLimit || 30;
+    var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
     var aliasFilter = req.param('populate');
     var associations = [];
     var parentModel = req.options.model;
@@ -138,14 +138,14 @@ module.exports = {
   },
 
   parseSkip: function (req) {
-    var DEFAULT_SKIP = req._sails.config.query.defaultSkip || 0;
+    var DEFAULT_SKIP = req._sails.config.blueprints.defaultSkip || 0;
     var skip = req.param('skip') || DEFAULT_SKIP;
     if (skip) { skip = +skip; }
     return skip;
   },
 
   parseLimit: function (req) {
-    var DEFAULT_LIMIT = req._sails.config.query.defaultLimit || 30;
+    var DEFAULT_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
     var limit = req.param('limit') || DEFAULT_LIMIT;
     if (limit) { limit = +limit; }
     return limit;
