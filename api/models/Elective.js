@@ -2,8 +2,8 @@
 
 module.exports = {
   attributes: {
-    type: {
-      field: "type",
+    name: {
+      field: "name",
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
