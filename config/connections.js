@@ -1,3 +1,4 @@
+var sails = require("sails");
 
 //change the params below to match your local server setting
 module.exports.connections = {
@@ -10,7 +11,7 @@ module.exports.connections = {
       dialect: 'postgres',
       host   : 'localhost',
       port   : 5432,
-      logging: console.log,
+      logging: sails.log.verbose,
 
       //model options
       timestamps: true, //enable timestamps for all tables
