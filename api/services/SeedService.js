@@ -43,44 +43,38 @@ var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
 var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
 
 //functions for seeding
-var seedSchools = function(next) {
+var seedSchools = function(req, res, next) {
   sails.log.debug("seeding schools");
-  School.create(schoolData).then(function(res){
+  School.bulkCreate(schoolData)
+  .then(function(schools){
     sails.log.debug("seeded: school");
-    next(); return null;
-  }).catch(function(err){
+    next();
+  })
+  .catch(function(err){
     sails.log.error("seeding failure: school");
     sails.log.error(err);
-    next(); return null;
+    next();
   });
 };
 
-var seedDepts = function(next) {
+
+var seedDepts = function(req, res, next) {
   sails.log.debug("seeding dept");
   async.eachSeries(deptData, function(entry, next){
     var dept = {};
-    var prepDept = function(next) {
-      dept.shortname = entry.shortname;
-      dept.longname = entry.longname;
-      if (entry.hasOwnProperty("alias")) {
-        dept.alias = entry.alias;
-      }
-      next();
-    };
-    var insertSchool = function(next){
-      School.findOne({"name": "西南交通大学"}).exec(function(err, school){
-        if (err) sails.log.error("error", err);
-        dept.school = school.id;
-        next();
-      });
-    };
-    var saveDept = function(next){
-      Dept.create(dept).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        next();
-      });
-    };
-    async.waterfall([prepDept, insertSchool, saveDept],function(err, res){
+    var deptCreated= null;
+    dept.shortname = entry.shortname;
+    dept.longname = entry.longname;
+    if (entry.hasOwnProperty("alias")) {
+      dept.alias = entry.alias;
+    }
+    Dept.create(dept)
+    .then(function(res){
+      deptCreated = res;
+      return School.findOne({ where: {"name": "西南交通大学"}});
+    })
+    .then(function(school){
+      school.addDepts(deptCreated);
       next();
     });
   }, function (err) {
@@ -90,281 +84,252 @@ var seedDepts = function(next) {
   });
 };
 
-var seedPositions = function(next) {
+
+var seedPositions = function(req, res, next) {
   sails.log.debug("seeding positions");
-  Position.create(positionData).then(function(res){
+  Position.bulkCreate(positionData)
+  .then(function(res){
     sails.log.debug("seeded: position");
-    next(); return null;
-  }).catch(function(err){
+    next();
+  })
+  .catch(function(err){
     sails.log.error("seeding failure: position");
-    next(); return null;
+    next();
   });
 };
 
-var seedTags = function (next) {
+var seedElective = function (req, res, next) {
+  sails.log.debug("seeding elective");
+  Elective.bulkCreate(electiveData)
+  .then(function(res){
+    sails.log.debug("seeded: elective");
+    next();
+  })
+  .catch(function(err){
+    sails.log.error("seeding failure: elective");
+    next();
+  });
+};
+
+
+var seedTags = function (req, res, next) {
   sails.log.debug("seeding tags");
-  Tag.create(tagData).then(function(res){
+  Tag.bulkCreate(tagData)
+  .then(function(res){
     sails.log.debug("seeded: tag");
-    next(); return null;
-  }).catch(function(err){
+    next();
+  })
+  .catch(function(err){
     sails.log.error("seeding failure: tag");
     sails.log.error("error", err);
-    next(); return null;
+    next();
   });
 };
 
-
-var seedUsers = function(next) {
+var seedUsers = function(req, res, next) {
   sails.log.debug("seeding users");
-  var users = [];
   async.eachSeries(userData.results, function(entry, next){
+    var userCreated = null;
     var user = {};
-    var prepUser = function(next) {
-      user.username = entry.username;
-      user.password = entry.password;
-      user.salt = entry.salt;
-      user.email = entry.email;
-      user.firstYear = entry.year;
-      next();
-    };
-    var insertSchool = function(next){
-      School.findOne({"name": "西南交通大学"}).exec(function(err, school){
-        if (err) sails.log.error("error", err);
-        user.school = school.id;
-        next();
-      });
-    };
-    var insertDept = function(next) {
-      Dept.findOne({"shortname": entry.dept}).exec(function(err, dept){
-        if (err) sails.log.error("error", err);
-        if (!dept) {
-          Dept.find({}).exec(function(err, depts){
-            var deptFound = false;
-            depts.forEach(function(dept, index, arr){
-              if (dept.hasOwnProperty("alias") && dept.alias ) {
-                dept.alias.forEach(function(alias, index, arr) {
-                  if (alias == entry.dept) {
-                    user.dept = dept.id;
-                    deptFound = true;
-                  }
-                })
-              }
-            })
-            if (!deptFound) {
-              sails.log.error("seed user error, dept not exist: " + entry.username + " : " + entry.dept);
+    user.username = entry.username;
+    user.password = entry.password;
+    user.salt = entry.salt;
+    user.email = entry.email;
+    user.firstYear = entry.year;
+
+    User.create(user)
+    .then(function(user){
+      userCreated = user;
+      return School.findOne({ where: {"name": "西南交通大学"}});
+    })
+    .then(function(school){
+      school.addUsers(userCreated);
+      return Dept.findOne({where: {"shortname": entry.dept}});
+    })
+    .then(function(dept){
+      if (!dept) {
+        Dept.findAll({})
+        .then(function(depts){
+          var deptFound = false;
+          depts.forEach(function(dept, index, arr){
+            deptData = dept.dataValues;
+            if (deptData.hasOwnProperty("alias") && deptData.alias ) {
+              deptData.alias.forEach(function(alias, index, arr) {
+                if (alias == entry.dept) {
+                  dept.addUsers(userCreated);
+                  deptFound = true;
+                }
+              })
             }
           })
-        } else {
-          user.dept = dept.id;
-        }
-        next();
-      });
-    };
-    var saveUser = function(next) {
-      users.push(user);
-      sails.log.info("seed user " + users.length + ": " + user.username);
+          if (!deptFound) {
+            sails.log.error("seed user error, dept not exist: " + entry.username + " : " + entry.dept);
+          }
+        })
+      } else {
+        dept.addUsers(userCreated);
+      }
+      return User.count();
+    })
+    .then(function(countUser){
+      sails.log.info("seed user " + countUser + ": " + user.username);
       next();
-    };
-    async.waterfall([prepUser, insertSchool, insertDept, saveUser],function (err, res) {
-      if (err) sails.log.error("error", err);
+    })
+    .catch(function(err){
+      sails.log.error("seeding failure: user");
+      sails.log.error("error", err);
       next();
     });
+
   }, function (err) {
     if (err) sails.log.error("error", err);
-    User.create(users).exec(function(err, res){
-      if (err) sails.log.error("error", err);
-      sails.log.debug("seeded: " + users.length + " user");
-      next();
-    });
-  });
-};
-
-var seedElective = function (next) {
-  sails.log.debug("seeding elective");
-  Elective.create(electiveData).then(function(res){
-    sails.log.debug("seeded: elective");
-    next(); return null;
-  }).catch(function(err){
-    sails.log.error("seeding failure: elective");
-    next(); return null;
+    sails.log.debug("seeded: depts");
+    next();
   });
 };
 
 //code,name,gender,position,dept,school,email,phone,birth,hometown,exp,group,motto,intro,legacy_courses,achievement,research,link
-var seedProfs = function(next) {
-  var profs = [];
+var seedProfs = function(req, res, next) {
   sails.log.debug("seeding profs");
   async.eachSeries(profData, function(entry, next){
+    var profCreated = {};
     var prof = {};
-    var prepProf = function(next) {
-      prof.code = entry.code;
-      prof.name = entry.name;
-      if (entry.gender == "男") {
-        prof.gender = "male";
-      } else if (entry.gender == "女") {
-        prof.gender = "female";
+    prof.code = entry.code;
+    prof.name = entry.name;
+    if (entry.gender == "男") {
+      prof.gender = "male";
+    } else if (entry.gender == "女") {
+      prof.gender = "female";
+    }
+    prof.email = entry.email;
+    prof.phone = entry.phone;
+    if (entry.birth && !isNaN(parseFloat(entry.birth))
+        && entry.brith > 1930 && entry.birth < 2010 ) {
+      prof.birth = entry.birth;
+    }
+    prof.hometown = entry.hometown;
+    if (entry.exp && !isNaN(parseFloat(entry.exp))) {
+      prof.exp = entry.exp;
+    }
+    prof.group = entry.group;
+    prof.intro = entry.intro;
+    prof.education = entry.education;
+    prof.research = entry.research;
+    prof.achievement = entry.achievement;
+    prof.legacyCourses = entry.legacyCourses;
+
+    Prof.create(prof)
+    .then(function(results){
+      profCreated = results;
+      return School.findOne({ where: {"name": "西南交通大学"}});
+    })
+    .then(function(school){
+      school.addProfs(profCreated);
+      return Dept.findOne({where: {"longname": entry.dept}});
+    })
+    .then(function(dept){
+      if (dept) {
+        dept.addProfs(profCreated);
       }
-      prof.email = entry.email;
-      prof.phone = entry.phone;
-      if (entry.birth && !isNaN(parseFloat(entry.birth))
-          && entry.brith > 1930 && entry.birth < 2010 ) {
-        prof.birth = entry.birth;
-      }
-      prof.hometown = entry.hometown;
-      if (entry.exp && !isNaN(parseFloat(entry.exp))) {
-        prof.exp = entry.exp;
-      }
-      prof.group = entry.group;
-      prof.intro = entry.intro;
-      prof.education = entry.education;
-      prof.research = entry.research;
-      prof.achievement = entry.achievement;
-      prof.legacyCourses = entry.legacyCourses;
+      return Prof.count();
+    })
+    .then(function(countProf){
+      sails.log.info("seed prof " + countProf + ": " + prof.name);
       next();
-    };
-    var insertSchool = function(next){
-      School.findOne({"name": entry.school}).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        prof.school = res.id;
-        next();
-      });
-    };
-    var insertDept = function(next) {
-      Dept.findOne({"longname": entry.dept}).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        if (res) {
-          prof.dept = res.id;
-        } else {
-          prof.dept = null;
-        }
-        next();
-      });
-    };
-    var saveProf = function(next) {
-      profs.push(prof);
-      sails.log.info("seed prof " + profs.length + ": " + prof.name);
-      next();
-    };
-    async.waterfall([prepProf, insertSchool, insertDept, saveProf],function (err, res) {
+    })
+    .catch(function(err){
       if (err) sails.log.error("error", err);
       next();
     });
   }, function (err) {
     if (err) sails.log.error("error", err);
-    Prof.create(profs).exec(function(err, res){
-      if (err) sails.log.error("error", err);
-      sails.log.debug("seeded: " + profs.length + " prof");
-      next();
-    });
+    sails.log.debug("seeded: profs");
+    next();
   });
 };
 
 //must constant: name,
 //must relation: school,dept,prof,
 //not sure: tags, stats, reviews, followers
-var seedCourses = function(next) {
+var seedCourses = function(req, res, next) {
   sails.log.debug("seeding course");
-  var courses = [];
-  var stats = [];
   async.eachSeries(courseData.results, function(entry, next){
+    var courseCreated = null;
+    var statCreated = null;
     var course = {};
     var stat = {};
-    var prepCourse = function(next) {
-      course.name = entry.name;
-      course.name = replace_roman(course.name);
 
-      // core stats
-      stat.professional = entry.rate1;
-      stat.expressive = entry.rate2;
-      stat.kind = entry.rate3;
-      stat.rateOverall = entry.rateOverall;
-      stat.countReview = entry.reviewCount;
-      stat.countGoodReview = entry.reviewGoodCount;
+    // course core
+    course.name = entry.name;
+    course.name = replace_roman(course.name);
 
-      // optional stats
-      stat.countHomework = entry.homeworkCount;
-      stat.rateHomework = entry.homeworkOverall;
-      stat.countAttend = entry.attendanceCount;
-      stat.rateAttend = entry.attendanceOverall;
-      stat.countExam = entry.examCount;
-      stat.rateExam = entry.examOverall;
-      stat.countBird = entry.birdCount;
-      stat.rateBird = entry.birdOverall;
+    // stats core
+    stat.professional = entry.rate1;
+    stat.expressive = entry.rate2;
+    stat.kind = entry.rate3;
+    stat.rateOverall = entry.rateOverall;
+    stat.countReview = entry.reviewCount;
+    stat.countGoodReview = entry.reviewGoodCount;
 
-      stat.followerCount = 0;
+    // stats stats
+    stat.countHomework = entry.homeworkCount;
+    stat.rateHomework = entry.homeworkOverall;
+    stat.countAttend = entry.attendanceCount;
+    stat.rateAttend = entry.attendanceOverall;
+    stat.countExam = entry.examCount;
+    stat.rateExam = entry.examOverall;
+    stat.countBird = entry.birdCount;
+    stat.rateBird = entry.birdOverall;
+    stat.followerCount = 0;
 
-      next();
-    };
-    var insertSchool = function(next){
-      School.findOne({"name": entry.school}).exec(function(err, school){
-        if (err) sails.log.error("error", err);
-        course.school = school.id;
-        next();
-      });
-    };
-    var insertDept = function(next) {
-      Dept.findOne({"shortname": entry.dept}).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        if (res) {
-          course.dept = res.id;
-        } else {
-          course.dept = null;
-        }
-        next();
-      });
-    };
-    var insertProf = function(next) {
-      Prof.findOne({"name": entry.prof}).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        if (res) {
-          course.prof = res.id;
-          next();
-        } else {
-          //create prof if not found
-          Prof.create({name: entry.prof, school: course.school}).then(function(res){
-            return res;
-          }).then(function(prof){
-            course.prof = prof.id;
-            next();
-            return null;
-          })
-          .catch(function(err){
-            next();
-            return null;
-          });
-        }
-      });
-    };
-    var saveCourse = function(next) {
-      CourseStat.create(stat).then(function(res){
-        stats.push(res);
-        return res;
-      }).then(function(stat){
-        course.stats = stat.id;
-        courses.push(course);
-        Course.create(course)
-        .then(function(res){
-          sails.log.info("seed course" + courses.length + ": " + course.name);
-          next(); return res;
-        }).catch(function(err){
-          if (err) sails.log.error("error", err); return null;
+    Course.create(course)
+    .then(function(results){
+      courseCreated = results;
+      return School.findOne({ where: {"name": "西南交通大学"}});
+    })
+    .then(function(school){
+      school.addCourses(courseCreated);
+      return Dept.findOne({where: {"shortname": entry.dept}});
+    })
+    .then(function(dept){
+      if (dept) {
+        dept.addCourses(courseCreated);
+      }
+      return Prof.findOne({where: {"name": entry.prof}});
+    })
+    .then(function(prof){
+      if (prof) {
+        prof.addCourses(courseCreated);
+      } else {
+        //create prof if not found
+        Prof.create({name: entry.prof})
+        .then(function(newProf){
+          newProf.addCourses(courseCreated);
         });
-      }).catch(function(err){
-        if (err) sails.log.error("error", err); return null;
-      });
-    };
-    async.waterfall([prepCourse, insertSchool, insertDept, insertProf, saveCourse],function (err, res) {
+      }
+      return CourseStat.create(stat);
+    })
+    .then(function(newStat){
+      statCreated = newStat;
+      courseCreated.setStat(statCreated);
+      return Course.count();
+    })
+    .then(function(countCourse){
+      sails.log.info("seed course " + countCourse + ": " + entry.prof + ": " + entry.name);
+      next();
+    })
+    .catch(function(err){
       if (err) sails.log.error("error", err);
       next();
     });
   }, function (err) {
     if (err) sails.log.error("error", err);
-    sails.log.debug("seeded: " + courses.length + " course");
+    sails.log.debug("seeded: courses");
     next();
   });
 };
 
-
+/*
 //course reference error
 var seedReviews = function(next) {
   sails.log.debug("seeding review");
@@ -465,7 +430,7 @@ var seedReviews = function(next) {
     });
   });
 };
-
+*/
 
 
 /*
@@ -497,20 +462,30 @@ review
 */
 
 module.exports = {
-  seedDB: function() {
-    async.series([
-      seedSchools,
-      seedDepts,
-      seedPositions,
-      seedElective,
-      seedTags,
-      seedUsers,
-      seedProfs,
-      seedCourses,
-      seedReviews,
-    ], function(err) {
-      if (err) sails.log.error("error", err);
-      sails.log.debug("seeding compeleted");
+  seedDB: function(req, res) {
+
+    var orderedActionList = [
+      seedSchools.bind(this, req, res),
+      seedDepts.bind(this, req, res),
+      seedPositions.bind(this, req, res),
+      seedElective.bind(this, req, res),
+      seedTags.bind(this, req, res),
+      seedUsers.bind(this, req, res),
+      seedProfs.bind(this, req, res),
+      seedCourses.bind(this, req, res),
+    ];
+
+    async.series(orderedActionList, function (err, resultsArray) {
+      if (err) {
+        sails.log.error("error", err);
+      } else {
+        sails.log.debug("seeding compeleted");
+        res.ok("seeding completed!");
+      }
     });
+
+
+    /*
+      seedReviews,*/
   }
 };

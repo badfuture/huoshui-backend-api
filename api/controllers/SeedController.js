@@ -7,6 +7,6 @@
 
 module.exports = {
   seedDB: function(req, res) {
-		SeedService.seedDB();
+		SeedService.seedDB(req, res);
 	}
 };
