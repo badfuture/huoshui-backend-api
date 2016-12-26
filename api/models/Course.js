@@ -13,7 +13,7 @@ module.exports = {
     homepage: {
       field: "homepage",
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       unique: false,
       comment: "course homepage",
@@ -36,7 +36,9 @@ module.exports = {
     }
   },
   associations: function() {
-    Course.hasOne(CourseStat); // courseStat: 1:1
+    Course.hasOne(CourseStat, {
+      as: "Stat"
+    }); // courseStat: 1:1
     Course.hasMany(Review, {
       as: 'Reviews',
       foreignKey: 'course_id'
