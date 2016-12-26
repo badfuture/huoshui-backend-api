@@ -135,7 +135,13 @@ module.exports = {
     }
   },
   associations: function() {
-    CourseStat.belongsTo(Course); // 1:1
+    CourseStat.belongsTo(Course, {
+      as: 'Course',
+      foreignKey: {
+        field: 'course_id',
+        allowNull: false,
+      }
+    }); // 1:1
   },
   options: {
     tableName: 'course_stat',
