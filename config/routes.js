@@ -5,6 +5,9 @@
 module.exports.routes = {
   '/': {view: 'homepage'},
 
+  //test route (dev only)
+  'post /test': 'TestController.test',
+
   //seed leancloud data
   'post /seeddb': 'SeedController.seedDB',
 

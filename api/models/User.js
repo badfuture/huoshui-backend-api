@@ -58,11 +58,11 @@ module.exports = {
       as: 'Dept'
     }); // n:1
     User.hasMany(Review, {
-      as: 'MyRviews',
+      as: 'Reviews',
       foreignKey: 'author_id'
     }); // 1:n
     User.hasMany(ReviewComment,{
-      as: 'MyComments',
+      as: 'Comments',
       foreignKey: 'author_id'
     }); // 1:n
 

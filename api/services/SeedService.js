@@ -329,137 +329,96 @@ var seedCourses = function(req, res, next) {
   });
 };
 
-/*
-//course reference error
-var seedReviews = function(next) {
+var seedReviews = function(req, res, next) {
   sails.log.debug("seeding review");
-  var reviews = [];
   async.eachSeries(reviewData.results, function(entry, next){
+    var reviewCreated = null;
     var review = {};
-    var prepReview = function(next) {
 
-      //must
-      review.text = entry.comment;
-      review.professional = entry.rating.rate1;
-      review.expressive = entry.rating.rate2;
-      review.kind = entry.rating.rate3;
+    //must
+    review.text = entry.comment;
+    review.professional = entry.rating.rate1;
+    review.expressive = entry.rating.rate2;
+    review.kind = entry.rating.rate3;
 
-      //optional
-      review.downVote = entry.downVote;
-      review.upVote = entry.upVote;
-      review.checkAttendance = entry.attendance.value + 1;
-      review.birdy = entry.bird.value + 1;
-      review.lotsHomework = entry.homework.value + 1;
-      review.hasExam = entry.exam.touched;
+    //optional
+    review.downVote = entry.downVote;
+    review.upVote = entry.upVote;
+    review.checkAttendance = entry.attendance.value + 1;
+    review.birdy = entry.bird.value + 1;
+    review.lotsHomework = entry.homework.value + 1;
+    review.hasExam = entry.exam.touched;
+    review.examprep = entry.exam.examprep.checked;
+    review.openbook = entry.exam.openbook.checked;
+    review.oldquestion = entry.exam.oldquestion.checked;
+    review.easymark = entry.exam.easiness.checked;
 
-      review.examprep = entry.exam.examprep.checked;
-      review.openbook = entry.exam.openbook.checked;
-      review.oldquestion = entry.exam.oldquestion.checked;
-      review.easymark = entry.exam.easiness.checked;
+    entry.courseName = replace_roman(entry.courseName);
+    console.log("course",entry.courseName);
+    console.log("prof",entry.profName);
 
-      next();
-    };
-    var insertCourse = function(next){
+    Review.create(review)
+    .then(function(newReview){
+      reviewCreated = newReview;
 
-      entry.courseName = replace_roman(entry.courseName);
-
-      console.log("course",entry.courseName);
-      console.log("prof",entry.profName);
-
-      Course.find({name: entry.courseName})
-      .populate('prof')
-      .then(function(courses){
-        if (courses.length == 0) {
-          sails.log.warn("Found no course with same name");
-        }
-        var match = [];
-        courses.forEach(function(course, index, arr){
-          var prof = course.prof;
-          if (entry.profName == prof.name) {
-            review.course = course.id;
-            match.push(course.id);
-          }
-        })
-        if (match.length >= 2) {
-
-          sails.log.warn("Found duplicate course with same prof", review.course);
-        } else if (match.length == 0) {
-          sails.log.warn("Found no course with same prof as review");
-          review.course = null;
-        }
-        next();return null;
-      })
-      .catch(function(err){
-        if (err) sails.log.error("error", err);
-        next();return null;
-      });
-    };
-    var insertAuthor = function(next) {
-      var authorId = entry.authorId.objectId;
+      var authorLeancloudId = entry.authorId.objectId;
       var authorName = null;
       userData.results.forEach(function(item, index, arr){
-        if (item.objectId == authorId) {
+        if (item.objectId == authorLeancloudId) {
           authorName = item.username;
         }
       });
-      User.findOne({"username": authorName}).exec(function(err, res){
-        if (err) sails.log.error("error", err);
-        if (res) {
-          review.author = res.id;
-        } else {
-          review.author = null;
-        }
-        next();
+      return User.findOne({where: {"username": authorName}})
+    })
+    .then(function(userFound){
+      userFound.addReviews(reviewCreated);
+      return Course.findOne({
+        where: {"name": entry.courseName},
+        include: [{
+          model: Prof, as: 'Prof',
+          where: {
+            name: entry.profName
+          }
+        }]
       });
-    };
-    var saveReview = function(next) {
-      reviews.push(review);
-      sails.log.info("seed review " + reviews.length + ": " + review.course);
+    })
+    .then(function(courseFound){
+      if (!courseFound) {
+        sails.log.warn("Found no course with same prof as review");
+      } else {
+        courseFound.addReviews(reviewCreated);
+      }
+      //TODO: update ReviewTag join table
+      var tagsArray = entry.tags;
+      async.eachSeries(tagsArray, function(tag, next){
+        tagName = tag.value;
+        Tag.findOne({where: {"name": tagName }})
+        .then(function(tagFound){
+          reviewCreated.setTags([tagFound])
+          .then(function(){
+            next();
+          });
+        });
+      });
+    })
+    .then(function(){
+      return Review.count();
+    })
+    .then(function(reviewCount){
+      sails.log.info("seed review " + reviewCount + ": " + entry.profName + ": " + entry.courseName);
       next();
-    };
-    async.waterfall([prepReview, insertCourse, saveReview],function (err, res) {
+    })
+    .catch(function(err){
       if (err) sails.log.error("error", err);
       next();
     });
+
   }, function (err) {
     if (err) sails.log.error("error", err);
-    Review.create(reviews).exec(function(err, res){
-      if (err) sails.log.error("error", err);
-      sails.log.debug("seeded: " + reviews.length + " review");
-      next();
-    });
+    sails.log.debug("seeded: reviews");
+    next();
   });
 };
-*/
-
-
-/*
-{
-"tags": [
- {
-   "id": "4",
-   "positive": true,
-   "value": "氛围轻松",
-   "checked": true
- },
- {
-   "id": "8",
-   "positive": true,
-   "value": "幽默",
-   "checked": true
- },
- {
-   "id": "14",
-   "positive": true,
-   "value": "热情",
-   "checked": true
- }
-],
-}
-*/
-/*
-review
-*/
 
 module.exports = {
   seedDB: function(req, res) {
@@ -473,6 +432,7 @@ module.exports = {
       seedUsers.bind(this, req, res),
       seedProfs.bind(this, req, res),
       seedCourses.bind(this, req, res),
+      seedReviews.bind(this, req, res)
     ];
 
     async.series(orderedActionList, function (err, resultsArray) {
@@ -483,9 +443,5 @@ module.exports = {
         res.ok("seeding completed!");
       }
     });
-
-
-    /*
-      seedReviews,*/
   }
 };
