@@ -16,32 +16,6 @@ npm install package_name --save
 export NODE_ENV=production
 
 /*****************************************
-SailsJs console
-******************************************/
-//start sails console
-sails console
-
-//find
-School.find().exec(function(err, foundRecords){console.log('records: ', foundRecords);});
-
-User.find({username: ['sailsinaction', 'nikolateslaidol']}).exec(function(err,
-       foundRecords){if (err) console.log(err); console.log(foundRecords); });
-
-School.find({name: {'contains': '西'}}).exec(function(err, found) {if (err)
-       console.log(err);console.log(found);});
-
-//create
-User.create({email: 'sailsinaction@gmail.com',username:'sailsinaction', deleted:
-       false,banned: false,admin: false}).exec(function(err, foundRecords){ if (err)
-       console.log(err); console.log(foundRecords);});
-
-//count
-School.count().exec(function(err, count){if (err) console.log(err); console.log(count);});
-
-//retrieve param from req
-req.param('username')
-
-/*****************************************
 SailsJs Concepts
 ******************************************/
 routing
@@ -84,3 +58,24 @@ router
 gathers incoming params
 using the params to manipulate data
 returns a response code depends on the status
+
+/*****************************************
+Sequelize commands
+******************************************/
+Project.hasOne(User, {
+  as: 'Initiator',
+  foreignKey: 'initiator_id',
+})
+Project.hasMany(User, {
+  as: 'users',
+  foreignKey: 'project_id',
+})
+User.belongsTo(Company, {
+  as: 'company'
+  foreignKey: 'company_id'
+});
+project.belongsToMany(user, {
+  as: 'users',
+  through: 'user_of_project',
+  foreignkey: 'project_id'
+});
