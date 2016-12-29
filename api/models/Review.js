@@ -144,7 +144,7 @@ module.exports = {
     }); // 1:n
     Review.belongsToMany(Tag, {
       as: 'Tags',
-      through: 'review_tag',
+      through: 'JoinReviewTag',
       foreignKey: 'review_id',
     }); // m:n
   },

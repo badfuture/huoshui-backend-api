@@ -38,7 +38,7 @@ module.exports = {
     }); // 1:n
     Dept.belongsToMany(Course, {
       as: 'Courses',
-      through: 'course_dept',
+      through: 'JoinCourseDept',
       foreignKey: 'dept_id',
     }); // m:n
     Dept.belongsToMany(Prof, {

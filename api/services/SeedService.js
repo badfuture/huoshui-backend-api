@@ -396,9 +396,20 @@ var seedReviews = function(req, res, next) {
         .then(function(tagFound){
           reviewCreated.setTags([tagFound])
           .then(function(){
-            courseFound.setTags([tagFound])
+            return courseFound.setTags([tagFound]);
           })
           .then(function(){
+            var courseId = courseFound.dataValues.id;
+            var tagId = tagFound.dataValues.id;
+            return JoinCourseTag.findOne({
+              where: {
+                "course_id": courseId,
+                "tag_id": tagId
+              }
+            });
+          })
+          .then(function(joinEntryFound){
+            joinEntryFound.increment({'count': 1});
             next();
           });
         });

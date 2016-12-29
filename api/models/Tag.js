@@ -30,12 +30,12 @@ module.exports = {
   associations: function() {
     Tag.belongsToMany(Course, {
       as: 'Courses',
-      through: 'course_tag',
+      through: 'JoinCourseTag',
       foreignKey: 'tag_id'
     }); // m:n
     Tag.belongsToMany(Review, {
       as: 'Reviews',
-      through: 'review_tag',
+      through: 'JoinReviewTag',
       foreignKey: 'tag_id'
     }); // m:n
   },

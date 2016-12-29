@@ -58,12 +58,12 @@ module.exports = {
     }); // n:1
     Course.belongsToMany(Tag, {
       as: 'Tags',
-      through: 'course_tag',
+      through: 'JoinCourseTag',
       foreignKey: 'course_id',
     }); // m:n
     Course.belongsToMany(Dept, {
       as: 'Depts',
-      through: 'course_dept',
+      through: 'JoinCourseDept',
       foreignKey: 'course_id',
     }); // m:n
 

@@ -2,6 +2,11 @@
 
 module.exports = {
   attributes: {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
     count: {
       field: "count",
       type: Sequelize.INTEGER,
@@ -14,7 +19,7 @@ module.exports = {
   associations: function() {
   },
   options: {
-    tableName: 'course_tag',
+    tableName: '_JoinCourseTag',
     underscored: true,
     freezeTableName: true,
     timestamps: true,
