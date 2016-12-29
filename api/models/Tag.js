@@ -31,12 +31,12 @@ module.exports = {
     Tag.belongsToMany(Course, {
       as: 'Courses',
       through: 'course_tag',
-      foreignKey: 'course_id'
+      foreignKey: 'tag_id'
     }); // m:n
     Tag.belongsToMany(Review, {
       as: 'Reviews',
       through: 'review_tag',
-      foreignKey: 'review_id'
+      foreignKey: 'tag_id'
     }); // m:n
   },
   options: {

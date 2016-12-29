@@ -14,8 +14,8 @@ module.exports = {
   },
   associations: function() {
     Role.hasMany(User, {
+      as: 'Users',
       foreignKey: 'role_id',
-      as: 'Users'
     }); // 1:n
   },
   options: {

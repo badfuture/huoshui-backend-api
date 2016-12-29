@@ -139,7 +139,7 @@ module.exports = {
       as: 'Course',
       foreignKey: {
         field: 'course_id',
-        allowNull: false,
+        //allowNull: false,
       }
     }); // 1:1
   },

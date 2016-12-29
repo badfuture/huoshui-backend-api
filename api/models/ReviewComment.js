@@ -21,19 +21,19 @@ module.exports = {
   },
   associations: function() {
     ReviewComment.belongsTo(User, {
+      as: 'Author',
       foreignKey: 'author_id',
-      as: 'Author'
     });  // n:1
-    ReviewComment.belongsTo(Review);  //thread: 1:n
     ReviewComment.belongsTo(Review, {
+      as: 'Review',
       foreignKey: 'review_id',
-      as: 'Review'
     });  // n:1
     ReviewComment.belongsTo(ReviewComment, {
-      foreignKey: 'review_comment_id',
-      as: 'Parent'
+      as: 'Parent',
+      foreignKey: 'comment_id',
     }); // n:1
   },
+  //TODO: thread: 1:n
   options: {
     tableName: 'review_comment',
     underscored: true,

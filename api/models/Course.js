@@ -37,33 +37,34 @@ module.exports = {
   },
   associations: function() {
     Course.hasOne(CourseStat, {
-      as: "Stat"
+      as: "Stat",
+      foreignKey: 'course_id',
     }); // courseStat: 1:1
     Course.hasMany(Review, {
       as: 'Reviews',
-      foreignKey: 'course_id'
+      foreignKey: 'course_id',
     }); // 1:n
     Course.belongsTo(School, {
+      as: 'School',
       foreignKey: 'school_id',
-      as: 'School'
     }); // n:1
     Course.belongsTo(Prof, {
+      as: 'Prof',
       foreignKey: 'prof_id',
-      as: 'Prof'
     }); // n:1
     Course.belongsTo(Elective, {
+      as: 'Elective',
       foreignKey: 'elective_id',
-      as: 'Elective'
     }); // n:1
     Course.belongsToMany(Tag, {
       as: 'Tags',
       through: 'course_tag',
-      foreignKey: 'tag_id'
+      foreignKey: 'course_id',
     }); // m:n
     Course.belongsToMany(Dept, {
       as: 'Depts',
       through: 'course_dept',
-      foreignKey: 'dept_id'
+      foreignKey: 'course_id',
     }); // m:n
 
     //followers: m:n

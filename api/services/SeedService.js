@@ -396,6 +396,9 @@ var seedReviews = function(req, res, next) {
         .then(function(tagFound){
           reviewCreated.setTags([tagFound])
           .then(function(){
+            courseFound.setTags([tagFound])
+          })
+          .then(function(){
             next();
           });
         });

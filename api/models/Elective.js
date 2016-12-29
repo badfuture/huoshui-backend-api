@@ -14,7 +14,7 @@ module.exports = {
   associations: function() {
     Elective.hasMany(Course, {
       as: 'Courses',
-      foreignKey: 'elective_id'
+      foreignKey: 'elective_id',
     }); // 1:n
   },
   options: {

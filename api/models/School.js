@@ -21,20 +21,20 @@ module.exports = {
   },
   associations: function() {
     School.hasMany(User, {
+      as: 'Users',
       foreignKey: 'school_id',
-      as: 'Users'
     }); // 1:n
     School.hasMany(Course, {
+      as: 'Courses',
       foreignKey: 'school_id',
-      as: 'Courses'
     }); // 1:n
     School.hasMany(Dept, {
+      as: 'Depts',
       foreignKey: 'school_id',
-      as: 'Depts'
     }); // 1:n
     School.hasMany(Prof, {
+      as: 'Profs',
       foreignKey: 'school_id',
-      as: 'Profs'
     }); // 1:n
   },
   options: {

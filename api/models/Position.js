@@ -14,8 +14,8 @@ module.exports = {
   },
   associations: function() {
     Position.hasMany(Prof, {
+      as: 'Profs',
       foreignKey: 'position_id',
-      as: 'Profs'
     }); // 1:n
   },
   options: {

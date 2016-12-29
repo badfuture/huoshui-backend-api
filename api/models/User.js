@@ -46,24 +46,24 @@ module.exports = {
   },
   associations: function() {
     User.belongsTo(School, {
+      as: 'School',
       foreignKey: 'school_id',
-      as: 'School'
     }); // n:1
     User.belongsTo(Role, {
+      as: 'Role',
       foreignKey: 'role_id',
-      as: 'Role'
     }); // n:1
     User.belongsTo(Dept, {
+      as: 'Dept',
       foreignKey: 'dept_id',
-      as: 'Dept'
     }); // n:1
     User.hasMany(Review, {
       as: 'Reviews',
-      foreignKey: 'author_id'
+      foreignKey: 'author_id',
     }); // 1:n
     User.hasMany(ReviewComment,{
       as: 'Comments',
-      foreignKey: 'author_id'
+      foreignKey: 'user_id',
     }); // 1:n
 
     //likedReviews: 1:n

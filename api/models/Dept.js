@@ -29,22 +29,22 @@ module.exports = {
   },
   associations: function() {
     Dept.belongsTo(School, {
+      as: 'School',
       foreignKey: 'school_id',
-      as: 'School'
     }); // n:1
     Dept.hasMany(User, {
+      as: 'Users',
       foreignKey: 'dept_id',
-      as: 'Users'
     }); // 1:n
     Dept.belongsToMany(Course, {
       as: 'Courses',
       through: 'course_dept',
-      foreignKey: 'course_id'
+      foreignKey: 'dept_id',
     }); // m:n
     Dept.belongsToMany(Prof, {
       as: 'Profs',
       through: 'prof_dept',
-      foreignKey: 'prof_id'
+      foreignKey: 'dept_id',
     }); // m:n
 
   },

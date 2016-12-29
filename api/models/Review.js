@@ -131,21 +131,21 @@ module.exports = {
   },
   associations: function() {
     Review.belongsTo(Course, {
+      as: 'Course',
       foreignKey: 'course_id',
-      as: 'Course'
     }); // n:1
     Review.belongsTo(User, {
+      as: 'Author',
       foreignKey: 'author_id',
-      as: 'Author'
     }); //author: n:1
     Review.hasMany(ReviewComment, {
       as: 'Comments',
-      foreignKey: 'comment_id'
+      foreignKey: 'review_id',
     }); // 1:n
     Review.belongsToMany(Tag, {
       as: 'Tags',
       through: 'review_tag',
-      foreignKey: 'tag_id'
+      foreignKey: 'review_id',
     }); // m:n
   },
   options: {

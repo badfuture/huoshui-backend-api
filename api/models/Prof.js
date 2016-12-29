@@ -150,12 +150,12 @@ module.exports = {
     }); // n:1
     Prof.hasMany(Course, {
       as: 'Courses',
-      foreignKey: 'prof_id'
+      foreignKey: 'prof_id',
     }); // 1:n
     Prof.belongsToMany(Dept, {
       as: 'Depts',
       through: 'prof_dept',
-      foreignKey: 'dept_id'
+      foreignKey: 'prof_id',
     }); // m:n
   },
   options: {
