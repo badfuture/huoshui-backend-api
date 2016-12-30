@@ -2,6 +2,14 @@
 
 module.exports = {
   attributes: {
+    commentable: {
+      field: "commentable",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: null,
+      unique: true,
+      comment: "comment type, mapped to the commetable tables (ex.Post and Review)",
+    },
     text: {
       field: "text",
       type: Sequelize.TEXT,
@@ -20,28 +28,33 @@ module.exports = {
     }
   },
   associations: function() {
-    ReviewComment.belongsTo(User, {
+    Comment.belongsTo(User, {
       as: 'Author',
       foreignKey: 'author_id',
     });  // n:1
-    ReviewComment.belongsTo(Review, {
+    Comment.belongsTo(Review, {
       as: 'Review',
       foreignKey: 'review_id',
+      constraints: false,
     });  // n:1
-    ReviewComment.belongsTo(ReviewComment, {
+    Comment.belongsTo(Comment, {
       as: 'Parent',
       foreignKey: 'comment_id',
     }); // n:1
   },
   //TODO: thread: 1:n
   options: {
-    tableName: 'review_comment',
+    tableName: 'comment',
     underscored: true,
     freezeTableName: true,
     timestamps: true,
     paranoid: false,
     classMethods: {},
-    instanceMethods: {},
+    instanceMethods: {
+      getItem: function() {
+        return this['get' + this.get('commentable').substr(0, 1).toUpperCase() + this.get('commentable').substr(1)]();
+      }
+    },
     hooks: {}
   }
 };

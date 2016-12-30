@@ -138,9 +138,13 @@ module.exports = {
       as: 'Author',
       foreignKey: 'author_id',
     }); //author: n:1
-    Review.hasMany(ReviewComment, {
+    Review.hasMany(Comment, {
       as: 'Comments',
       foreignKey: 'review_id',
+      constraints: false,
+      scope: {
+        commentable: 'review'
+      },
     }); // 1:n
     Review.belongsToMany(Tag, {
       as: 'Tags',

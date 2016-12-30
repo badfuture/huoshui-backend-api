@@ -61,7 +61,7 @@ module.exports = {
       as: 'Reviews',
       foreignKey: 'author_id',
     }); // 1:n
-    User.hasMany(ReviewComment,{
+    User.hasMany(Comment, {
       as: 'Comments',
       foreignKey: 'user_id',
     }); // 1:n
