@@ -148,8 +148,15 @@ module.exports = {
     }); // 1:n
     Review.belongsToMany(Tag, {
       as: 'Tags',
-      through: 'JoinReviewTag',
-      foreignKey: 'review_id',
+      through: {
+        model: 'JoinItemTag',
+        unique: false,
+        scope: {
+          taggable: 'review'
+        }
+      },
+      foreignKey: 'taggable_id',
+      constraints: false
     }); // m:n
   },
   options: {

@@ -74,7 +74,7 @@ var seedDepts = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addDepts(deptCreated);
+      school.addDept(deptCreated);
       next();
     });
   }, function (err) {
@@ -143,7 +143,7 @@ var seedUsers = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addUsers(userCreated);
+      school.addUser(userCreated);
       return Dept.findOne({where: {"shortname": entry.dept}});
     })
     .then(function(dept){
@@ -156,7 +156,7 @@ var seedUsers = function(req, res, next) {
             if (deptData.hasOwnProperty("alias") && deptData.alias ) {
               deptData.alias.forEach(function(alias, index, arr) {
                 if (alias == entry.dept) {
-                  dept.addUsers(userCreated);
+                  dept.addUser(userCreated);
                   deptFound = true;
                 }
               })
@@ -167,7 +167,7 @@ var seedUsers = function(req, res, next) {
           }
         })
       } else {
-        dept.addUsers(userCreated);
+        dept.addUser(userCreated);
       }
       return User.count();
     })
@@ -224,12 +224,12 @@ var seedProfs = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addProfs(profCreated);
+      school.addProf(profCreated);
       return Dept.findOne({where: {"longname": entry.dept}});
     })
     .then(function(dept){
       if (dept) {
-        dept.addProfs(profCreated);
+        dept.addProf(profCreated);
       }
       return Prof.count();
     })
@@ -288,23 +288,23 @@ var seedCourses = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addCourses(courseCreated);
+      school.addCourse(courseCreated);
       return Dept.findOne({where: {"shortname": entry.dept}});
     })
     .then(function(dept){
       if (dept) {
-        dept.addCourses(courseCreated);
+        dept.addCourse(courseCreated);
       }
       return Prof.findOne({where: {"name": entry.prof}});
     })
     .then(function(prof){
       if (prof) {
-        prof.addCourses(courseCreated);
+        prof.addCourse(courseCreated);
       } else {
         //create prof if not found
         Prof.create({name: entry.prof})
         .then(function(newProf){
-          newProf.addCourses(courseCreated);
+          newProf.addCourse(courseCreated);
         });
       }
       return CourseStat.create(stat);
@@ -333,6 +333,7 @@ var seedReviews = function(req, res, next) {
   sails.log.debug("seeding review");
   async.eachSeries(reviewData.results, function(entry, next){
     var reviewCreated = null;
+    var courseFound = null;
     var review = {};
 
     //must
@@ -354,8 +355,6 @@ var seedReviews = function(req, res, next) {
     review.easymark = entry.exam.easiness.checked;
 
     entry.courseName = replace_roman(entry.courseName);
-    console.log("course",entry.courseName);
-    console.log("prof",entry.profName);
 
     Review.create(review)
     .then(function(newReview){
@@ -371,7 +370,7 @@ var seedReviews = function(req, res, next) {
       return User.findOne({where: {"username": authorName}})
     })
     .then(function(userFound){
-      userFound.addReviews(reviewCreated);
+      userFound.addReview(reviewCreated);
       return Course.findOne({
         where: {"name": entry.courseName},
         include: [{
@@ -382,36 +381,50 @@ var seedReviews = function(req, res, next) {
         }]
       });
     })
-    .then(function(courseFound){
+    .then(function(results){
+      var courseFound = results;
       if (!courseFound) {
         sails.log.warn("Found no course with same prof as review");
       } else {
-        courseFound.addReviews(reviewCreated);
+        courseFound.addReview(reviewCreated);
       }
-      //TODO: update ReviewTag join table
+
       var tagsArray = entry.tags;
       async.eachSeries(tagsArray, function(tag, next){
         tagName = tag.value;
+        var tagFound = null;
+        var profFound = null;
+
         Tag.findOne({where: {"name": tagName }})
-        .then(function(tagFound){
-          reviewCreated.setTags([tagFound])
-          .then(function(){
-            return courseFound.setTags([tagFound]);
-          })
-          .then(function(){
-            var courseId = courseFound.dataValues.id;
-            var tagId = tagFound.dataValues.id;
-            return JoinCourseTag.findOne({
-              where: {
-                "course_id": courseId,
-                "tag_id": tagId
-              }
-            });
-          })
-          .then(function(joinEntryFound){
-            joinEntryFound.increment({'count': 1});
-            next();
+        .then(function(results){
+          tagFound = results;
+          return Prof.findOne({
+            where: {
+              name: entry.profName
+            }
           });
+        })
+        .then(function(results){
+          profFound = results;
+          return profFound.addTag(tagFound);
+
+        })
+        .then(function(){
+          return reviewCreated.addTag(tagFound);
+        })
+        .then(function(){
+          return courseFound.addTag(tagFound);
+        })
+        .then(function(){
+          var tagId = tagFound.dataValues.id;
+          return courseFound.getTags({where: {"id": tagId}});
+        })
+        .then(function(results){
+          var tagFound = results[0];
+          return tagFound.JoinItemTag.increment({'count': 1});
+        })
+        .then(function(){
+          next();
         });
       });
     })
@@ -436,6 +449,7 @@ var seedReviews = function(req, res, next) {
 
 module.exports = {
   seedDB: function(req, res) {
+    res.ok("seeding is started!");
 
     var orderedActionList = [
       seedSchools.bind(this, req, res),
@@ -454,7 +468,7 @@ module.exports = {
         sails.log.error("error", err);
       } else {
         sails.log.debug("seeding compeleted");
-        res.ok("seeding completed!");
+
       }
     });
   }

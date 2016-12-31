@@ -157,6 +157,18 @@ module.exports = {
       through: 'prof_dept',
       foreignKey: 'prof_id',
     }); // m:n
+    Prof.belongsToMany(Tag, {
+      as: 'Tags',
+      through: {
+        model: 'JoinItemTag',
+        unique: false,
+        scope: {
+          taggable: 'prof'
+        }
+      },
+      foreignKey: 'taggable_id',
+      constraints: false,
+    }); // m:n
   },
   options: {
     tableName: 'prof',

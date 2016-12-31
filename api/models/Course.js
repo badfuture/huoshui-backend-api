@@ -58,8 +58,15 @@ module.exports = {
     }); // n:1
     Course.belongsToMany(Tag, {
       as: 'Tags',
-      through: 'JoinCourseTag',
-      foreignKey: 'course_id',
+      through: {
+        model: 'JoinItemTag',
+        unique: false,
+        scope: {
+          taggable: 'course'
+        }
+      },
+      foreignKey: 'taggable_id',
+      constraints: false
     }); // m:n
     Course.belongsToMany(Dept, {
       as: 'Depts',
