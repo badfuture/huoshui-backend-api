@@ -103,6 +103,10 @@ module.exports = function(sails) {
         return cb();
       }
 
+      sails.on('lifted', function() {
+          sails.log.debug('sails-hook-sequelize-blueprint loaded successfully');
+      });
+
       // Register route syntax for binding blueprints directly.
       sails.on('route:typeUnknown', onRoute);
 
