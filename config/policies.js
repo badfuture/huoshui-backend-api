@@ -54,6 +54,12 @@ module.exports.policies = {
   //'*': ['isAuthorized'], // Everything resctricted by default
   AuthController: {
     '*': true
-  }
+  },
+
+  SchoolController: {
+    'find': true,
+    'findOne': true,
+    '*': false
+  },
 
 };
