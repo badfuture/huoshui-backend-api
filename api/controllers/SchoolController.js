@@ -6,7 +6,7 @@
 
 module.exports = {
 
-	find: function(req,res){
+  find: function(req,res){
     School.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
@@ -34,7 +34,7 @@ module.exports = {
     });
   },
 
-	create: function(req,res){
+  create: function(req,res){
     var data = ActionUtil.parseValues(req);
     School.create(data).then(function(newInstance) {
        res.created(newInstance);
