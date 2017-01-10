@@ -40,6 +40,7 @@
     "sails-mongo": "^0.12.0",
     "sails-mysql": "^0.12.1",
     "sails-postgresql": "^0.11.4",
+    "sails-swagger": "^0.5.1",
     "sequelize": "^3.27.0",
     "the-ultimate-question": "^1.3.0"
   },
@@ -53,5 +54,8 @@
     "url": "git://github.com/ze/sails_huoshui.git"
   },
   "author": "ze",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "swagger-ui": "^2.2.10"
+  }
 }
