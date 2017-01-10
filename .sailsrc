@@ -5,5 +5,8 @@
     "pubsub": false,
     "blueprints": false,
     "i18n": false
+  },
+  "paths": {
+      "public": "assets"
   }
 }
