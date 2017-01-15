@@ -16,7 +16,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "is the tag has a positive meaning",
+      comment: "does the tag has a positive meaning",
     },
     category: {
       field: "category",
