@@ -1,6 +1,7 @@
 var fs = require("fs");
 var async = require("async");
 var csv_parse = require('csv-parse/lib/sync');
+var publisher = sails.hooks.publisher;
 
 //replace all roman numerals with regular English characters
 var replace_roman = function(roman) {
@@ -74,7 +75,9 @@ var seedDepts = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addDept(deptCreated);
+      return school.addDept(deptCreated);
+    })
+    .then(function(){
       next();
     });
   }, function (err) {
@@ -143,7 +146,9 @@ var seedUsers = function(req, res, next) {
       return School.findOne({ where: {"name": "西南交通大学"}});
     })
     .then(function(school){
-      school.addUser(userCreated);
+      return school.addUser(userCreated);
+    })
+    .then(function(){
       return Dept.findOne({where: {"shortname": entry.dept}});
     })
     .then(function(dept){
@@ -359,7 +364,6 @@ var seedReviews = function(req, res, next) {
     Review.create(review)
     .then(function(newReview){
       reviewCreated = newReview;
-
       var authorLeancloudId = entry.authorId.objectId;
       var authorName = null;
       userData.results.forEach(function(item, index, arr){
@@ -370,7 +374,9 @@ var seedReviews = function(req, res, next) {
       return User.findOne({where: {"username": authorName}})
     })
     .then(function(userFound){
-      userFound.addReview(reviewCreated);
+      return userFound.addReview(reviewCreated);
+    })
+    .then(function(){
       return Course.findOne({
         where: {"name": entry.courseName},
         include: [{
@@ -382,13 +388,14 @@ var seedReviews = function(req, res, next) {
       });
     })
     .then(function(results){
-      var courseFound = results;
+      courseFound = results;
       if (!courseFound) {
         sails.log.warn("Found no course with same prof as review");
       } else {
-        courseFound.addReview(reviewCreated);
+        return courseFound.addReview(reviewCreated);
       }
-
+    })
+    .then(function(){
       var tagsArray = entry.tags;
       async.eachSeries(tagsArray, function(tag, next){
         tagName = tag.value;
@@ -407,7 +414,14 @@ var seedReviews = function(req, res, next) {
         .then(function(results){
           profFound = results;
           return profFound.addTag(tagFound);
-
+        })
+        .then(function(){
+          var tagId = tagFound.dataValues.id;
+          return profFound.getTags({where: {"id": tagId}});
+        })
+        .then(function(results){
+          var tagFound = results[0];
+          return tagFound.JoinItemTag.increment({'count': 1});
         })
         .then(function(){
           return reviewCreated.addTag(tagFound);
@@ -468,7 +482,6 @@ module.exports = {
         sails.log.error("error", err);
       } else {
         sails.log.debug("seeding compeleted");
-
       }
     });
   }
