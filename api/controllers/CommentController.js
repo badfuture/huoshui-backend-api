@@ -2,10 +2,47 @@
  * CommentController
  *
  * @description :: Server-side logic for managing comments
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
-	
-};
+	find: function(req,res){
+		var customInclude = ActionUtil.populateEach(req);
+    var defaultInclude = [
+      { model: User, as: 'Author'},
+    ];
+    var includeOption = (customInclude.length === 0)
+                  ? defaultInclude : customInclude;
 
+    Dept.findAll({
+      where: ActionUtil.parseWhere(req),
+      limit: ActionUtil.parseLimit(req),
+      offset: ActionUtil.parseSkip(req),
+      order: ActionUtil.parseSort(req),
+      include: includeOption
+    }).then(function(recordsFound){
+      return res.ok(recordsFound);
+    }).catch(function(err){
+      return res.serverError(err);
+    });
+  },
+
+  findOne: function(req,res){
+    var pk = ActionUtil.requirePk(req);
+		var customInclude = ActionUtil.populateEach(req);
+    var defaultInclude = [
+      { model: User, as: 'Author'},
+    ];
+    var includeOption = (customInclude.length === 0)
+                  ? defaultInclude : customInclude;
+
+    Dept.findById(pk, {
+      include: includeOption
+    }).then(function(recordFound) {
+      if(!recordFound) return res.notFound('No record found with the specified `id`.');
+      res.ok(recordFound);
+    }).catch(function(err){
+      return res.serverError(err);
+    });
+  },
+
+};

@@ -2,11 +2,14 @@
  * SeedController
  *
  * @description :: Server-side logic for seeding data
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+
+var publisher = sails.hooks.publisher;
 
 module.exports = {
   seedDB: function(req, res) {
+
+    var job = publisher.create('seed_service').priority('medium').save();
 		SeedService.seedDB(req, res);
 	}
 };
