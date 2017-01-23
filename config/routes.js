@@ -7,14 +7,18 @@ module.exports.routes = {
   //seed leancloud data
   'POST /seeddb': 'SeedController.seedDB',
 
+  //swagger doc
+  'GET /swagger/doc': {
+    controller: "SwaggerController",
+    action: "getSwaggerDocJson"
+  },
+
   //authorization
   'POST /auth/signup': {
-    model: "",
     controller: "AuthController",
     action: "signup"
   },
   'POST /auth/login': {
-    model: "",
     controller: "AuthController",
     action: "login"
   },
