@@ -23,6 +23,18 @@ module.exports.http = {
 
   middleware: {
 
+    // set 'X-Powered-By'
+    poweredBy: false,
+    setPoweredBy: function(request, response, next) {
+      //disable 'x-powered-by'
+      //var expressApp = sails.hooks.http.app;
+      //expressApp.disable('x-powered-by');
+      response.set('X-Powered-By', 'The Huoshui Team');
+      next();
+    },
+
+
+
   /***************************************************************************
   *                                                                          *
   * The order in which middleware should be run for HTTP request. (the Sails *
@@ -30,23 +42,24 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+    order: [
+      'startRequestTimer',
+      'cookieParser',
+      'session',
+      'myRequestLogger',
+      'bodyParser',
+      'handleBodyParserError',
+      'compress',
+      'methodOverride',
+      'poweredBy',
+      'setPoweredBy',
+      '$custom',
+      'router',
+      'www',
+      'favicon',
+      '404',
+      '500'
+    ],
 
   /****************************************************************************
   *                                                                           *
