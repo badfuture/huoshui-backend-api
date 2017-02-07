@@ -5,6 +5,7 @@ module.exports = {
     shortname: {
       field: "shortname",
       type: Sequelize.STRING,
+      type_swag: "string",
       allowNull: false,
       defaultValue: null,
       unique: false,

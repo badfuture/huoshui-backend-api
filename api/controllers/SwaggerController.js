@@ -7,6 +7,6 @@
 module.exports = {
 
   getSwaggerDocJson: function(req, res) {
-    SwaggerService.generateDocJson(this, res);
+    SwaggerService.generateDocJson(req, res);
   }
 };

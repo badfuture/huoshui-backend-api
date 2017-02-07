@@ -2,156 +2,45 @@
  * Route Mappings
  */
 
-module.exports.routes = {
+var authRoute = require('../api/routes/authRoute');
+var commentRoute = require('../api/routes/commentRoute');
+var courseRoute = require('../api/routes/courseRoute');
+var courseStatsRoute = require('../api/routes/courseStatsRoute');
+var deptRoute = require('../api/routes/deptRoute');
+var electiveRoute = require('../api/routes/electiveRoute');
+var positionRoute = require('../api/routes/positionRoute');
+var profRoute = require('../api/routes/profRoute');
+var reviewRoute = require('../api/routes/reviewRoute');
+var schoolRoute = require('../api/routes/schoolRoute');
+var swaggerRoute = require('../api/routes/swaggerRoute');
+var tagRoute = require('../api/routes/tagRoute');
+var userRoute = require('../api/routes/userRoute');
+var otherRoute = require('../api/routes/otherRoute');
 
-  //seed leancloud data
-  'POST /seeddb': 'SeedController.seedDB',
+// Dynamic include custom routes from api
+var routes = function (routes) {
+  var obj = {};
+  routes.forEach(function (route) {
+    for (path in route) {
+      obj[path] = route[path];
+    }
+  })
+  return obj;
+}
 
-  //swagger doc
-  'GET /swagger/doc': {
-    controller: "SwaggerController",
-    action: "getSwaggerDocJson"
-  },
-
-  //authorization
-  'POST /auth/signup': {
-    controller: "AuthController",
-    action: "signup"
-  },
-  'POST /auth/login': {
-    controller: "AuthController",
-    action: "login"
-  },
-
-  //course
-  'GET /comments': {
-    model: "comment",
-    controller: "CommentController",
-    action: "find"
-  },
-  'GET /comments/:id': {
-    model: "comment",
-    controller: "CommentController",
-    action: "findOne"
-  },
-
-  //course
-  'GET /courses': {
-    model: "course",
-    controller: "CourseController",
-    action: "find"
-  },
-  'GET /courses/:id': {
-    model: "course",
-    controller: "CourseController",
-    action: "findOne"
-  },
-
-  //courseStat
-  'GET /coursestats': {
-    model: "coursestat",
-    controller: "CourseStatController",
-    action: "find"
-  },
-  'GET /coursestats/:id': {
-    model: "coursestat",
-    controller: "CourseStatController",
-    action: "findOne"
-  },
-
-  //dept
-  'GET /depts': {
-    model: "dept",
-    controller: "DeptController",
-    action: "find"
-  },
-  'GET /depts/:id': {
-    model: "dept",
-    controller: "DeptController",
-    action: "findOne"
-  },
-
-  //elective
-  'GET /electives': {
-    model: "elective",
-    controller: "ElectiveController",
-    action: "find"
-  },
-  'GET /electives/:id': {
-    model: "elective",
-    controller: "ElectiveController",
-    action: "findOne"
-  },
-
-  //position
-  'GET /positions': {
-    model: "position",
-    controller: "PositionController",
-    action: "find"
-  },
-  'GET /positions/:id': {
-    model: "position",
-    controller: "PositionController",
-    action: "findOne"
-  },
-
-  //prof
-  'GET /profs': {
-    model: "prof",
-    controller: "ProfController",
-    action: "find"
-  },
-  'GET /profs/:id': {
-    model: "prof",
-    controller: "ProfController",
-    action: "findOne"
-  },
-
-  //review
-  'GET /reviews': {
-    model: "review",
-    controller: "ReviewController",
-    action: "find"
-  },
-  'GET /reviews/:id': {
-    model: "review",
-    controller: "ReviewController",
-    action: "findOne"
-  },
-
-  //school
-  'GET /schools': {
-    model: "school",
-    controller: "SchoolController",
-    action: "find"
-  },
-  'GET /schools/:id': {
-    model: "school",
-    controller: "SchoolController",
-    action: "findOne"
-  },
-
-  //tag
-  'GET /tags': {
-    model: "tag",
-    controller: "TagController",
-    action: "find"
-  },
-  'GET /tags/:id': {
-    model: "tag",
-    controller: "TagController",
-    action: "findOne"
-  },
-
-  //user
-  'GET /users': {
-    model: "user",
-    controller: "UserController",
-    action: "find"
-  },
-  'GET /users/:id': {
-    model: "user",
-    controller: "UserController",
-    action: "findOne"
-  },
-};
+module.exports.routes = routes([
+  authRoute,
+  commentRoute,
+  courseRoute,
+  courseStatsRoute,
+  deptRoute,
+  electiveRoute,
+  positionRoute,
+  profRoute,
+  reviewRoute,
+  schoolRoute,
+  swaggerRoute,
+  tagRoute,
+  userRoute,
+  otherRoute
+]);
