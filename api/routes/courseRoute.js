@@ -2,11 +2,15 @@ module.exports = {
   'GET /courses': {
     model: "course",
     controller: "CourseController",
-    action: "find"
+    action: "find",
+    isPlural: true,
+    swagger: {}
   },
   'GET /courses/:id': {
     model: "course",
     controller: "CourseController",
-    action: "findOne"
+    action: "findOne",
+    isPlural: false,
+    swagger: {}
   }
 }

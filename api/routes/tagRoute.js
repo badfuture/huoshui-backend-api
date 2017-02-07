@@ -2,11 +2,15 @@ module.exports = {
   'GET /tags': {
     model: "tag",
     controller: "TagController",
-    action: "find"
+    action: "find",
+    isPlural: true,
+    swagger: {}
   },
   'GET /tags/:id': {
     model: "tag",
     controller: "TagController",
-    action: "findOne"
+    action: "findOne",
+    isPlural: false,
+    swagger: {}
   }
 }

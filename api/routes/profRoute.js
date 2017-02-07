@@ -2,11 +2,15 @@ module.exports = {
   'GET /profs': {
     model: "prof",
     controller: "ProfController",
-    action: "find"
+    action: "find",
+    isPlural: true,
+    swagger: {}
   },
   'GET /profs/:id': {
     model: "prof",
     controller: "ProfController",
-    action: "findOne"
+    action: "findOne",
+    isPlural: false,
+    swagger: {}
   }
 }

@@ -3,11 +3,15 @@ module.exports = {
   'GET /users': {
     model: "user",
     controller: "UserController",
-    action: "find"
+    action: "find",
+    isPlural: true,
+    swagger: {}
   },
   'GET /users/:id': {
     model: "user",
     controller: "UserController",
-    action: "findOne"
+    action: "findOne",
+    isPlural: false,
+    swagger: {}
   }
 }
