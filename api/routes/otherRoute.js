@@ -1,6 +1,6 @@
 module.exports = {
   //seed leancloud data
-  'POST /seeddb': {
+  'PUT /seeddb': {
     controller: "SeedController",
     action: "seedDB"
   }

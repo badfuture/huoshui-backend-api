@@ -44,11 +44,12 @@ var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
 var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
 
 //functions for seeding
-var seedSchools = function(req, res, next) {
+var seedSchools = function(job, next) {
   sails.log.debug("seeding schools");
   School.bulkCreate(schoolData)
   .then(function(schools){
     sails.log.debug("seeded: school");
+    job.progress(1, 10);
     next();
   })
   .catch(function(err){
@@ -59,7 +60,7 @@ var seedSchools = function(req, res, next) {
 };
 
 
-var seedDepts = function(req, res, next) {
+var seedDepts = function(job, next) {
   sails.log.debug("seeding dept");
   async.eachSeries(deptData, function(entry, next){
     var dept = {};
@@ -83,16 +84,18 @@ var seedDepts = function(req, res, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: depts");
+    job.progress(2, 10);
     next();
   });
 };
 
 
-var seedPositions = function(req, res, next) {
+var seedPositions = function(job, next) {
   sails.log.debug("seeding positions");
   Position.bulkCreate(positionData)
   .then(function(res){
     sails.log.debug("seeded: position");
+    job.progress(4, 10);
     next();
   })
   .catch(function(err){
@@ -101,11 +104,12 @@ var seedPositions = function(req, res, next) {
   });
 };
 
-var seedElective = function (req, res, next) {
+var seedElective = function (job, next) {
   sails.log.debug("seeding elective");
   Elective.bulkCreate(electiveData)
   .then(function(res){
     sails.log.debug("seeded: elective");
+    job.progress(5, 10);
     next();
   })
   .catch(function(err){
@@ -115,11 +119,12 @@ var seedElective = function (req, res, next) {
 };
 
 
-var seedTags = function (req, res, next) {
+var seedTags = function (job, next) {
   sails.log.debug("seeding tags");
   Tag.bulkCreate(tagData)
   .then(function(res){
     sails.log.debug("seeded: tag");
+    job.progress(6, 10);
     next();
   })
   .catch(function(err){
@@ -129,7 +134,7 @@ var seedTags = function (req, res, next) {
   });
 };
 
-var seedUsers = function(req, res, next) {
+var seedUsers = function(job, next) {
   sails.log.debug("seeding users");
   async.eachSeries(userData.results, function(entry, next){
     var userCreated = null;
@@ -189,12 +194,13 @@ var seedUsers = function(req, res, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: depts");
+    job.progress(7, 10);
     next();
   });
 };
 
 //code,name,gender,position,dept,school,email,phone,birth,hometown,exp,group,motto,intro,legacy_courses,achievement,research,link
-var seedProfs = function(req, res, next) {
+var seedProfs = function(job, next) {
   sails.log.debug("seeding profs");
   async.eachSeries(profData, function(entry, next){
     var profCreated = {};
@@ -249,6 +255,7 @@ var seedProfs = function(req, res, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: profs");
+    job.progress(8, 10);
     next();
   });
 };
@@ -256,7 +263,7 @@ var seedProfs = function(req, res, next) {
 //must constant: name,
 //must relation: school,dept,prof,
 //not sure: tags, stats, reviews, followers
-var seedCourses = function(req, res, next) {
+var seedCourses = function(job, next) {
   sails.log.debug("seeding course");
   async.eachSeries(courseData.results, function(entry, next){
     var courseCreated = null;
@@ -330,11 +337,12 @@ var seedCourses = function(req, res, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: courses");
+    job.progress(9, 10);
     next();
   });
 };
 
-var seedReviews = function(req, res, next) {
+var seedReviews = function(job, next) {
   sails.log.debug("seeding review");
   async.eachSeries(reviewData.results, function(entry, next){
     var reviewCreated = null;
@@ -462,27 +470,37 @@ var seedReviews = function(req, res, next) {
 };
 
 module.exports = {
-  seedDB: function(req, res) {
-    res.ok("seeding is started!");
+  seedDB: function() {
+    var publisher = sails.hooks.publisher;
+    var queue = publisher.queue;
+    var seedJob = publisher.create('seed_service', {
+      title: 'seed initial data for db'
+    })
+    .priority('medium')
+    .save();
 
-    var orderedActionList = [
-      seedSchools.bind(this, req, res),
-      seedDepts.bind(this, req, res),
-      seedPositions.bind(this, req, res),
-      seedElective.bind(this, req, res),
-      seedTags.bind(this, req, res),
-      seedUsers.bind(this, req, res),
-      seedProfs.bind(this, req, res),
-      seedCourses.bind(this, req, res),
-      seedReviews.bind(this, req, res)
-    ];
+    queue.process("seed_service", function(job, jobDone){
+      var orderedActionList = [
+        seedSchools.bind(this, job),
+        seedDepts.bind(this, job),
+        seedPositions.bind(this, job),
+        seedElective.bind(this, job),
+        seedTags.bind(this, job),
+        seedUsers.bind(this, job),
+        seedProfs.bind(this, job),
+        seedCourses.bind(this, job),
+        seedReviews.bind(this, job)
+      ];
 
-    async.series(orderedActionList, function (err, resultsArray) {
-      if (err) {
-        sails.log.error("error", err);
-      } else {
-        sails.log.debug("seeding compeleted");
-      }
+      async.series(orderedActionList, function (err, resultsArray) {
+        if (err) {
+          sails.log.error("error", err);
+        } else {
+          sails.log.debug("seeding compeleted");
+          jobDone();
+        }
+      });
+
     });
   }
 };
