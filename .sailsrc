@@ -4,6 +4,7 @@
     "orm": false,
     "pubsub": false,
     "blueprints": false,
-    "i18n": false
+    "i18n": false,
+    "session": false
   }
 }
