@@ -29,6 +29,7 @@
     "lodash": "^4.17.2",
     "merge-defaults": "^0.2.1",
     "mysql": "^2.12.0",
+    "nodemailer": "^3.0.2",
     "passport": "^0.3.2",
     "passport-jwt": "^2.0.0",
     "passport-local": "^1.0.0",
