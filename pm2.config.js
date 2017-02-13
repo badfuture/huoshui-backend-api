@@ -18,6 +18,9 @@ module.exports = {
       env: {
         NODE_ENV: "production"
       },
+      env_env : {
+        NODE_ENV: "production"
+      },
       env_production : {
         NODE_ENV: "production"
       }
@@ -30,20 +33,20 @@ module.exports = {
    */
   deploy : {
     production : {
-      user : "node",
-      host : "212.83.163.1",
+      user : "deploy",
+      host : "api.huoshui.tk",
       ref  : "origin/master",
-      repo : "git@github.com:repo.git",
-      path : "/var/www/production",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production"
+      repo : "https://github.com/badfuture/huoshui-backend-api.git",
+      path : "/home/deploy/huoshui_api",
+      "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env production"
     },
     dev : {
-      user : "node",
-      host : "212.83.163.1",
+      user : "deploy",
+      host : "api.huoshui.tk",
       ref  : "origin/master",
-      repo : "git@github.com:repo.git",
-      path : "/var/www/development",
-      "post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env dev",
+      repo : "https://github.com/badfuture/huoshui-backend-api.git",
+      path : "/home/deploy/huoshui_api",
+      "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env dev",
       env  : {
         NODE_ENV: "dev"
       }
