@@ -20,7 +20,6 @@ var path_leancloud = sails.config.appPath + "/migration/data_leancloud/";
 var file_position = "position.json";
 var file_school = "school.json";
 var file_tag = "tag.json";
-var file_elective = "elective.json";
 var file_prof = "prof.csv";
 
 var file_user = "_User.json";
@@ -32,7 +31,6 @@ var positionData = JSON.parse(fs.readFileSync(path_common + file_position));
 var schoolData = JSON.parse(fs.readFileSync(path_common + file_school));
 var deptData = schoolData[0].depts;
 var tagData = JSON.parse(fs.readFileSync(path_common + file_tag));
-var electiveData = JSON.parse(fs.readFileSync(path_common + file_elective));
 var profData = fs.readFileSync(path_common + file_prof);
 var profData = csv_parse(profData, {columns: true});
 profData.splice(0, 2);
@@ -103,21 +101,6 @@ var seedPositions = function(job, next) {
     next();
   });
 };
-
-var seedElective = function (job, next) {
-  sails.log.debug("seeding elective");
-  Elective.bulkCreate(electiveData)
-  .then(function(res){
-    sails.log.debug("seeded: elective");
-    job.progress(5, 10);
-    next();
-  })
-  .catch(function(err){
-    sails.log.error("seeding failure: elective");
-    next();
-  });
-};
-
 
 var seedTags = function (job, next) {
   sails.log.debug("seeding tags");
@@ -484,7 +467,6 @@ module.exports = {
         seedSchools.bind(this, job),
         seedDepts.bind(this, job),
         seedPositions.bind(this, job),
-        seedElective.bind(this, job),
         seedTags.bind(this, job),
         seedUsers.bind(this, job),
         seedProfs.bind(this, job),

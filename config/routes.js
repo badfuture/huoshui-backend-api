@@ -7,7 +7,6 @@ var commentRoute = require('../api/routes/commentRoute');
 var courseRoute = require('../api/routes/courseRoute');
 var courseStatsRoute = require('../api/routes/courseStatsRoute');
 var deptRoute = require('../api/routes/deptRoute');
-var electiveRoute = require('../api/routes/electiveRoute');
 var positionRoute = require('../api/routes/positionRoute');
 var profRoute = require('../api/routes/profRoute');
 var reviewRoute = require('../api/routes/reviewRoute');
@@ -34,7 +33,6 @@ module.exports.routes = routes([
   courseRoute,
   courseStatsRoute,
   deptRoute,
-  electiveRoute,
   positionRoute,
   profRoute,
   reviewRoute,

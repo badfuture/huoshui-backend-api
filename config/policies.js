@@ -38,11 +38,6 @@ module.exports.policies = {
     'findOne': true,
     '*': false
   },
-  ElectiveController: {
-    'find': true,
-    'findOne': true,
-    '*': false
-  },
   PositionController: {
     'find': true,
     'findOne': true,

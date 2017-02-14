@@ -68,10 +68,6 @@ module.exports = {
       as: 'Prof',
       foreignKey: 'prof_id'
     }); // n:1
-    Course.belongsTo(Elective, {
-      as: 'Elective',
-      foreignKey: 'elective_id'
-    }); // n:1
     Course.belongsToMany(Tag, {
       as: 'Tags',
       through: {

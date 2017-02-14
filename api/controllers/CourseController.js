@@ -12,7 +12,6 @@ module.exports = {
     var defaultInclude = [
       { model: School, as: 'School'},
       { model: Prof, as: 'Prof'},
-      { model: Elective, as: 'Elective'},
       { model: Dept, as: 'Depts'},
     ];
     var includeOption = (customInclude.length === 0)
@@ -37,7 +36,6 @@ module.exports = {
     var defaultInclude = [
       { model: School, as: 'School'},
       { model: Prof, as: 'Prof'},
-      { model: Elective, as: 'Elective'},
       { model: Tag, as: 'Tags'},
       { model: Dept, as: 'Depts'},
     ];
