@@ -8,7 +8,23 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: false,
-      comment: "course name",
+      comment: "课名"
+    },
+    isElective: {
+      field: "isElective",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "是否选修"
+    },
+    audience: {
+      field: "audience",
+      type: Sequelize.ENUM('all_undergrad', 'general_edu'),
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "优选人群／课程性质"
     },
     homepage: {
       field: "homepage",
@@ -16,7 +32,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "course homepage",
+      comment: "课程主页"
     },
     textbook: {
       field: "textbook",
@@ -24,7 +40,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "course textbook",
+      comment: "课本"
     },
     credit: {
       field: "credit",
@@ -32,29 +48,29 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "course credit",
+      comment: "学分"
     }
   },
   associations: function() {
     Course.hasOne(CourseStat, {
       as: "Stat",
-      foreignKey: 'course_id',
+      foreignKey: 'course_id'
     }); // courseStat: 1:1
     Course.hasMany(Review, {
       as: 'Reviews',
-      foreignKey: 'course_id',
+      foreignKey: 'course_id'
     }); // 1:n
     Course.belongsTo(School, {
       as: 'School',
-      foreignKey: 'school_id',
+      foreignKey: 'school_id'
     }); // n:1
     Course.belongsTo(Prof, {
       as: 'Prof',
-      foreignKey: 'prof_id',
+      foreignKey: 'prof_id'
     }); // n:1
     Course.belongsTo(Elective, {
       as: 'Elective',
-      foreignKey: 'elective_id',
+      foreignKey: 'elective_id'
     }); // n:1
     Course.belongsToMany(Tag, {
       as: 'Tags',
@@ -71,7 +87,7 @@ module.exports = {
     Course.belongsToMany(Dept, {
       as: 'Depts',
       through: 'JoinCourseDept',
-      foreignKey: 'course_id',
+      foreignKey: 'course_id'
     }); // m:n
 
     //followers: m:n

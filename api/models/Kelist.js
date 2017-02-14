@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "Kelist name",
+      comment: "课列名称"
     }
   },
   associations: function() {

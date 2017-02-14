@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "tag name",
+      comment: "标签名"
     },
     isPositive: {
       field: "isPositive",
@@ -16,7 +16,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "does the tag has a positive meaning",
+      comment: "标签是否正面"
     },
     category: {
       field: "category",
@@ -24,7 +24,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "category of the info the tag applies to",
+      comment: "category of the info the tag applies to"
     },
   },
   associations: function() {
@@ -35,7 +35,7 @@ module.exports = {
         unique: false
       },
       foreignKey: 'tag_id',
-      constraints: false,
+      constraints: false
     }); // m:n
     Tag.belongsToMany(Review, {
       as: 'Reviews',
@@ -44,7 +44,7 @@ module.exports = {
         unique: false
       },
       foreignKey: 'tag_id',
-      constraints: false,
+      constraints: false
     }); // m:n
     Tag.belongsToMany(Prof, {
       as: 'Profs',
@@ -53,7 +53,7 @@ module.exports = {
         unique: false
       },
       foreignKey: 'tag_id',
-      constraints: false,
+      constraints: false
     }); // m:n
   },
   options: {

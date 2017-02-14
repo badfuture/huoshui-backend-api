@@ -9,7 +9,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: false,
-      comment: "dept name short form",
+      comment: "院系简称"
     },
     longname: {
       field: "longname",
@@ -17,7 +17,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: false,
-      comment: "dept name long form",
+      comment: "院系全称"
     },
     alias: {
       field: "alias",
@@ -25,27 +25,27 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "alternative names for dept",
+      comment: "院系别名"
     },
   },
   associations: function() {
     Dept.belongsTo(School, {
       as: 'School',
-      foreignKey: 'school_id',
+      foreignKey: 'school_id'
     }); // n:1
     Dept.hasMany(User, {
       as: 'Users',
-      foreignKey: 'dept_id',
+      foreignKey: 'dept_id'
     }); // 1:n
     Dept.belongsToMany(Course, {
       as: 'Courses',
       through: 'JoinCourseDept',
-      foreignKey: 'dept_id',
+      foreignKey: 'dept_id'
     }); // m:n
     Dept.belongsToMany(Prof, {
       as: 'Profs',
       through: 'prof_dept',
-      foreignKey: 'dept_id',
+      foreignKey: 'dept_id'
     }); // m:n
 
   },

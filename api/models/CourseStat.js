@@ -10,7 +10,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof professional",
+      comment: "专业"
     },
     expressive: {
       field: "expressive",
@@ -19,7 +19,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof expressive",
+      comment: "表达"
     },
     kind: {
       field: "kind",
@@ -28,7 +28,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "友好"
     },
     rateOverall: {
       field: "rateOverall",
@@ -37,7 +37,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "综合评分"
     },
 
     //secondary stats
@@ -48,7 +48,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "作业多少，分高作业多"
     },
     rateAttend: {
       field: "rateAttend",
@@ -57,7 +57,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "点名多少，分高点名多"
     },
     rateExam: {
       field: "rateExam",
@@ -66,7 +66,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "考试难度，越高越难"
     },
     rateBird: {
       field: "rateBird",
@@ -75,7 +75,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "课程水分，越高越水"
     },
 
     //counters
@@ -86,7 +86,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "总评论次数"
     },
     countGoodReview: {
       field: "countGoodReview",
@@ -95,7 +95,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "好评次数"
     },
     countHomework: {
       field: "countHomework",
@@ -104,7 +104,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "作业评论次数"
     },
     countAttend: {
       field: "countAttend",
@@ -113,7 +113,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "点名评论次数"
     },
     countExam: {
       field: "countExam",
@@ -122,7 +122,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "考试评论次数"
     },
     countBird: {
       field: "countBird",
@@ -131,14 +131,14 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "is the prof kind",
+      comment: "水课评论次数"
     }
   },
   associations: function() {
     CourseStat.belongsTo(Course, {
       as: 'Course',
       foreignKey: {
-        field: 'course_id',
+        field: 'course_id'
         //allowNull: false,
       }
     }); // 1:1

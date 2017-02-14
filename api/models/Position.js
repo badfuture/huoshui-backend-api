@@ -8,14 +8,14 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "Position name",
+      comment: "职位名称"
     },
 
   },
   associations: function() {
     Position.hasMany(Prof, {
       as: 'Profs',
-      foreignKey: 'position_id',
+      foreignKey: 'position_id'
     }); // 1:n
   },
   options: {

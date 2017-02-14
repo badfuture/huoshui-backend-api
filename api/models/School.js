@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "school name",
+      comment: "校名"
     },
     campus: {
       field: "campus",
@@ -16,7 +16,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "school campus",
+      comment: "校区"
     }
   },
   associations: function() {

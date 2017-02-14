@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "username",
+      comment: "用户名"
     },
     password: {
       field: "password",
@@ -16,7 +16,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: false,
-      comment: "password",
+      comment: "密码"
     },
     salt: {
       field: "salt",
@@ -24,7 +24,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "salt for password",
+      comment: "密码盐"
     },
     email: {
       field: "email",
@@ -32,7 +32,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "email",
+      comment: "邮箱"
     },
     firstYear: {
       field: "firstYear",
@@ -41,29 +41,29 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: { min: 2000, max: 2020},
-      comment: "the year admitted to the school",
+      comment: "入学年份"
     },
   },
   associations: function() {
     User.belongsTo(School, {
       as: 'School',
-      foreignKey: 'school_id',
+      foreignKey: 'school_id'
     }); // n:1
     User.belongsTo(Role, {
       as: 'Role',
-      foreignKey: 'role_id',
+      foreignKey: 'role_id'
     }); // n:1
     User.belongsTo(Dept, {
       as: 'Dept',
-      foreignKey: 'dept_id',
+      foreignKey: 'dept_id'
     }); // n:1
     User.hasMany(Review, {
       as: 'Reviews',
-      foreignKey: 'author_id',
+      foreignKey: 'author_id'
     }); // 1:n
     User.hasMany(Comment, {
       as: 'Comments',
-      foreignKey: 'user_id',
+      foreignKey: 'user_id'
     }); // 1:n
 
     //likedReviews: 1:n

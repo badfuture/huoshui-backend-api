@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "comment type, mapped to the commetable tables (ex.Post and Review)",
+      comment: "评论类型，对应其它可被评价的表 (ex.Post and Review)"
     },
     text: {
       field: "text",
@@ -16,7 +16,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "comment text body",
+      comment: "文字内容"
     },
     datePosted: {
       field: "datePosted",
@@ -24,22 +24,22 @@ module.exports = {
       allowNull: false,
       defaultValue: Sequelize.NOW,
       unique: true,
-      comment: "date comment was posted",
+      comment: "发布日期"
     }
   },
   associations: function() {
     Comment.belongsTo(User, {
       as: 'Author',
-      foreignKey: 'author_id',
+      foreignKey: 'author_id'
     });  // n:1
     Comment.belongsTo(Review, {
       as: 'Review',
       foreignKey: 'review_id',
-      constraints: false,
+      constraints: false
     });  // n:1
     Comment.belongsTo(Comment, {
       as: 'Parent',
-      foreignKey: 'comment_id',
+      foreignKey: 'comment_id'
     }); // n:1
   },
   //TODO: thread: 1:n

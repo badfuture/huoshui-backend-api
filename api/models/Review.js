@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: false,
-      comment: "review text body",
+      comment: "点评正文"
     },
     downVote: {
       field: "downVote",
@@ -17,7 +17,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "# of down vote",
+      comment: "踩的计数器"
     },
     upVote: {
       field: "upVote",
@@ -26,7 +26,7 @@ module.exports = {
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
-      comment: "# of up vote",
+      comment: "赞的计数器"
     },
 
     //core stats
@@ -37,7 +37,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof professional",
+      comment: "专业"
     },
     expressive: {
       field: "expressive",
@@ -46,7 +46,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof expressive",
+      comment: "表达"
     },
     kind: {
       field: "kind",
@@ -55,7 +55,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the prof kind",
+      comment: "友好"
     },
 
     //optional stats
@@ -66,7 +66,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "does the prof check attendance",
+      comment: "点名"
     },
     lotsHomework: {
       field: "lotsHomework",
@@ -75,7 +75,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "does the prof assign lots of homework",
+      comment: "作业"
     },
     birdy: {
       field: "birdy",
@@ -84,7 +84,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "is the course birdy",
+      comment: "水分"
     },
 
     //exam related
@@ -94,7 +94,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "does the course has exam",
+      comment: "是否有考试"
     },
     examprep: {
       field: "examprep",
@@ -102,7 +102,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "does the course has examprep",
+      comment: "划重点"
     },
     openbook: {
       field: "openbook",
@@ -110,7 +110,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "is the course open book",
+      comment: "开卷"
     },
     oldquestion: {
       field: "oldquestion",
@@ -118,7 +118,7 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "does exam contain old question",
+      comment: "原题"
     },
     easymark: {
       field: "easymark",
@@ -126,17 +126,17 @@ module.exports = {
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "does exam contain easy question",
+      comment: "题目容易"
     },
   },
   associations: function() {
     Review.belongsTo(Course, {
       as: 'Course',
-      foreignKey: 'course_id',
+      foreignKey: 'course_id'
     }); // n:1
     Review.belongsTo(User, {
       as: 'Author',
-      foreignKey: 'author_id',
+      foreignKey: 'author_id'
     }); //author: n:1
     Review.hasMany(Comment, {
       as: 'Comments',
@@ -144,7 +144,7 @@ module.exports = {
       constraints: false,
       scope: {
         commentable: 'review'
-      },
+      }
     }); // 1:n
     Review.belongsToMany(Tag, {
       as: 'Tags',

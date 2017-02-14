@@ -8,7 +8,7 @@ module.exports = {
       allowNull: false,
       defaultValue: null,
       unique: true,
-      comment: "role name",
+      comment: "用户角色"
     }
     //ACL
   },
