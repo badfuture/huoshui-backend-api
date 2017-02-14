@@ -42,12 +42,12 @@ module.exports = {
         NODE_ENV: "development"
       }
     },
-    production : {
-      user : "deploy",
-      host : "api.huoshui.tk",
+    prod : {
+      user : "root",
+      host : "api.huoshui.org",
       ref  : "origin/master",
       repo : "https://github.com/badfuture/huoshui-backend-api.git",
-      path : "/home/deploy/huoshui_api",
+      path : "/root/huoshui_api",
       "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env prod",
       env  : {
         NODE_ENV: "production"
