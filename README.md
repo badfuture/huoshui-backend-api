@@ -40,12 +40,34 @@ vim config/connections.js
 sails lift
 ```
 
+## 部署
+在dev和local环境安装PM2
+```
+npm install pm2 -g
+```
+
+local生成SSH key，并将public key加入dev服务器
+```
+ssh-keygen -t rsa
+cat ~/.ssh/id_rsa.pub | ssh user@dev_hostname 'cat >> .ssh/authorized_keys'
+```
+
+进行部署配置
+```
+pm2 deploy pm2.config.js dev setup
+```
+
+部署
+```
+pm2 deploy pm2.config.js dev
+```
+
 ## 主要功能
 
 - [x] 课程信息 （课名，教师，作业，考试，标签等）
 - [x] 点评信息 （点评内容，标签，各项指标等）
 - [x] 教授档案 （更全的数据：格言，研究方向，头像，联系方式等）
-- [ ] 课程榜单 （综合最佳，院系推荐，不想上的课）
+- [ ] 课程榜单 （综合最佳，院系推荐，选修课排名，不想上的课）
 - [ ] 课列系统 （用户自定义列表加简评，参考豆列）
 - [ ] 查分功能 （挂科率，课程历史打分记录）
 - [ ] 评论功能 （对评论进行评论）
@@ -53,16 +75,10 @@ sails lift
 - [ ] 社交分享 （生成链接给 微信，微博）
 - [ ] 社交登录 （QQ，微博，github）
 - [ ] 常规登录 （用户名密码登录）
-- [ ] 多学校支持 （做到如果要加学校，不用改软件，只用加内容）
 - [ ] 邮件系统（密码重置，群发信息）
-- [ ] 实时通信 （信息推送，实时答疑）
-- [ ] 对外公开的数据接口API （获取研究数据，别人可以做第三方应用）
+- [ ] 多学校支持 （做到如果要加学校，不用改软件，只用加内容）
 - [ ] 权限控制 （基于角色的权限控制）
-- [ ] 后端驱动的数据统计 （客户端只录入数据，后端周期性做数据统计）
-- [ ] 后端驱动的排名 （客户端只读，不用每个客户端都有一套逻辑。这样前端更快，算法可复杂定制）
 - [ ] 半自动数据接口文档生成
-- [ ] 安全问题应对 (CSRF, XSS, SQL Injection, DDOS)
-
 
 ## 用以下技术制作
 
@@ -72,20 +88,18 @@ sails lift
 * SequalizeJs - ORM对象关系映射
 * PosgreSQL - SQL结构化数据储存 （主数据库）
 * Redis / Kue - Job Scheduler (任务调度管理)
-* Socket.io - 实时通讯
-* Docker - 轻量级的、可移植的、自给自足的部署用的容器
-* Nginx - 负载均衡 / 逆伺服
+* Nginx - 负载均衡 / 伺服
 * Cloud IaaS 服务
   * 阿里云 ECS (compute)
-  * 阿里云 RDS (data store) <=买不起
-  * 七牛云 (image store)
-  * CDN (delivery) <=买不起
-* Nodemailer - 邮件服务
+  * 阿里云 RDS (data)
+  * 七牛云 (image)
+  * CDN (delivery)
 
 ### 其它技术
-* PassportJs - 用户鉴别与授权(Basic Auth + JWT)
+* PassportJs: 用户鉴别与授权(Basic Auth + JWT)
 * swagger: API 文档生成
-* python: 数据爬虫和自动化
+* Nodemailer: 邮件服务
+* python：数据爬虫和自动化
 * Bash: 服务器环境自动化
 
 ## 维护人员
