@@ -16,10 +16,10 @@ module.exports = {
       out_file: "logs/out.log",
       merge_logs: true,
       env: {
-        NODE_ENV: "production"
+        NODE_ENV: "development"
       },
       env_env : {
-        NODE_ENV: "production"
+        NODE_ENV: "development"
       },
       env_production : {
         NODE_ENV: "production"
@@ -41,14 +41,14 @@ module.exports = {
       "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env production"
     },
     dev : {
-      user : "deploy",
+      user : "ubuntu",
       host : "api.huoshui.tk",
       ref  : "origin/master",
       repo : "https://github.com/badfuture/huoshui-backend-api.git",
-      path : "/home/deploy/huoshui_api",
-      "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env dev",
+      path : "/home/ubuntu/huoshui_api",
+      "post-deploy" : "npm install && pm2 startOrRestart pm2.config.js --env development",
       env  : {
-        NODE_ENV: "dev"
+        NODE_ENV: "development"
       }
     }
   }
