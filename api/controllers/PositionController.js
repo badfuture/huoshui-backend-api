@@ -8,8 +8,7 @@ module.exports = {
 	find: function(req,res){
 		var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+		var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Position.findAll({
       where: ActionUtil.parseWhere(req),
@@ -28,8 +27,7 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
 		var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Position.findById(pk, {
       include: includeOption

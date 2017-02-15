@@ -14,8 +14,7 @@ module.exports = {
       { model: Prof, as: 'Prof'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Course.findAll({
       where: ActionUtil.parseWhere(req),
@@ -39,8 +38,7 @@ module.exports = {
       { model: Tag, as: 'Tags'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Course.findById(pk, {
       include: includeOption

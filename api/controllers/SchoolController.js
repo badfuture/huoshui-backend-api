@@ -9,8 +9,7 @@ module.exports = {
   find: function(req,res){
     var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [{ model: Dept, as: 'Depts'}];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     School.findAll({
       where: ActionUtil.parseWhere(req),
@@ -29,8 +28,7 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
     var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [{ model: Dept, as: 'Depts'}];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     School.findById(pk, {
       include: includeOption

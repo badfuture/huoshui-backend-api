@@ -11,8 +11,7 @@ module.exports = {
       { model: Course, as: 'Course'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Review.findAll({
       where: ActionUtil.parseWhere(req),
@@ -36,8 +35,7 @@ module.exports = {
       { model: User, as: 'Author'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+    var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Review.findById(pk, {
       include: includeOption

@@ -10,8 +10,7 @@ module.exports = {
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+		var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Dept.findAll({
       where: ActionUtil.parseWhere(req),
@@ -32,8 +31,7 @@ module.exports = {
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-    var includeOption = (customInclude.length === 0)
-                  ? defaultInclude : customInclude;
+		var includeOption = req.param('populate')? defaultInclude : customInclude;
 
     Dept.findById(pk, {
       include: includeOption
