@@ -49,7 +49,7 @@ npm install pm2 -g
 local生成SSH key，并将public key加入dev服务器
 ```
 ssh-keygen -t rsa
-cat ~/.ssh/id_rsa.pub | ssh user@dev_hostname 'cat >> .ssh/authorized_keys'
+ssh-copy-id -i path/to/my/key user@dev_hostname
 ```
 
 进行部署配置
