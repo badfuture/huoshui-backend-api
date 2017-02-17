@@ -15,7 +15,18 @@ var replace_roman = function(roman) {
 
 //seed the db with leancloud data
 var path_common = sails.config.appPath + "/migration/data_common/";
-var path_leancloud = sails.config.appPath + "/migration/data_leancloud/";
+var path_leancloud_full = sails.config.appPath + "/migration/data_raw_full/";
+var path_leancloud_part = sails.config.appPath + "/migration/data_raw_part/";
+
+var path_leancloud = "";
+if (sails.config.environment == "production") {
+  path_leancloud = path_leancloud_full;
+} else if (sails.config.environment == "development"){
+  path_leancloud = path_leancloud_part;
+} else {
+  path_leancloud = path_leancloud_part;
+}
+
 
 var file_position = "position.json";
 var file_school = "school.json";
@@ -255,8 +266,9 @@ var seedCourses = function(job, next) {
     var stat = {};
 
     // course core
-    course.name = entry.name;
-    course.name = replace_roman(course.name);
+    course.name = replace_roman(entry.name);
+    course.isElective = (entry.isElective) ? entry.isElective : null;
+    course.audience = (entry.audience) ? entry.audience : null;
 
     // stats core
     stat.professional = entry.rate1;
@@ -266,7 +278,7 @@ var seedCourses = function(job, next) {
     stat.countReview = entry.reviewCount;
     stat.countGoodReview = entry.reviewGoodCount;
 
-    // stats stats
+    // stats secondary
     stat.countHomework = entry.homeworkCount;
     stat.rateHomework = entry.homeworkOverall;
     stat.countAttend = entry.attendanceCount;
@@ -344,6 +356,7 @@ var seedReviews = function(job, next) {
     review.checkAttendance = entry.attendance.value + 1;
     review.birdy = entry.bird.value + 1;
     review.lotsHomework = entry.homework.value + 1;
+    review.examHard = entry.examHard + 1;
     review.hasExam = entry.exam.touched;
     review.examprep = entry.exam.examprep.checked;
     review.openbook = entry.exam.openbook.checked;
