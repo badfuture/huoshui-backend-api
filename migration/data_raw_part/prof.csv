@@ -1,0 +1,6 @@
+code,name,gender,position,dept,school,email,phone,birth,hometown,exp,group,motto,intro,legacy_courses,achievement,research,link
+教师编号,姓名,男,职称,所属学院,学校,电子邮件,联系电话,出生年份,籍贯,教龄,教学组,教师寄语,个人简介,讲授课程,教学成果,科研方向,链接
+string,string,string,string,string,string,string,string,int,string,int,string,string,string,string,string,string,string
+2133,刘霓,男,副教授,信息科学与技术学院,西南交通大学,liuni@swjtu.edu.cn,,1972,江苏,12,信息科学与技术学院 计算机基础教学中心,2、做精彩的自己！,"从事基础教学多年来，深受学生喜爱，获\西南交通大学首届最受本科生欢迎的教师\""榜首。""",《计算机程序设计基础A》等,参编教材《计算机程序设计基础（C++）,计算机及应用、教育信息技术、管理信息系统、网络教育技术等,
+7363,蒋晗,女,副教授,力学与工程学院,西南交通大学,jianghantamu@gmail.com,87601442（办公电话）,1973,,      ,,,2001-2002 访问学者 里尔科技大学，法国,《Nonlinear Continuum Mechanics》；《Strength Theories， Damage and Fracture》,,#NAME?,
+7081,闫连山,男,教授,信息科学与技术学院,西南交通大学,lsyan@home.swjtu.edu.cn,,1971,,      ,信息科学与技术学院 信息光子与通信,境界：千江有水千江月，万里无云万里天,教育部长江学者特聘教授，国家杰出青年基金获得者，获得IEEE光子学会Distinguished Lecturer Award （杰出讲席奖，2011-2013）和IEEE/LEOS Graduate Fellowship（2002）；入选四川省学术与技术带头人（2013）和教育部新世纪优秀人才（2008）。,物联网导论,指导博士生获得IEEE光子学会最佳博士生奖（2015）,信息光子学与通信（光纤通信；微纳光子；微波光子等）；物联网（光纤传感；传感网络等）；计算机网络（软件定义网络、网络安全等）；智能轨道交通安全监测；,

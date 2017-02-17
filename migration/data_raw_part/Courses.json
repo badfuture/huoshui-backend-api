@@ -1,0 +1,15 @@
+
+
+{
+  "results": [
+
+
+{"tags":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"prof":"刘霓","rate1":5,"updatedAt":"2016-03-04T02:06:35.537Z","rate3":5,"rateOverall":5,"ACL":{"*":{"write":true,"read":true}},"reviewGoodCount":1,"school":"西南交通大学","attendanceCount":0,"attendanceOverall":0,"name":"大学计算机基础A","objectId":"561da58de4b0d98abf280e97","createdAt":"2015-10-14T00:45:01.890Z","reviewCount":1,"homeworkCount":0,"homeworkOverall":0,"rate2":5,"position":"副教授","examCount":0,"campus":"犀浦","birdOverall":0,"dept":"信息","birdCount":0,"examOverall":0},
+
+
+{"tags":[1,1,0,0,0,0,0,0,0,1,0,0,0,6,0,0,0,2,3,2,0,1],"prof":"蒋晗","rate1":2.625,"updatedAt":"2016-11-16T09:20:21.075Z","rate3":1.5,"rateOverall":1.9583333333333333,"ACL":{"*":{"write":true,"read":true}},"reviewGoodCount":0,"school":"西南交通大学","attendanceCount":8,"attendanceOverall":2.125,"name":"工程力学C","objectId":"561da594e4b0d98abf2810bc","createdAt":"2015-10-14T00:45:08.788Z","reviewCount":8,"homeworkCount":7,"homeworkOverall":3.7142857142857144,"rate2":1.75,"position":"副教授","examCount":8,"campus":"犀浦","birdOverall":2.125,"dept":"力学","birdCount":8,"examOverall":0},
+
+
+{"tags":[0,0,1,3,2,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"prof":"闫连山","rate1":5,"updatedAt":"2016-03-04T03:57:28.585Z","rate3":4,"rateOverall":4.666666666666667,"ACL":{"*":{"write":true,"read":true}},"reviewGoodCount":3,"school":"西南交通大学","attendanceCount":3,"attendanceOverall":2,"name":"物联世界，互联网+","objectId":"561da58de4b0d98abf280e89","createdAt":"2015-10-14T00:45:01.724Z","reviewCount":3,"homeworkCount":3,"homeworkOverall":2,"rate2":5,"position":"教授","examCount":3,"campus":"犀浦","birdOverall":2.3333333333333335,"dept":"信息","birdCount":3,"examOverall":2}
+
+]}

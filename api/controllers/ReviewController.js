@@ -6,12 +6,11 @@
 
 module.exports = {
   find: function(req,res){
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: Course, as: 'Course'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Review.findAll({
       where: ActionUtil.parseWhere(req),
@@ -28,15 +27,14 @@ module.exports = {
 
   findOne: function(req,res){
     var pk = ActionUtil.requirePk(req);
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: Course, as: 'Course'},
       { model: Comment, as: 'Comments'},
       { model: User, as: 'Author'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
-
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    
     Review.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {

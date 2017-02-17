@@ -6,14 +6,13 @@
 
 module.exports = {
   find: function(req,res){
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: Dept, as: 'Depts'},
       { model: School, as: 'School'},
       { model: Position, as: 'Position'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Prof.findAll({
       where: ActionUtil.parseWhere(req),
@@ -30,7 +29,6 @@ module.exports = {
 
   findOne: function(req,res){
     var pk = ActionUtil.requirePk(req);
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: Dept, as: 'Depts'},
       { model: School, as: 'School'},
@@ -38,7 +36,7 @@ module.exports = {
       { model: Course, as: 'Courses'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Prof.findById(pk, {
       include: includeOption

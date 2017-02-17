@@ -6,11 +6,10 @@
 
 module.exports = {
 	find: function(req,res){
-		var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-		var includeOption = req.param('populate')? defaultInclude : customInclude;
+		var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Dept.findAll({
       where: ActionUtil.parseWhere(req),
@@ -27,12 +26,11 @@ module.exports = {
 
   findOne: function(req,res){
     var pk = ActionUtil.requirePk(req);
-		var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-		var includeOption = req.param('populate')? defaultInclude : customInclude;
-
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    
     Dept.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {

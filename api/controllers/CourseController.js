@@ -2,19 +2,17 @@
  * CoursesController
  *
  * @description :: Server-side logic for managing Course
- * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 module.exports = {
 
   find: function(req,res){
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: School, as: 'School'},
       { model: Prof, as: 'Prof'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Course.findAll({
       where: ActionUtil.parseWhere(req),
@@ -31,14 +29,13 @@ module.exports = {
 
   findOne: function(req,res){
     var pk = ActionUtil.requirePk(req);
-    var customInclude = ActionUtil.populateEach(req);
     var defaultInclude = [
       { model: School, as: 'School'},
       { model: Prof, as: 'Prof'},
       { model: Tag, as: 'Tags'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = req.param('populate')? defaultInclude : customInclude;
+    var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
     Course.findById(pk, {
       include: includeOption

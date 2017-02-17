@@ -1,0 +1,18 @@
+
+{
+  "results": [
+
+  {"salt":"g8zf5dqg0i36bpvyexo1rcwuox8b3gcu0goodhcbi9bkubd7","email":"22@4.com","sessionToken":"71xr78pxmizg23att2efvagiw","updatedAt":"2016-01-17T08:43:49.121Z","ACL":{"*":{"write":true,"read":true}},"password":"bAa6bGk8f3\/b30md6sXyxtYcryn1+9FkV6TKRWfLP\/O8JdBqaKK9NeSXlGYvtHNZOytBI0Htwj0mmB2gcuEOZw==","objectId":"569b541800b0b6cb000715f1","username":"LY","createdAt":"2016-01-17T08:43:04.907Z","emailVerified":false,"year":2013,"dept":"电气","authData":null,"mobilePhoneVerified":false},
+
+  {"salt":"azh3dlm6cynsjuz29k0jc2ig5awrdyzmuywjg228pwxwjget","email":"angerscofield@163.com","sessionToken":"lswx0jft2ib9ode4k6dawh3pj","updatedAt":"2016-06-12T06:12:40.620Z","ACL":{"*":{"write":true,"read":true}},"password":"4v78v1yh5DlH02\/JjbE2ft+ddujD4jvOtueqxFwR1z2NsRuNgU9HkPx35PkDsMSkhImKukU1goV06hqmWka8xg==","objectId":"566b9f8300b0bf37f5d524ff","username":"Strato","createdAt":"2015-12-12T04:16:03.702Z","emailVerified":false,"year":2015,"dept":"材料","authData":null,"mobilePhoneVerified":false},
+
+
+  {"salt":"sy2egv45dsp9g22ghsosiyyb9wdj3cs66c3c4j15ihr0dyxs","email":"283126771@qq.com","sessionToken":"ef1ontiz7va1ryceyf57dlt86","updatedAt":"2016-02-27T14:12:21.291Z","ACL":{"*":{"write":true,"read":true}},"password":"Qx8v\/rVRNYeMt1cSxETaUugcwZdqhDgFOwGhR7Dws5saWyUcZ7gsojcrFEZ3RjEJRuqr8l08iNXCwf23cLuGuQ==","objectId":"565aff3360b2c00ce467bff5","username":"小王子","createdAt":"2015-11-29T13:35:47.192Z","emailVerified":false,"year":2011,"dept":"信息","authData":null,"mobilePhoneVerified":false}
+
+
+
+
+
+
+
+]}

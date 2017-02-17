@@ -7,9 +7,13 @@ var JSONP_CALLBACK_PARAM = 'callback';
 
 module.exports = {
 
-  populateEach: function (req) {
+  populateEach: function (req, defaultInclude) {
     var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
-    var aliasFilter = req.param('populate');
+    var customInclude = req.param('populate');
+    if (!customInclude) {
+      return defaultInclude;
+    } 
+
     var associations = [];
     var parentModel = req.options.model;
 
@@ -18,12 +22,12 @@ module.exports = {
     // list string representations are supported:
     //   /model?populate=alias1,alias2,alias3
     //   /model?populate=[alias1,alias2,alias3]
-    if (typeof aliasFilter === 'string') {
-      aliasFilter = aliasFilter.replace(/\[|\]/g, '');
-      aliasFilter = (aliasFilter) ? aliasFilter.split(',') : [];
+    if (typeof customInclude === 'string') {
+      customInclude = customInclude.replace(/\[|\]/g, '');
+      customInclude = (customInclude) ? customInclude.split(',') : [];
     }
 
-    _.each(aliasFilter, function(association){
+    _.each(customInclude, function(association){
       var childModel = sails.models[association.toLowerCase()];
       // iterate through parent model associations
       _.each(sails.models[parentModel].associations, function(relation){

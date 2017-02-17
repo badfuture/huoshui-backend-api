@@ -42,15 +42,16 @@ var positionData = JSON.parse(fs.readFileSync(path_common + file_position));
 var schoolData = JSON.parse(fs.readFileSync(path_common + file_school));
 var deptData = schoolData[0].depts;
 var tagData = JSON.parse(fs.readFileSync(path_common + file_tag));
-var profData = fs.readFileSync(path_common + file_prof);
-var profData = csv_parse(profData, {columns: true});
-profData.splice(0, 2);
 
 
 //leancloud Data
 var userData = JSON.parse(fs.readFileSync(path_leancloud + file_user));
 var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
 var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
+var profData = fs.readFileSync(path_leancloud + file_prof);
+var profData = csv_parse(profData, {columns: true});
+profData.splice(0, 2);
+
 
 //functions for seeding
 var seedSchools = function(job, next) {
