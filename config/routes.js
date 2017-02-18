@@ -2,6 +2,7 @@
  * Route Mappings
  */
 
+var indexRoute = require('../api/routes/indexRoute');
 var authRoute = require('../api/routes/authRoute');
 var commentRoute = require('../api/routes/commentRoute');
 var courseRoute = require('../api/routes/courseRoute');
@@ -28,6 +29,7 @@ var routes = function (routes) {
 }
 
 module.exports.routes = routes([
+  indexRoute,
   authRoute,
   commentRoute,
   courseRoute,
