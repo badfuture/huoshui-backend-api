@@ -75,7 +75,14 @@ module.exports = {
     underscored: true,
     freezeTableName: true,
     classMethods: {},
-    instanceMethods: {},
+    instanceMethods: {
+      toJSON: function () {
+        var values = Object.assign({}, this.get());
+        delete values.password;
+        delete values.salt;
+        return values;
+      }
+    },
     validate: {},
     hooks: {
       beforeCreate: function(user, options) {
