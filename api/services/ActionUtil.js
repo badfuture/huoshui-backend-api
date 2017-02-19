@@ -10,35 +10,36 @@ module.exports = {
   populateEach: function (req, defaultInclude) {
     var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
     var customInclude = req.param('populate');
+    var reqModel = req.options.model;
+    var modelRelations = sails.models[reqModel].associations;
+
     if (!customInclude) {
+      // use default includes if param not exist
       return defaultInclude;
-    }
-
-    var associations = [];
-    var parentModel = req.options.model;
-
-    // Convert the string representation of the filter list to an Array. We
-    // need this to provide flexibility in the request param. This way both
-    // list string representations are supported:
-    //   /model?populate=alias1,alias2,alias3
-    //   /model?populate=[alias1,alias2,alias3]
-    if (typeof customInclude === 'string') {
+    } else if (customInclude === 'all') {
+      // add support for all includes
+      customInclude = [];
+      _.each(modelRelations, function(rel){
+        customInclude.push(rel.options.as);
+      });
+    } else if (typeof customInclude === 'string') {
+      // add support for array format
+      // /model?populate=alias1,alias2,alias3
+      // /model?populate=[alias1,alias2,alias3]
       customInclude = customInclude.replace(/\[|\]/g, '');
       customInclude = (customInclude) ? customInclude.split(',') : [];
     }
 
-    _.each(customInclude, function(association){
-      var childModel = sails.models[association.toLowerCase()];
-      // iterate through parent model associations
-      _.each(sails.models[parentModel].associations, function(relation){
-        // check if association match childModel name
-        if(relation.target.name === childModel.name) {
-          var obj = { model: childModel, as: relation.options.as };
-          if (childModel.name == 'User') {
+    var associations = [];
+    // iterate through target model associations
+    _.each(customInclude, function(includeRel){
+      _.each(modelRelations, function(rel){
+        if(includeRel === rel.options.as) {
+          var obj = { model: rel.target, as: rel.options.as };
+          if (rel.target.name == 'User') {
             obj.attributes = {exclude: ['password', 'salt']};
           }
-
-          if(relation.associationType === 'HasMany') {
+          if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;
           }
           associations.push(obj);
