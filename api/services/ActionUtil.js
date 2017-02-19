@@ -12,7 +12,7 @@ module.exports = {
     var customInclude = req.param('populate');
     if (!customInclude) {
       return defaultInclude;
-    } 
+    }
 
     var associations = [];
     var parentModel = req.options.model;
@@ -34,6 +34,10 @@ module.exports = {
         // check if association match childModel name
         if(relation.target.name === childModel.name) {
           var obj = { model: childModel, as: relation.options.as };
+          if (childModel.name == 'User') {
+            obj.attributes = {exclude: ['password', 'salt']};
+          }
+
           if(relation.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;
           }

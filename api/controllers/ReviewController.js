@@ -30,11 +30,15 @@ module.exports = {
     var defaultInclude = [
       { model: Course, as: 'Course'},
       { model: Comment, as: 'Comments'},
-      { model: User, as: 'Author'},
+      { model: User, as: 'Author',
+        attributes: {
+          exclude: ['password', 'salt']
+        }
+      },
       { model: Tag, as: 'Tags'}
     ];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
-    
+
     Review.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {
