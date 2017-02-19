@@ -44,7 +44,7 @@ module.exports = {
     },
     credit: {
       field: "credit",
-      type: Sequelize.DECIMAL(10, 2), //<==== what's this
+      type: Sequelize.DECIMAL(10, 2),
       allowNull: true,
       defaultValue: null,
       unique: false,

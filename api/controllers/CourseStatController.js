@@ -1,15 +1,16 @@
 /**
- * StatController
+ * CoursesController
  *
- * @description :: Server-side logic for managing Stats
+ * @description :: Server-side logic for managing Course
  */
 
 module.exports = {
+
   find: function(req,res){
     var defaultInclude = [];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
 
-    Dept.findAll({
+    CourseStat.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
@@ -26,8 +27,8 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
     var defaultInclude = [];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
-    
-    Dept.findById(pk, {
+
+    CourseStat.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
@@ -36,5 +37,6 @@ module.exports = {
       return res.serverError(err);
     });
   },
+
 
 };
