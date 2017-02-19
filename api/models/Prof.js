@@ -70,13 +70,21 @@ module.exports = {
       unique: false,
       comment: "电话"
     },
-    homepage: {
-      field: "homepage",
+    official_site: {
+      field: "official_site",
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "主页"
+      comment: "学校官网"
+    },
+    blog: {
+      field: "blog",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "博客"
     },
 
     //professional background

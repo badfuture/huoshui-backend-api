@@ -233,6 +233,7 @@ var seedProfs = function(job, next) {
     prof.research = entry.research;
     prof.achievement = entry.achievement;
     prof.legacyCourses = entry.legacyCourses;
+    prof.official_site = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID=" + entry.code;
 
     Prof.create(prof)
     .then(function(results){
