@@ -59,14 +59,14 @@ module.exports = {
     },
 
     //optional stats
-    checkAttendance: {
-      field: "checkAttendance",
+    checkAttend: {
+      field: "checkAttend",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "点名"
+      comment: "点名多少，分高点名多"
     },
     lotsHomework: {
       field: "lotsHomework",
@@ -75,7 +75,7 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "作业"
+      comment: "作业多少，分高作业多"
     },
     birdy: {
       field: "birdy",
@@ -84,7 +84,16 @@ module.exports = {
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
-      comment: "水分"
+      comment: "课程水分，越高越水"
+    },
+    examHard: {
+      field: "examHard",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "考试难度，越高越难"
     },
 
     //exam related

@@ -13,6 +13,16 @@ var replace_roman = function(roman) {
     return eng_char;
 };
 
+var getExamEasyVal = function(exam) {
+  var easyVal = 0;
+  if (exam.examprep) easyVal++;
+  if (exam.openbook) easyVal++;
+  if (exam.oldquestion) easyVal++;
+  if (exam.easymark) easyVal++;
+  return easyVal;
+};
+
+
 //seed the db with leancloud data
 var path_common = sails.config.appPath + "/migration/data_common/";
 var path_leancloud_full = sails.config.appPath + "/migration/data_raw_full/";
@@ -351,19 +361,33 @@ var seedReviews = function(job, next) {
     review.expressive = entry.rating.rate2;
     review.kind = entry.rating.rate3;
 
-    //optional
-    review.downVote = entry.downVote;
-    review.upVote = entry.upVote;
-    review.checkAttendance = entry.attendance.value + 1;
-    review.birdy = entry.bird.value + 1;
-    review.lotsHomework = entry.homework.value + 1;
-    review.examHard = entry.examHard + 1;
+    //optional: exam data
     review.hasExam = entry.exam.touched;
     review.examprep = entry.exam.examprep.checked;
     review.openbook = entry.exam.openbook.checked;
     review.oldquestion = entry.exam.oldquestion.checked;
     review.easymark = entry.exam.easiness.checked;
 
+    //optional: exam data
+    review.checkAttend = entry.attendance.value + 1;
+    review.birdy = entry.bird.value + 1;
+    review.lotsHomework = entry.homework.value + 1;
+    review.examHard = 0;
+    if (entry.exam.difficulty && entry.exam.difficulty.value) {
+      review.examHard = entry.exam.difficulty.value;
+    } else if (review.hasExam) {
+      var examEasyVal = getExamEasyVal({
+        examprep: review.examprep,
+        openbook: review.openbook,
+        oldquestion: review.oldquestion,
+        easymark: review.easymark
+      });
+      review.examHard = Math.round(5 - examEasyVal);
+    }
+
+    //optional: upvote/downvote
+    review.downVote = entry.downVote;
+    review.upVote = entry.upVote;
     entry.courseName = replace_roman(entry.courseName);
 
     Review.create(review)
