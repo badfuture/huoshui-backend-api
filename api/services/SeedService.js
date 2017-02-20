@@ -492,7 +492,7 @@ var seedReviews = function(job, next) {
 };
 
 module.exports = {
-  seedDB: function() {
+  seedDB: () => {
     var publisher = sails.hooks.publisher;
     var queue = publisher.queue;
     var seedJob = publisher.create('seed_service', {
@@ -522,6 +522,16 @@ module.exports = {
         }
       });
 
+    });
+  },
+
+  isDbSeeded: ()=> {
+    School.findOne({where: {"name": "西南交通大学"}})
+    .then(function(data){
+      sails.isSeeded = (data) ? true : false;
+    })
+    .catch(function(err){
+      console.log("bootstrap error");
     });
   }
 };

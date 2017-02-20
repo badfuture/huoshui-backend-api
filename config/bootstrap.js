@@ -6,30 +6,25 @@
  * This gives you an opportunity to set up your data model, run jobs, or perform some special logic.
  */
 
-const Promise = require('sequelize').Promise;
-var isDbSeeded = function() {
-  School.findOne({where: {"name": "西南交通大学"}})
-  .then(function(data){
-    sails.isSeeded = (data) ? true : false;
-  })
-  .catch(function(err){
-    console.log("bootstrap error");
-  });
-};
 
-module.exports.bootstrap = function(cb) {
+module.exports.bootstrap = function(done) {
 
   //bluebird promises
+  const Promise = require('sequelize').Promise;
   Promise.config({
       warnings: false,
   });
 
-  if (!isDbSeeded()) {
+  //initialize db seeding status
+  if (!SeedService.isDbSeeded()) {
     sails.isSeeded = false;
   } else {
     sails.isSeeded = true;
   }
 
-  //need this otherwise won't return
-  cb();
+  //job queue service
+  JobService.removeAllJobs();
+  JobService.updateCourseStats();
+
+  done();
 };

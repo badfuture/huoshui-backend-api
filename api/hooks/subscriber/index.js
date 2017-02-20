@@ -28,7 +28,7 @@ module.exports = function(sails) {
                     .replace(/([a-z\d])([A-Z])/g, '$1' + config.jobTypePrefixUppercase + '$2');
         }
         // Convert job type entirely to lowercase
-        jobType = jobType.toLowerCase();
+        //jobType = jobType.toLowerCase();
 
         return jobType;
     }
@@ -49,7 +49,6 @@ module.exports = function(sails) {
         _.keys(workers).forEach(function(worker) {
             // deduce job type form worker name (add prefix)
             var jobType = getJobType(worker, config);
-
             //grab worker definition from
             //loaded workers
             var workerDefinition = workers[worker];
