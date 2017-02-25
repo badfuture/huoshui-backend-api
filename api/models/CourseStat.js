@@ -78,7 +78,7 @@ module.exports = {
       comment: "考试难度，越高越难"
     },
 
-    //counters
+    //secondary counters
     countReview: {
       field: "countReview",
       type: Sequelize.INTEGER,
@@ -132,8 +132,54 @@ module.exports = {
       unique: false,
       validate: {min: 0},
       comment: "考试评论次数"
-    }
+    },
 
+    //exam details stats
+    countExamDetails: {
+      field: "countExamDetails",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "考试细节（开卷，原题，划重点，题目容易）评论次数"
+    },
+    countExamPrep: {
+      field: "countExamPrep",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "划重点 次数"
+    },
+    countExamOpenbook: {
+      field: "countExamDetails",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "开卷 次数"
+    },
+    countExamOldquestion: {
+      field: "countExamDetails",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "原题 次数"
+    },
+    countExamEasymark: {
+      field: "countExamDetails",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "题目容易 次数"
+    }
   },
   associations: function() {
     CourseStat.belongsTo(Course, {

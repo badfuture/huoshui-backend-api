@@ -8,7 +8,18 @@ module.exports = {
       type_swag: "string",
       allowNull: false,
       defaultValue: null,
-      unique: false,
+      unique: true,
+      validate: {
+        isUnique: function(value, next) {
+          Dept.find({
+            where: {shortname: value},
+            attributes: ['id']
+          }).then((dept) => {
+            if (dept) return next('Dept shortname already in use!');
+            next();
+          })
+        }
+      },
       comment: "院系简称"
     },
     longname: {
@@ -16,7 +27,18 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: false,
+      unique: true,
+      validate: {
+        isUnique: function(value, next) {
+          Dept.find({
+            where: {longname: value},
+            attributes: ['id']
+          }).then((dept) => {
+            if (dept) return next('Dept longname already in use!');
+            next();
+          })
+        }
+      },
       comment: "院系全称"
     },
     alias: {
@@ -24,7 +46,20 @@ module.exports = {
       type: Sequelize.ARRAY(Sequelize.STRING),
       allowNull: true,
       defaultValue: null,
-      unique: false,
+      unique: true,
+      validate: {
+        isUnique: function(value, next) {
+          Dept.find({
+            where: {alias: {
+              $contains: value
+            }},
+            attributes: ['id']
+          }).then((dept) => {
+            if (dept) return next('Dept alias already in use!');
+            next();
+          })
+        }
+      },
       comment: "院系别名"
     },
   },

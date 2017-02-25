@@ -63,22 +63,32 @@ var profData = csv_parse(profData, {columns: true});
 profData.splice(0, 2);
 
 
-//functions for seeding
 var seedSchools = function(job, next) {
   sails.log.debug("seeding schools");
-  School.bulkCreate(schoolData)
-  .then(function(schools){
-    sails.log.debug("seeded: school");
+  async.eachSeries(schoolData, function(entry, next){
+    var school = {};
+    school.name = entry.name;
+    school.campus = entry.campus;
+
+    School.create(school)
+    .then(function(schools){
+      job.progress(1, 10);
+      next();
+    })
+    .catch(function(err){
+      sails.log.error(err.errors);
+      next(err);
+    });
+  }, function (err) {
+    if (err) {
+      sails.log.error("seeding failure: school");
+    } else {
+      sails.log.debug("seeded: schools");
+    }
     job.progress(1, 10);
-    next();
-  })
-  .catch(function(err){
-    sails.log.error("seeding failure: school");
-    sails.log.error(err);
     next();
   });
 };
-
 
 var seedDepts = function(job, next) {
   sails.log.debug("seeding dept");
@@ -100,10 +110,17 @@ var seedDepts = function(job, next) {
     })
     .then(function(){
       next();
+    })
+    .catch(function(err){
+      sails.log.error(err.message);
+      next(err);
     });
   }, function (err) {
-    if (err) sails.log.error("error", err);
-    sails.log.debug("seeded: depts");
+    if (err) {
+      sails.log.error("seeding failure: dept");
+    } else {
+      sails.log.debug("seeded: depts");
+    }
     job.progress(2, 10);
     next();
   });

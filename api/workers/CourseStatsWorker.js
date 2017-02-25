@@ -13,7 +13,7 @@ var isGoodReview = (review)=>{
 
 var statsModelFactory = ()=>{
     var model = {
-        //stats core
+        //core stats
         professional: 0,
         expressive: 0,
         kind: 0,
@@ -21,7 +21,7 @@ var statsModelFactory = ()=>{
         countGoodReview: 0,
         scoreOverall: 0,
 
-        //stats secondary
+        //secondary stats
         countHomework: 0,
         lotsHomework: 0,
         countAttend: 0,
@@ -29,7 +29,14 @@ var statsModelFactory = ()=>{
         countBird: 0,
         birdy: 0,
         countExam: 0,
-        examHard: 0
+        examHard: 0,
+
+        //exam details stats
+        countExamDetails: 0,
+        countExamPrep: 0,
+        countExamOpenbook: 0,
+        countExamOldquestion: 0,
+        countExamEasymark: 0,
     };
     return model;
 };
@@ -64,7 +71,22 @@ var updateStats = (sModel, review)=>{
       sModel.examHard += review.examHard;
     }
 
-    //TBD: exam details
+    //exam details
+    if (review.hasExam) {
+      sModel.countExamDetails++;
+    }
+    if (review.examprep) {
+      sModel.countExamPrep++;
+    }
+    if (review.openbook) {
+      sModel.countExamOpenbook++;
+    }
+    if (review.oldquestion) {
+      sModel.countExamOldquestion++;
+    }
+    if (review.easymark) {
+      sModel.countExamEasymark++;
+    }
 };
 
 var normalizeStats = (sModel)=>{
