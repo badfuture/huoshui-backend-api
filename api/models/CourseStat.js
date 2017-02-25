@@ -30,8 +30,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "友好"
     },
-    rateOverall: {
-      field: "rateOverall",
+    scoreOverall: {
+      field: "scoreOverall",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -41,8 +41,8 @@ module.exports = {
     },
 
     //secondary stats
-    rateHomework: {
-      field: "rateHomework",
+    lotsHomework: {
+      field: "lotsHomework",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -50,8 +50,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "作业多少，分高作业多"
     },
-    rateAttend: {
-      field: "rateAttend",
+    checkAttend: {
+      field: "checkAttend",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -59,23 +59,23 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "点名多少，分高点名多"
     },
-    rateExam: {
-      field: "rateExam",
-      type: Sequelize.FLOAT,
-      allowNull: true,
-      defaultValue: null,
-      unique: false,
-      validate: {min: 0, max: 5},
-      comment: "考试难度，越高越难"
-    },
-    rateBird: {
-      field: "rateBird",
+    birdy: {
+      field: "birdy",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
       unique: false,
       validate: {min: 0, max: 5},
       comment: "课程水分，越高越水"
+    },
+    examHard: {
+      field: "examHard",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "考试难度，越高越难"
     },
 
     //counters
@@ -115,15 +115,6 @@ module.exports = {
       validate: {min: 0},
       comment: "点名评论次数"
     },
-    countExam: {
-      field: "countExam",
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue: 0,
-      unique: false,
-      validate: {min: 0},
-      comment: "考试评论次数"
-    },
     countBird: {
       field: "countBird",
       type: Sequelize.INTEGER,
@@ -132,7 +123,17 @@ module.exports = {
       unique: false,
       validate: {min: 0},
       comment: "水课评论次数"
+    },
+    countExam: {
+      field: "countExam",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "考试评论次数"
     }
+
   },
   associations: function() {
     CourseStat.belongsTo(Course, {

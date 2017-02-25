@@ -59,15 +59,6 @@ module.exports = {
     },
 
     //optional stats
-    checkAttend: {
-      field: "checkAttend",
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue: null,
-      unique: false,
-      validate: {min: 0, max: 5},
-      comment: "点名多少，分高点名多"
-    },
     lotsHomework: {
       field: "lotsHomework",
       type: Sequelize.INTEGER,
@@ -76,6 +67,15 @@ module.exports = {
       unique: false,
       validate: {min: 0, max: 5},
       comment: "作业多少，分高作业多"
+    },
+    checkAttend: {
+      field: "checkAttend",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "点名多少，分高点名多"
     },
     birdy: {
       field: "birdy",

@@ -286,7 +286,7 @@ var seedCourses = function(job, next) {
     stat.professional = entry.rate1;
     stat.expressive = entry.rate2;
     stat.kind = entry.rate3;
-    stat.rateOverall = entry.rateOverall;
+    stat.scoreOverall = entry.rateOverall;
     stat.countReview = entry.reviewCount;
     stat.countGoodReview = entry.reviewGoodCount;
 
@@ -374,7 +374,8 @@ var seedReviews = function(job, next) {
     review.birdy = entry.bird.value + 1;
     review.lotsHomework = entry.homework.value + 1;
     review.examHard = 0;
-    if (entry.exam.difficulty && entry.exam.difficulty.value) {
+    if (entry.exam.difficulty && entry.exam.difficulty.value
+                              && entry.exam.difficulty.value > 0) {
       review.examHard = entry.exam.difficulty.value;
     } else if (review.hasExam) {
       var examEasyVal = getExamEasyVal({
@@ -420,7 +421,9 @@ var seedReviews = function(job, next) {
     .then(function(results){
       courseFound = results;
       if (!courseFound) {
-        sails.log.warn("Found no course with same prof as review");
+        sails.log.error("Found no course with same prof as review");
+        sails.log.error("course name", entry.courseName );
+        sails.log.error("review prof", entry.profName);
       } else {
         return courseFound.addReview(reviewCreated);
       }
@@ -476,17 +479,23 @@ var seedReviews = function(job, next) {
       return Review.count();
     })
     .then(function(reviewCount){
-      sails.log.info("seed review " + reviewCount + ": " + entry.profName + ": " + entry.courseName);
+      sails.log.info("seeded review " + reviewCount + ": " + entry.profName + ": " + entry.courseName);
       next();
     })
     .catch(function(err){
-      if (err) sails.log.error("error", err);
+      if (err) {
+        console.log(review.examHard);
+        sails.log.error("course name", entry.courseName );
+        sails.log.error("prof name", entry.profName);
+        sails.log.error("review", review);
+        sails.log.error("error", err);
+      }
       next();
     });
 
   }, function (err) {
     if (err) sails.log.error("error", err);
-    sails.log.debug("seeded: reviews");
+    sails.log.debug("seeded table: reviews");
     next();
   });
 };

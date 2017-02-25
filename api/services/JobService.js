@@ -19,7 +19,7 @@ module.exports = {
       });
     });
     kue.Job.rangeByState( 'active', 0, 5000, 'asc', function( err, jobs ) {
-      sails.log.debug('cleanup queued job');
+      sails.log.debug('cleanup active job');
       jobs.forEach( function( job ) {
         job.remove( function(){});
       });
@@ -42,9 +42,9 @@ module.exports = {
     var pub = sails.hooks.publisher;
     var jobName = "CourseStats";
     pub.createJob(jobName, {
-      title: 'updating course stats',
+      title: 'update course stats',
       name: jobName,
-      interval: 10 * 1000,
+      interval: 10 * 60 * 1000,
       removeOnComplete: false
     }).save();
   }

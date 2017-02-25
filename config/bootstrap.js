@@ -24,7 +24,7 @@ module.exports.bootstrap = function(done) {
 
   //job queue service
   JobService.removeAllJobs();
-  JobService.updateCourseStats();
+  setTimeout(JobService.updateCourseStats, 3000);
 
   done();
 };
