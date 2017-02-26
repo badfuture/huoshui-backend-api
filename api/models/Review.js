@@ -146,7 +146,24 @@ module.exports = {
     Review.belongsTo(User, {
       as: 'Author',
       foreignKey: 'author_id'
-    }); //author: n:1
+    }); //n:1
+
+    Review.belongsTo(Prof, {
+      as: 'Prof',
+      foreignKey: 'prof_id'
+    }); // n:1
+
+    Review.belongsToMany(User, {
+      as: 'LikedReviews',
+      through: 'LikedReviews',
+      foreignKey: 'review_id'
+    }); // m:n
+    Review.belongsToMany(User, {
+      as: 'DislikedReviews',
+      through: 'Join:User:DislikedReviews:Review',
+      foreignKey: 'review_id'
+    }); // m:n
+
     Review.hasMany(Comment, {
       as: 'Comments',
       foreignKey: 'review_id',

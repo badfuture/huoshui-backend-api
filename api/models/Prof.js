@@ -156,10 +156,16 @@ module.exports = {
       as: 'Position',
       foreignKey: 'position_id'
     }); // n:1
+
     Prof.hasMany(Course, {
       as: 'Courses',
       foreignKey: 'prof_id'
     }); // 1:n
+    Prof.hasMany(Review, {
+      as: 'Reviews',
+      foreignKey: 'prof_id'
+    }); // 1:n
+
     Prof.belongsToMany(Dept, {
       as: 'Depts',
       through: 'prof_dept',

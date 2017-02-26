@@ -47,12 +47,15 @@ var file_user = "_User.json";
 var file_course = "Courses.json";
 var file_review = "Reviews.json";
 
+var file_liked_reviews = "_Join:Reviews:likedReviews:_User.json";
+var file_disliked_reviews = "_Join:Reviews:dislikedReviews:_User.json";
+var file_liked_Courses = "_Join:Courses:likedCourses:_User.json";
+
 //common data
 var positionData = JSON.parse(fs.readFileSync(path_common + file_position));
 var schoolData = JSON.parse(fs.readFileSync(path_common + file_school));
 var deptData = schoolData[0].depts;
 var tagData = JSON.parse(fs.readFileSync(path_common + file_tag));
-
 
 //leancloud Data
 var userData = JSON.parse(fs.readFileSync(path_leancloud + file_user));
@@ -61,6 +64,11 @@ var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
 var profData = fs.readFileSync(path_leancloud + file_prof);
 var profData = csv_parse(profData, {columns: true});
 profData.splice(0, 2);
+
+var likedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_reviews));
+var dislikedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_disliked_reviews));
+var likedCoursesData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_Courses));
+
 
 
 var seedSchools = function(job, next) {
@@ -72,7 +80,6 @@ var seedSchools = function(job, next) {
 
     School.create(school)
     .then(function(schools){
-      job.progress(1, 10);
       next();
     })
     .catch(function(err){
@@ -85,7 +92,7 @@ var seedSchools = function(job, next) {
     } else {
       sails.log.debug("seeded: schools");
     }
-    job.progress(1, 10);
+    job.progress(0.5, 10);
     next();
   });
 };
@@ -121,7 +128,7 @@ var seedDepts = function(job, next) {
     } else {
       sails.log.debug("seeded: depts");
     }
-    job.progress(2, 10);
+    job.progress(1, 10);
     next();
   });
 };
@@ -132,7 +139,7 @@ var seedPositions = function(job, next) {
   Position.bulkCreate(positionData)
   .then(function(res){
     sails.log.debug("seeded: position");
-    job.progress(4, 10);
+    job.progress(1.5, 10);
     next();
   })
   .catch(function(err){
@@ -146,7 +153,7 @@ var seedTags = function (job, next) {
   Tag.bulkCreate(tagData)
   .then(function(res){
     sails.log.debug("seeded: tag");
-    job.progress(6, 10);
+    job.progress(2, 10);
     next();
   })
   .catch(function(err){
@@ -216,7 +223,7 @@ var seedUsers = function(job, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: depts");
-    job.progress(7, 10);
+    job.progress(3, 10);
     next();
   });
 };
@@ -278,7 +285,7 @@ var seedProfs = function(job, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: profs");
-    job.progress(8, 10);
+    job.progress(4, 10);
     next();
   });
 };
@@ -361,7 +368,7 @@ var seedCourses = function(job, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded: courses");
-    job.progress(9, 10);
+    job.progress(5, 10);
     next();
   });
 };
@@ -423,6 +430,14 @@ var seedReviews = function(job, next) {
     })
     .then(function(userFound){
       return userFound.addReview(reviewCreated);
+    })
+    .then(()=> {
+      return Prof.findOne({
+        where: {"name": entry.profName}
+      })
+    })
+    .then((profFound)=> {
+      return profFound.addReview(reviewCreated);
     })
     .then(function(){
       return Course.findOne({
@@ -489,6 +504,12 @@ var seedReviews = function(job, next) {
         })
         .then(function(){
           next();
+        })
+        .catch(function(err){
+          if (err) {
+            sails.log.error("error", err);
+          }
+          next();
         });
       });
     })
@@ -513,9 +534,92 @@ var seedReviews = function(job, next) {
   }, function (err) {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded table: reviews");
+    job.progress(6, 10);
     next();
   });
 };
+
+var seedLikedReviews = function(job, next) {
+  sails.log.debug("seeding associations: User:LikedReviews:Review");
+  async.eachSeries(likedReviewsData.results, function(entry, next){
+    var reviewLeanId = entry.relatedId;
+    var userLeanId = entry.owningId;
+    var username = null;
+    var reviewCourse = null;
+    var reviewProf = null;
+    var reviewAuthor = null;
+    var reviewFound = null;
+    var userFound = null;
+
+    userData.results.forEach(function(item, index, arr){
+      if (item.objectId == userLeanId) {
+        username = item.username;
+      }
+    });
+    reviewData.results.forEach(function(item, index, arr){
+      if (item.objectId == reviewLeanId) {
+        reviewCourse = item.courseName;
+        reviewProf = item.profName;
+        var authorLeanId = item.authorId.objectId;
+        userData.results.forEach(function(item, index, arr){
+          if (item.objectId == authorLeanId) {
+            reviewAuthor = item.username;
+          }
+        });
+      }
+    });
+
+    Review.findOne({
+      include: [
+        {
+          model: User, as: 'Author',
+          where: {
+            username: reviewAuthor
+          }
+        }, {
+          model: Course, as: 'Course',
+          where: {
+            name: reviewCourse
+          }
+        }, {
+          model: Prof, as: 'Prof',
+          where: {
+            name: reviewProf
+          }
+        }
+      ]
+    })
+    .then((results)=> {
+      reviewFound = results;
+      return User.findOne({where:{
+        username: username
+      }})
+    })
+    .then((results)=> {
+      userFound = results;
+      if (reviewFound && userFound) {
+        sails.log.info("seeded relation " + ": " + username
+                      + ": " + reviewCourse + ": " + reviewProf + ":" + reviewAuthor);
+        userFound.addLikedReview(reviewFound);
+      }
+      next();
+    })
+    .catch(function(err){
+      if (err) {
+        sails.log.info("seeded relation " + ": " + username
+                      + ": " + reviewCourse + ": " + reviewProf + ":" + reviewAuthor);
+        sails.log.error("error", err);
+      }
+      next();
+    });
+  }, function (err) {
+    if (err) sails.log.error("error", err.errors);
+    sails.log.debug("seeded relation: User:LikedReviews:Review");
+    job.progress(7, 10);
+    next();
+  });
+};
+
 
 module.exports = {
   seedDB: () => {
@@ -536,7 +640,8 @@ module.exports = {
         seedUsers.bind(this, job),
         seedProfs.bind(this, job),
         seedCourses.bind(this, job),
-        seedReviews.bind(this, job)
+        seedReviews.bind(this, job),
+        seedLikedReviews.bind(this, job)
       ];
 
       async.series(orderedActionList, function (err, resultsArray) {

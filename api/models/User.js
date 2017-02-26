@@ -66,9 +66,18 @@ module.exports = {
       foreignKey: 'user_id'
     }); // 1:n
 
-    //likedReviews: 1:n
-    //dislikedReviews: 1:n
-    //followedCourses: n:m => need to change this to personal course list
+    User.belongsToMany(Review, {
+      as: 'LikedReviews',
+      through: 'Join:User:LikedReviews:Review',
+      foreignKey: 'user_id'
+    }); // m:n
+    User.belongsToMany(Review, {
+      as: 'DislikedReviews',
+      through: 'Join:User:DislikedReviews:Review',
+      foreignKey: 'user_id'
+    }); // m:n
+
+    //followedCourses: n:m => need to change this to an entry in the kelist system
   },
   options: {
     tableName: 'user',
