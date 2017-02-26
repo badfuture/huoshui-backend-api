@@ -573,19 +573,13 @@ var seedLikedReviews = function(job, next) {
       include: [
         {
           model: User, as: 'Author',
-          where: {
-            username: reviewAuthor
-          }
+          where: {username: reviewAuthor}
         }, {
           model: Course, as: 'Course',
-          where: {
-            name: reviewCourse
-          }
+          where: {name: reviewCourse}
         }, {
           model: Prof, as: 'Prof',
-          where: {
-            name: reviewProf
-          }
+          where: {name: reviewProf}
         }
       ]
     })
@@ -621,6 +615,81 @@ var seedLikedReviews = function(job, next) {
 };
 
 
+var seedDislikedReviews = function(job, next) {
+  sails.log.debug("seeding associations: User:DislikedReviews:Review");
+  async.eachSeries(dislikedReviewsData.results, function(entry, next){
+    var reviewLeanId = entry.relatedId;
+    var userLeanId = entry.owningId;
+    var username = null;
+    var reviewCourse = null;
+    var reviewProf = null;
+    var reviewAuthor = null;
+    var reviewFound = null;
+    var userFound = null;
+
+    userData.results.forEach(function(item, index, arr){
+      if (item.objectId == userLeanId) {
+        username = item.username;
+      }
+    });
+    reviewData.results.forEach(function(item, index, arr){
+      if (item.objectId == reviewLeanId) {
+        reviewCourse = item.courseName;
+        reviewProf = item.profName;
+        var authorLeanId = item.authorId.objectId;
+        userData.results.forEach(function(item, index, arr){
+          if (item.objectId == authorLeanId) {
+            reviewAuthor = item.username;
+          }
+        });
+      }
+    });
+
+    Review.findOne({
+      include: [
+        {
+          model: User, as: 'Author',
+          where: {username: reviewAuthor}
+        }, {
+          model: Course, as: 'Course',
+          where: {name: reviewCourse}
+        }, {
+          model: Prof, as: 'Prof',
+          where: {name: reviewProf}
+        }
+      ]
+    })
+    .then((results)=> {
+      reviewFound = results;
+      return User.findOne({where:{
+        username: username
+      }})
+    })
+    .then((results)=> {
+      userFound = results;
+      if (reviewFound && userFound) {
+        sails.log.info("seeded relation " + ": " + username
+                      + ": " + reviewCourse + ": " + reviewProf + ":" + reviewAuthor);
+        userFound.addDislikedReview(reviewFound);
+      }
+      next();
+    })
+    .catch(function(err){
+      if (err) {
+        sails.log.info("seeded relation " + ": " + username
+                      + ": " + reviewCourse + ": " + reviewProf + ":" + reviewAuthor);
+        sails.log.error("error", err);
+      }
+      next();
+    });
+  }, function (err) {
+    if (err) sails.log.error("error", err.errors);
+    sails.log.debug("seeded relation: User:DislikedReviews:Review");
+    job.progress(8, 10);
+    next();
+  });
+};
+
 module.exports = {
   seedDB: () => {
     var publisher = sails.hooks.publisher;
@@ -641,7 +710,8 @@ module.exports = {
         seedProfs.bind(this, job),
         seedCourses.bind(this, job),
         seedReviews.bind(this, job),
-        seedLikedReviews.bind(this, job)
+        seedLikedReviews.bind(this, job),
+        seedDislikedReviews.bind(this, job)
       ];
 
       async.series(orderedActionList, function (err, resultsArray) {
