@@ -270,8 +270,20 @@ var seedProfs = function(job, next) {
     })
     .then(function(dept){
       if (dept) {
-        dept.addProf(profCreated);
+        return dept.addProf(profCreated);
       }
+    })
+    .then(()=>{
+      return Position.findOne({where: {"name": entry.position}});
+    })
+    .then((position)=>{
+      if (position){
+        return position.addProf(profCreated);
+      } else if (entry.position) {
+        sails.log.debug("unknown position", entry.position);
+      }
+    })
+    .then(()=>{
       return Prof.count();
     })
     .then(function(countProf){
