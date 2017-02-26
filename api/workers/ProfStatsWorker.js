@@ -113,7 +113,7 @@ var computeScoreOverall = (sModel)=>{
 
   var C = 3.5; // mean score all score gravitates to (when votes are small)
   var M = 1; // minimum # of votes to be considered effective
-  var r = (sModel.professional + sModel.expressive + sModel.kind)/3; // rating of the course
+  var r = (sModel.professional + sModel.expressive + sModel.kind)/3; // rating of the prof
   var v = sModel.countReview; // # of reviews
   var score = (v / (v + M)) * r + (M / (v + M)) * (C);
   return score;
@@ -135,30 +135,30 @@ module.exports = {
         var executeTime = 5000;
         sails.log.debug("processing job: " + id + " | name: " + jobName);
 
-        //get all courses
-        //    for each course
+        //get all profs
+        //    for each prof
         //        get all reviews
         //            aggregate all reviews
-        //            get current course stats
-        //            store the result in course stats model
+        //            get current prof stats
+        //            store the result in prof stats model
 
-        Course.findAll({})
-        .then((courses)=> {
-            courses.forEach((course)=>{
-                course.getReviews({
-                    where: {'course_id': course.id}
+        Prof.findAll({})
+        .then((profs)=> {
+            profs.forEach((prof)=>{
+                prof.getReviews({
+                    where: {'prof_id': prof.id}
                 })
                 .then((reviews)=>{
                     //get metadata
-                    var cName = course.name;
-                    var cReviewCount = reviews.length;
-                    job.log("name: " + cName + " | " + "review count: " + cReviewCount);
+                    var pName = prof.name;
+                    var pReviewCount = reviews.length;
+                    job.log("name: " + pName + " | " + "review count: " + pReviewCount);
 
                     //initialize stats model
                     var sModel = statsModelFactory();
 
                     //aggregate review stats
-                    sModel.countReview = cReviewCount;
+                    sModel.countReview = pReviewCount;
                     reviews.forEach((review)=>{
                         updateStats(sModel, review);
                     });
@@ -170,17 +170,17 @@ module.exports = {
                     setScores(sModel);
 
                     //update stats model
-                    course.getStat()
+                    prof.getStat()
                     .then((stat)=>{
                         if(stat) {
                             stat.update(sModel).then(()=>{
-                                job.log("updated name: " + cName + " | "
-                                    + "review count: " + cReviewCount);
+                                job.log("updated name: " + pName + " | "
+                                    + "review count: " + pReviewCount);
                             });
                         } else {
-                            CourseStat.create(sModel)
+                            ProfStat.create(sModel)
                             .then((newStat)=>{
-                                course.setStat(newStat);
+                                prof.setStat(newStat);
                             })
                         }
                     })
@@ -190,7 +190,6 @@ module.exports = {
                 });
             });
         });
-
         //schedule next job
         pub.createJob(jobName, {
             title: title,

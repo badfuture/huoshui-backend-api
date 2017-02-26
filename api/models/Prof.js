@@ -148,6 +148,10 @@ module.exports = {
     }
   },
   associations: function() {
+    Prof.hasOne(ProfStat, {
+      as: "Stat",
+      foreignKey: 'prof_id'
+    }); // 1:1
     Prof.belongsTo(School, {
       as: 'School',
       foreignKey: 'school_id'

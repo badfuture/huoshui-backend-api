@@ -2,6 +2,7 @@
 //setup recurring jobs
 var kue = require('kue');
 var doRemove = false;
+var pub = sails.hooks.publisher;
 
 module.exports = {
 
@@ -39,7 +40,6 @@ module.exports = {
   },
 
   updateCourseStats: () => {
-    var pub = sails.hooks.publisher;
     var jobName = "CourseStats";
     pub.createJob(jobName, {
       title: 'update course stats',
@@ -47,7 +47,16 @@ module.exports = {
       interval: 10 * 60 * 1000,
       removeOnComplete: false
     }).save();
-  }
+  },
 
+  updateProfStats: () => {
+    var jobName = "ProfStats";
+    pub.createJob(jobName, {
+      title: 'update prof stats',
+      name: jobName,
+      interval: 10 * 60 * 1000,
+      removeOnComplete: false
+    }).save();
+  }
 
 };
