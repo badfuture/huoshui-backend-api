@@ -472,70 +472,59 @@ var seedReviews = function(job, next) {
         return courseFound.addReview(reviewCreated);
       }
     })
-    .then(function(){
+    .then(()=> {
       var tagsArray = entry.tags;
-      async.eachSeries(tagsArray, function(tag, next){
+      async.eachSeries(tagsArray, (tag, next)=> {
         tagName = tag.value;
         var tagFound = null;
         var tagFoundId = null;
         var profFound = null;
 
         Tag.findOne({where: {"name": tagName }})
-        .then(function(results){
+        .then((results)=> {
           tagFound = results;
           tagFoundId = tagFound.get('id');
           return Prof.findOne({where: {name: entry.profName}});
         })
-        .then(function(results){
+        .then((results)=> {
           profFound = results;
-          return JoinItemTag.findOrCreate({
-            where: {
-              tag_id: tagFoundId,
-              taggable: 'prof',
-              taggable_id: profFound.get('id')
-            },
-            defaults: {
-              tag_id: tagFoundId,
-              taggable: 'prof',
-              taggable_id: profFound.get('id')
-            }
-          });
-        })
-        .then(function(results){
           return profFound.getTags({where: {"id": tagFoundId}});
         })
-        .then(function(results){
-          var profTag = results[0];
-          return profTag.JoinItemTag.increment({'count': 1});
+        .then((profTags)=> {
+          var profTag = profTags[0];
+          if (!profTag) {
+            return profFound.addTag(tagFound);
+          }
         })
-        .then(function(){
+        .then(()=> {
+          return profFound.getTags({where: {"id": tagFoundId}});
+        })
+        .then((profTags)=> {
+          return profTags[0].JoinItemTag.increment({'count': 1});
+        })
+        .then(()=> {
           return reviewCreated.addTag(tagFound);
         })
-        .then(function(){
-          return JoinItemTag.findOrCreate({
-            where: {
-              tag_id: tagFoundId,
-              taggable: 'course',
-              taggable_id: courseFound.get('id')
-            },
-            defaults: {
-              tag_id: tagFoundId,
-              taggable: 'course',
-              taggable_id: courseFound.get('id')
-            }
-          });
-        })
-        .then(function(){
+        .then(()=> {
           return courseFound.getTags({where: {"id": tagFoundId}});
         })
-        .then(function(results){
+        .then((courseTags)=> {
+          var courseTag = courseTags[0];
+          if (!courseTag) {
+            return courseFound.addTag(tagFound);
+          }
+        })
+        .then(()=> {
+          return courseFound.getTags({where: {"id": tagFoundId}});
+        })
+        .then((results)=> {
           var courseTag = results[0];
           return courseTag.JoinItemTag.increment({'count': 1});
         })
-        .then(function(){
+        .then(()=> {
           next();
         })
-        .catch(function(err){
+        .catch((err)=> {
           if (err) {
             sails.log.error("error", err);
           }
@@ -543,14 +532,14 @@ var seedReviews = function(job, next) {
         });
       });
     })
-    .then(function(){
+    .then(()=> {
       return Review.count();
     })
-    .then(function(reviewCount){
+    .then((reviewCount)=> {
       sails.log.info("seeded review " + reviewCount + ": " + entry.profName + ": " + entry.courseName);
       next();
     })
-    .catch(function(err){
+    .catch((err)=> {
       if (err) {
         console.log(review.examHard);
         sails.log.error("course name", entry.courseName );
@@ -561,7 +550,7 @@ var seedReviews = function(job, next) {
       next();
     });
 
-  }, function (err) {
+  }, (err)=>  {
     if (err) sails.log.error("error", err);
     sails.log.debug("seeded table: reviews");
     job.progress(6, 10);
