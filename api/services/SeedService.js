@@ -484,6 +484,7 @@ var seedReviews = function(job, next) {
         .then((results)=> {
           tagFound = results;
           tagFoundId = tagFound.get('id');
+          console.log("tagId", tagFoundId);
           return Prof.findOne({where: {name: entry.profName}});
         })
         .then((results)=> {
@@ -493,6 +494,8 @@ var seedReviews = function(job, next) {
         .then((profTags)=> {
           var profTag = profTags[0];
           if (!profTag) {
+            console.log("taggable", "prof");
+            console.log("taggableId", profFound.id);
             return profFound.addTag(tagFound);
           }
         })
@@ -511,6 +514,9 @@ var seedReviews = function(job, next) {
         .then((courseTags)=> {
           var courseTag = courseTags[0];
           if (!courseTag) {
+            console.log("tagId", tagFoundId);
+            console.log("taggable", "course");
+            console.log("taggableId", courseFound.id);
             return courseFound.addTag(tagFound);
           }
         })
@@ -526,7 +532,7 @@ var seedReviews = function(job, next) {
         })
         .catch((err)=> {
           if (err) {
-            sails.log.error("error", err);
+            sails.log.error("error", err.errors);
           }
           next();
         });
