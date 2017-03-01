@@ -477,42 +477,60 @@ var seedReviews = function(job, next) {
       async.eachSeries(tagsArray, function(tag, next){
         tagName = tag.value;
         var tagFound = null;
+        var tagFoundId = null;
         var profFound = null;
 
         Tag.findOne({where: {"name": tagName }})
         .then(function(results){
           tagFound = results;
-          return Prof.findOne({
+          tagFoundId = tagFound.get('id');
+          return Prof.findOne({where: {name: entry.profName}});
+        })
+        .then(function(results){
+          profFound = results;
+          return JoinItemTag.findOrCreate({
             where: {
-              name: entry.profName
+              tag_id: tagFoundId,
+              taggable: 'prof',
+              taggable_id: profFound.get('id')
+            },
+            defaults: {
+              tag_id: tagFoundId,
+              taggable: 'prof',
+              taggable_id: profFound.get('id')
             }
           });
         })
         .then(function(results){
-          profFound = results;
-          return profFound.addTag(tagFound);
-        })
-        .then(function(){
-          var tagId = tagFound.dataValues.id;
-          return profFound.getTags({where: {"id": tagId}});
+          return profFound.getTags({where: {"id": tagFoundId}});
         })
         .then(function(results){
-          var tagFound = results[0];
-          return tagFound.JoinItemTag.increment({'count': 1});
+          var profTag = results[0];
+          return profTag.JoinItemTag.increment({'count': 1});
         })
         .then(function(){
           return reviewCreated.addTag(tagFound);
         })
         .then(function(){
-          return courseFound.addTag(tagFound);
+          return JoinItemTag.findOrCreate({
+            where: {
+              tag_id: tagFoundId,
+              taggable: 'course',
+              taggable_id: courseFound.get('id')
+            },
+            defaults: {
+              tag_id: tagFoundId,
+              taggable: 'course',
+              taggable_id: courseFound.get('id')
+            }
+          });
         })
         .then(function(){
-          var tagId = tagFound.dataValues.id;
-          return courseFound.getTags({where: {"id": tagId}});
+          return courseFound.getTags({where: {"id": tagFoundId}});
         })
         .then(function(results){
-          var tagFound = results[0];
-          return tagFound.JoinItemTag.increment({'count': 1});
+          var courseTag = results[0];
+          return courseTag.JoinItemTag.increment({'count': 1});
         })
         .then(function(){
           next();
