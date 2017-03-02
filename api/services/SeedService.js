@@ -1,3 +1,4 @@
+const Promise = require('sequelize').Promise;
 var fs = require("fs");
 var async = require("async");
 var csv_parse = require('csv-parse/lib/sync');
@@ -474,30 +475,22 @@ var seedReviews = function(job, next) {
     })
     .then(()=> {
       var tagsArray = entry.tags;
-      async.eachSeries(tagsArray, (tag, next)=> {
+      return Promise.all(tagsArray).map((tag)=> {
         tagName = tag.value;
         var tagFound = null;
         var tagFoundId = null;
         var profFound = null;
 
-        Tag.findOne({where: {"name": tagName }})
+        return Tag
+        .findOne({where: {"name": tagName }})
         .then((results)=> {
           tagFound = results;
           tagFoundId = tagFound.get('id');
-          console.log("tagId", tagFoundId);
           return Prof.findOne({where: {name: entry.profName}});
         })
         .then((results)=> {
           profFound = results;
-          return profFound.getTags({where: {"id": tagFoundId}});
-        })
-        .then((profTags)=> {
-          var profTag = profTags[0];
-          if (!profTag) {
-            console.log("taggable", "prof");
-            console.log("taggableId", profFound.id);
-            return profFound.addTag(tagFound);
-          }
+          return profFound.addTag(tagFound);
         })
         .then(()=> {
           return profFound.getTags({where: {"id": tagFoundId}});
@@ -509,32 +502,18 @@ var seedReviews = function(job, next) {
           return reviewCreated.addTag(tagFound);
         })
         .then(()=> {
+          return courseFound.addTag(tagFound);
+        })
+        .then(()=> {
           return courseFound.getTags({where: {"id": tagFoundId}});
         })
         .then((courseTags)=> {
-          var courseTag = courseTags[0];
-          if (!courseTag) {
-            console.log("tagId", tagFoundId);
-            console.log("taggable", "course");
-            console.log("taggableId", courseFound.id);
-            return courseFound.addTag(tagFound);
-          }
-        })
-        .then(()=> {
-          return courseFound.getTags({where: {"id": tagFoundId}});
-        })
-        .then((results)=> {
-          var courseTag = results[0];
-          return courseTag.JoinItemTag.increment({'count': 1});
-        })
-        .then(()=> {
-          next();
+          return courseTags[0].JoinItemTag.increment({'count': 1});
         })
         .catch((err)=> {
           if (err) {
             sails.log.error("error", err.errors);
           }
-          next();
         });
       });
     })
