@@ -43,6 +43,10 @@ module.exports = {
               as: 'stat',
               attributes: ['count']
             };
+          } else if (rel.target.name == 'Review') {
+            obj.through = {
+              attributes: []
+            };
           }
           if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;
