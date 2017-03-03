@@ -38,6 +38,11 @@ module.exports = {
           var obj = { model: rel.target, as: rel.options.as };
           if (rel.target.name == 'User') {
             obj.attributes = {exclude: ['password', 'salt']};
+          } else if (rel.target.name == 'Tag') {
+            obj.through = {
+              as: 'stat',
+              attributes: ['count']
+            };
           }
           if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;
