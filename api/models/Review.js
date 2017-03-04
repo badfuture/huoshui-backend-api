@@ -155,12 +155,12 @@ module.exports = {
 
     Review.belongsToMany(User, {
       as: 'LikedReviews',
-      through: 'Join:User:LikedReviews:Review',
+      through: 'Join_User_LikedReviews_Review',
       foreignKey: 'review_id'
     }); // m:n
     Review.belongsToMany(User, {
       as: 'DislikedReviews',
-      through: 'Join:User:DislikedReviews:Review',
+      through: 'Join_User_DislikedReviews_Review',
       foreignKey: 'review_id'
     }); // m:n
 

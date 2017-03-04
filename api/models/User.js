@@ -71,12 +71,12 @@ module.exports = {
     }); // 1:n
     User.belongsToMany(Review, {
       as: 'LikedReviews',
-      through: 'Join:User:LikedReviews:Review',
+      through: 'Join_User_LikedReviews_Review',
       foreignKey: 'user_id'
     }); // m:n
     User.belongsToMany(Review, {
       as: 'DislikedReviews',
-      through: 'Join:User:DislikedReviews:Review',
+      through: 'Join_User_DislikedReviews_Review',
       foreignKey: 'user_id'
     }); // m:n
     User.belongsToMany(Kelist, {
