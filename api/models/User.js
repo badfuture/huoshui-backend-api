@@ -65,7 +65,10 @@ module.exports = {
       as: 'Comments',
       foreignKey: 'user_id'
     }); // 1:n
-
+    User.hasMany(Kelist, {
+      as: 'Kelists',
+      foreignKey: 'author_id'
+    }); // 1:n
     User.belongsToMany(Review, {
       as: 'LikedReviews',
       through: 'Join:User:LikedReviews:Review',
@@ -76,8 +79,12 @@ module.exports = {
       through: 'Join:User:DislikedReviews:Review',
       foreignKey: 'user_id'
     }); // m:n
+    User.belongsToMany(Kelist, {
+      as: 'CollectedKelists',
+      through: 'Join_Kelist_Collectors_User',
+      foreignKey: 'user_id'
+    }); // m:n
 
-    //followedCourses: n:m => need to change this to an entry in the kelist system
   },
   options: {
     tableName: 'user',

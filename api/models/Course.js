@@ -85,8 +85,11 @@ module.exports = {
       through: 'JoinCourseDept',
       foreignKey: 'course_id'
     }); // m:n
-
-    //followers: m:n
+    Course.belongsToMany(Kelist, {
+      as: 'Kelists',
+      through: 'Join_Kelist_Courses_Course',
+      foreignKey: 'course_id'
+    }); // m:n
   },
   options: {
     tableName: 'course',
