@@ -20,11 +20,11 @@ module.exports = {
     },
     category: {
       field: "category",
-      type: Sequelize.ENUM('course', 'prof'),
+      type: Sequelize.ENUM('course', 'prof', 'kelist'),
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "category of the info the tag applies to"
+      comment: "标签的类型"
     },
   },
   associations: function() {

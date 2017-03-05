@@ -1,67 +1,89 @@
 [{
+  "name": "照本宣科",
   "isPositive": false,
-  "name": "照本宣科"
+  "category": "course"
 }, {
+  "name": "枯燥无味",
   "isPositive": false,
-  "name": "枯燥无味"
+  "category": "course"
 }, {
+  "name": "引人入胜",
   "isPositive": true,
-  "name": "引人入胜"
+  "category": "course"
 }, {
+  "name": "富有创新",
   "isPositive": true,
-  "name": "富有创新"
+  "category": "course"
 }, {
+  "name": "氛围轻松",
   "isPositive": true,
-  "name": "氛围轻松"
+  "category": "course"
 }, {
+  "name": "水课一门",
   "isPositive": false,
-  "name": "水课一门"
+  "category": "course"
 }, {
+  "name": "治学严谨",
   "isPositive": true,
-  "name": "治学严谨"
+  "category": "prof"
 }, {
+  "name": "耐心",
   "isPositive": true,
-  "name": "耐心"
+  "category": "prof"
 }, {
+  "name": "幽默",
   "isPositive": true,
-  "name": "幽默"
+  "category": "prof"
 }, {
+  "name": "僵化刻板",
   "isPositive": false,
-  "name": "僵化刻板"
+  "category": "prof"
 }, {
+  "name": "低调",
   "isPositive": true,
-  "name": "低调"
+  "category": "prof"
 }, {
+  "name": "仁慈",
   "isPositive": true,
-  "name": "仁慈"
+  "category": "prof"
 }, {
+  "name": "认真负责",
   "isPositive": true,
-  "name": "认真负责"
+  "category": "prof"
 }, {
+  "name": "冷酷无情",
   "isPositive": false,
-  "name": "冷酷无情"
+  "category": "prof"
 }, {
+  "name": "热情",
   "isPositive": true,
-  "name": "热情"
+  "category": "prof"
 }, {
+  "name": "和蔼",
   "isPositive": true,
-  "name": "和蔼"
+  "category": "prof"
 }, {
+  "name": "冷淡",
   "isPositive": false,
-  "name": "冷淡"
+  "category": "prof"
 }, {
+  "name": "博学",
   "isPositive": true,
-  "name": "博学"
+  "category": "prof"
 }, {
+  "name": "健谈",
   "isPositive": true,
-  "name": "健谈"
+  "category": "prof"
 }, {
+  "name": "浮夸",
   "isPositive": false,
-  "name": "浮夸"
+  "category": "prof"
 }, {
+  "name": "深邃",
   "isPositive": true,
-  "name": "深邃"
+  "category": "prof"
 }, {
+  "name": "张扬",
   "isPositive": false,
-  "name": "张扬"
+  "category": "prof"
 }]
