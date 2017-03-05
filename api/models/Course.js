@@ -71,7 +71,7 @@ module.exports = {
     Course.belongsToMany(Tag, {
       as: 'Tags',
       through: {
-        model: 'JoinItemTag',
+        model: 'Join_Item_Tag',
         unique: false,
         scope: {
           taggable: 'course'

@@ -496,7 +496,7 @@ var seedReviews = function(job, next) {
           return profFound.getTags({where: {"id": tagFoundId}});
         })
         .then((profTags)=> {
-          return profTags[0].JoinItemTag.increment({'count': 1});
+          return profTags[0].Join_Item_Tag.increment({'count': 1});
         })
         .then(()=> {
           return reviewCreated.addTag(tagFound);
@@ -508,7 +508,7 @@ var seedReviews = function(job, next) {
           return courseFound.getTags({where: {"id": tagFoundId}});
         })
         .then((courseTags)=> {
-          return courseTags[0].JoinItemTag.increment({'count': 1});
+          return courseTags[0].Join_Item_Tag.increment({'count': 1});
         })
         .catch((err)=> {
           if (err) {

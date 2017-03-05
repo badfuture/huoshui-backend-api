@@ -31,7 +31,7 @@ module.exports = {
     Tag.belongsToMany(Course, {
       as: 'Courses',
       through:{
-        model: 'JoinItemTag',
+        model: 'Join_Item_Tag',
         unique: false
       },
       foreignKey: 'tag_id',
@@ -40,7 +40,7 @@ module.exports = {
     Tag.belongsToMany(Review, {
       as: 'Reviews',
       through: {
-        model: 'JoinItemTag',
+        model: 'Join_Item_Tag',
         unique: false
       },
       foreignKey: 'tag_id',
@@ -49,7 +49,16 @@ module.exports = {
     Tag.belongsToMany(Prof, {
       as: 'Profs',
       through: {
-        model: 'JoinItemTag',
+        model: 'Join_Item_Tag',
+        unique: false
+      },
+      foreignKey: 'tag_id',
+      constraints: false
+    }); // m:n
+    Tag.belongsToMany(Kelist, {
+      as: 'Kelists',
+      through: {
+        model: 'Join_Item_Tag',
         unique: false
       },
       foreignKey: 'tag_id',

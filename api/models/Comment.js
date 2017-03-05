@@ -37,6 +37,11 @@ module.exports = {
       foreignKey: 'review_id',
       constraints: false
     });  // n:1
+    Comment.belongsTo(Kelist, {
+      as: 'Kelist',
+      foreignKey: 'kelist_id',
+      constraints: false
+    });  // n:1
     Comment.belongsTo(Comment, {
       as: 'Parent',
       foreignKey: 'comment_id'

@@ -32,7 +32,7 @@ module.exports = {
   associations: function() {
   },
   options: {
-    tableName: 'JoinItemTag',
+    tableName: 'Join_Item_Tag',
     underscored: true,
     freezeTableName: true,
     timestamps: true,
