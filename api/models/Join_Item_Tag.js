@@ -12,8 +12,12 @@ module.exports = {
       unique: 'item_tag_taggable'
     },
     taggable: {
-      type: Sequelize.STRING,
-      unique: 'item_tag_taggable'
+      field: "taggable",
+      type: Sequelize.ENUM('course', 'review', 'prof', 'kelist'),
+      allowNull: false,
+      defaultValue: null,
+      unique: 'item_tag_taggable',
+      comment: "被贴标签对象的类型"
     },
     taggable_id: {
       type: Sequelize.INTEGER,
@@ -38,11 +42,7 @@ module.exports = {
     timestamps: true,
     paranoid: false,
     classMethods: {},
-    instanceMethods: {
-      //getItem: function() {
-      //  return this['get' + this.get('commentable').substr(0, 1).toUpperCase() + this.get('commentable').substr(1)]();
-      //}
-    },
+    instanceMethods: {},
     hooks: {}
   }
 };
