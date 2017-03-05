@@ -4,18 +4,18 @@ module.exports = {
   attributes: {
     commentable: {
       field: "commentable",
-      type: Sequelize.STRING,
+      type: Sequelize.ENUM('review', 'kelist'),
       allowNull: false,
       defaultValue: null,
-      unique: true,
-      comment: "评论类型，对应其它可被评价的表 (ex.Post and Review)"
+      unique: false,
+      comment: "被评论对象的类型"
     },
     text: {
       field: "text",
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: true,
+      unique: false,
       comment: "文字内容"
     },
     datePosted: {
@@ -23,7 +23,7 @@ module.exports = {
       type: Sequelize.DATE,
       allowNull: false,
       defaultValue: Sequelize.NOW,
-      unique: true,
+      unique: false,
       comment: "发布日期"
     }
   },
