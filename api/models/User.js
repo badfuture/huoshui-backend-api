@@ -66,9 +66,14 @@ module.exports = {
       foreignKey: 'user_id'
     }); // 1:n
     User.hasMany(Kelist, {
-      as: 'Kelists',
+      as: 'OwnsKelists',
       foreignKey: 'author_id'
     }); // 1:n
+    User.belongsToMany(Kelist, {
+      as: 'CollectedKelists',
+      through: 'Join_Kelist_Collectors_User',
+      foreignKey: 'user_id'
+    }); // m:n
     User.belongsToMany(Review, {
       as: 'LikedReviews',
       through: 'Join_User_LikedReviews_Review',
@@ -79,12 +84,6 @@ module.exports = {
       through: 'Join_User_DislikedReviews_Review',
       foreignKey: 'user_id'
     }); // m:n
-    User.belongsToMany(Kelist, {
-      as: 'CollectedKelists',
-      through: 'Join_Kelist_Collectors_User',
-      foreignKey: 'user_id'
-    }); // m:n
-
   },
   options: {
     tableName: 'user',

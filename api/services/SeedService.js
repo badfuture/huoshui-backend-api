@@ -168,6 +168,7 @@ var seedUsers = function(job, next) {
   sails.log.debug("seeding users");
   async.eachSeries(userData.results, function(entry, next){
     var userCreated = null;
+    var kelistCreated = null;
     var user = {};
     user.username = entry.username;
     user.password = entry.password;
@@ -209,6 +210,18 @@ var seedUsers = function(job, next) {
       } else {
         dept.addUser(userCreated);
       }
+    })
+    .then(()=> {
+      return Kelist.create({
+        name: '我喜欢的课程',
+        category: 'default_liked_courses'
+      });
+    })
+    .then((results)=> {
+      var kelistCreated = results;
+      return userCreated.addOwnsKelists(kelistCreated);
+    })
+    .then(()=> {
       return User.count();
     })
     .then(function(countUser){
@@ -543,6 +556,74 @@ var seedReviews = function(job, next) {
   });
 };
 
+var seedKelists = function(job, next) {
+  sails.log.debug("seeding Kelists");
+
+  async.eachSeries(likedCoursesData.results, function(entry, next){
+    var courseLeanId = entry.relatedId;
+    var userLeanId = entry.owningId;
+
+    var username = null;
+    var courseName = null;
+    var courseProf = null;
+    var courseFound = null;
+    var userFound = null;
+
+    userData.results.forEach(function(item, index, arr){
+      if (item.objectId == userLeanId) {
+        username = item.username;
+      }
+    });
+    courseData.results.forEach(function(item, index, arr){
+      if (item.objectId == courseLeanId) {
+        courseName = replace_roman(item.name);
+        courseProf = item.prof;
+      }
+    });
+
+    Course.findOne({
+      where: {name: courseName},
+      include: [
+        {
+          model: Prof, as: 'Prof',
+          where: {name: courseProf}
+        }
+      ]
+    })
+    .then((results)=> {
+      courseFound = results;
+      return User.findOne({where:{
+        username: username
+      }})
+    })
+    .then((results)=> {
+      userFound = results;
+      return userFound.getOwnsKelists({
+        where: {category: 'default_liked_courses'}
+      });
+    })
+    .then((results)=> {
+      sails.log.info("seeded kelist " + ": " + username
+                    + ": " + courseName + ": " + courseProf);
+      var kelist = results[0];
+      kelist.addCourse(courseFound);
+      next();
+    })
+    .catch(function(err){
+      if (err) {
+        sails.log.error("error", err);
+      }
+      next();
+    });
+  }, function (err) {
+    if (err) sails.log.error("error", err.errors);
+    sails.log.debug("seeded kelists");
+    job.progress(7, 10);
+    next();
+  });
+};
+
+
 var seedLikedReviews = function(job, next) {
   sails.log.debug("seeding associations: User:LikedReviews:Review");
   async.eachSeries(likedReviewsData.results, function(entry, next){
@@ -714,6 +795,7 @@ module.exports = {
         seedProfs.bind(this, job),
         seedCourses.bind(this, job),
         seedReviews.bind(this, job),
+        seedKelists.bind(this, job),
         seedLikedReviews.bind(this, job),
         seedDislikedReviews.bind(this, job)
       ];

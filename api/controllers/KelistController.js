@@ -14,7 +14,7 @@ module.exports = {
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: defaultInclude
+      include: includeOption
     }).then(function(recordsFound){
       return res.ok(recordsFound);
     }).catch(function(err){
@@ -26,7 +26,7 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
     var defaultInclude = [];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
-    
+
     Kelist.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {

@@ -47,6 +47,11 @@ module.exports = {
             obj.through = {
               attributes: []
             };
+          } else if (rel.target.name == 'Course') {
+            obj.through = {
+              as: 'meta',
+              attributes: ['brief_comment']
+            };
           }
           if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;

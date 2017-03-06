@@ -7,8 +7,16 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: true,
+      unique: false,
       comment: "课列名称"
+    },
+    category: {
+      field: "category",
+      type: Sequelize.ENUM('default_liked_courses'),
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "标签的类型"
     },
     description: {
       field: "description",
@@ -56,16 +64,16 @@ module.exports = {
     }); // 1:n
     Kelist.belongsTo(User, {
       as: 'Author',
-      foreignKey: 'user_id'
+      foreignKey: 'author_id'
     }); // n:1
-    Kelist.belongsToMany(Course, {
-      as: 'courses',
-      through: 'Join_Kelist_Courses_Course',
+    Kelist.belongsToMany(User, {
+      as: 'Collectors',
+      through: 'Join_Kelist_Collectors_User',
       foreignKey: 'kelist_id'
     }); // m:n
-    Kelist.belongsToMany(User, {
-      as: 'collectors',
-      through: 'Join_Kelist_Collectors_User',
+    Kelist.belongsToMany(Course, {
+      as: 'Courses',
+      through: 'Join_Kelist_Courses_Course',
       foreignKey: 'kelist_id'
     }); // m:n
     Kelist.belongsToMany(Tag, {
