@@ -12,5 +12,12 @@ module.exports = {
     action: "findOne",
     isPlural: false,
     swagger: {}
-  }
+  },
+  'POST /kelists': {
+    model: "kelist",
+    controller: "KelistController",
+    action: "find",
+    isPlural: true,
+    swagger: {}
+  },
 }
