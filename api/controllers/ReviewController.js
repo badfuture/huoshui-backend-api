@@ -11,7 +11,7 @@ module.exports = {
       { model: Tag, as: 'Tags'}
     ];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
-
+    console.log(includeOption);
     Review.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),

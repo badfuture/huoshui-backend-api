@@ -47,7 +47,7 @@ module.exports = {
             obj.through = {
               attributes: []
             };
-          } else if (rel.target.name == 'Course') {
+          } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
             obj.through = {
               as: 'meta',
               attributes: ['brief_comment']

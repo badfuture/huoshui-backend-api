@@ -31,17 +31,14 @@ var JWT_STRATEGY_CONFIG = {
 // Triggers when user authenticates via local strategy
 function _onLocalStrategyAuth(email, password, next) {
   User.findOne({
-      email: email
+      where: {email: email}
     })
-    .exec(function(error, user) {
-      if (error) return next(error, false, {});
-
+    .then((user) => {
       if (!user) return next(null, false, {
         code: 'E_USER_NOT_FOUND',
         message: email + ' is not found'
       });
 
-      // TODO: replace with new cipher service type
       if (!CipherService.comparePassword(password, user))
         return next(null, false, {
           code: 'E_WRONG_PASSWORD',
@@ -49,6 +46,10 @@ function _onLocalStrategyAuth(email, password, next) {
         });
 
       return next(null, user, {});
+    })
+    .catch((err) => {
+      sails.log.error(err.message);
+      next(err);
     });
 }
 
