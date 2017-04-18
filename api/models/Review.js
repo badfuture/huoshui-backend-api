@@ -137,6 +137,25 @@ module.exports = {
       unique: false,
       comment: "题目容易"
     },
+
+    // custom timestamps
+    createdAt: {
+      field: "created_at",
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "创建时间"
+    },
+
+    updatedAt: {
+      field: "updated_at",
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: null,
+      unique: false,
+      comment: "更新时间"
+    },
   },
   associations: function() {
     Review.belongsTo(Course, {
@@ -189,7 +208,7 @@ module.exports = {
     tableName: 'review',
     underscored: true,
     freezeTableName: true,
-    timestamps: true,
+    timestamps: false,
     paranoid: false,
     classMethods: {},
     instanceMethods: {},

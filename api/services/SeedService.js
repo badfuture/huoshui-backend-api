@@ -440,6 +440,12 @@ var seedReviews = function(job, next) {
     //optional: upvote/downvote
     review.downVote = entry.downVote;
     review.upVote = entry.upVote;
+
+    //date
+    review.createdAt = entry.createdAt;
+    review.updatedAt = entry.updatedAt;
+
+    //additional parsing
     entry.courseName = replace_roman(entry.courseName);
 
     Review.create(review)
