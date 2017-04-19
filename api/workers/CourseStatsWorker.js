@@ -170,7 +170,10 @@ module.exports = {
                     setScores(sModel);
 
                     //update stats model
-                    course.getStat()
+                    course.update({
+                      scoreOverall: sModel.scoreOverall
+                    })
+                    .then(() => course.getStat())
                     .then((stat)=>{
                         if(stat) {
                             stat.update(sModel).then(()=>{

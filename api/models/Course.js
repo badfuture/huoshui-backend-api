@@ -49,7 +49,18 @@ module.exports = {
       defaultValue: null,
       unique: false,
       comment: "学分"
-    }
+    },
+
+    // redundent stats (used to reduce # of api calls)
+    scoreOverall: {
+      field: "scoreOverall",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "综合评分"
+    },
   },
   associations: function() {
     Course.hasOne(CourseStat, {
