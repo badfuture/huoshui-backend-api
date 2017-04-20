@@ -1,9 +1,15 @@
 {
-  "name": "sails_huoshui",
+  "name": "huoshui_backend_api",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "version": "1.0.0",
+  "description": "Huoshui Backend API",
   "keywords": [],
+  "scripts": {
+    "deploy:dev:setup": "pm2 deploy pm2.config.js dev setup",
+    "deploy:dev": "pm2 deploy pm2.config.js dev",
+    "deploy:prod:setup": "pm2 deploy pm2.config.js prod setup",
+    "deploy:prod": "pm2 deploy pm2.config.js prod"
+  },
   "dependencies": {
     "async": "^2.0.1",
     "bcrypt-nodejs": "0.0.3",
@@ -11,18 +17,6 @@
     "csv": "^1.1.0",
     "ejs": "2.3.4",
     "flaverr": "^1.0.0",
-    "grunt": "0.4.5",
-    "grunt-contrib-clean": "0.6.0",
-    "grunt-contrib-coffee": "0.13.0",
-    "grunt-contrib-concat": "0.5.1",
-    "grunt-contrib-copy": "0.5.0",
-    "grunt-contrib-cssmin": "0.9.0",
-    "grunt-contrib-jst": "0.6.0",
-    "grunt-contrib-less": "1.1.0",
-    "grunt-contrib-uglify": "0.7.0",
-    "grunt-contrib-watch": "0.5.3",
-    "grunt-sails-linker": "~0.10.1",
-    "grunt-sync": "0.2.4",
     "include-all": "~0.1.6",
     "jsonwebtoken": "^7.0.0",
     "kue": "^0.11.5",
@@ -38,10 +32,6 @@
     "pluralize": "^3.1.0",
     "rc": "1.0.1",
     "sails": "~0.12.3",
-    "sails-disk": "~0.10.9",
-    "sails-mongo": "^0.12.0",
-    "sails-mysql": "^0.12.1",
-    "sails-postgresql": "^0.11.4",
     "sequelize": "^3.27.0"
   },
   "scripts": {
