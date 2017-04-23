@@ -142,6 +142,11 @@ module.exports = {
     return Model;
   },
 
+  parsePaginate: function (req) {
+    // expect a boolean value
+    var paginate = req.param('paginate')
+    return (paginate === true || paginate === 'true') ? true : false;
+  },
 
   parseSort: function (req) {
     var sort = req.param('sort')
@@ -175,7 +180,7 @@ module.exports = {
   },
 
   parseWhere: function ( req ) {
-    var blacklist = ['limit', 'skip', 'sort', 'populate'];
+    var blacklist = ['limit', 'skip', 'sort', 'populate', 'paginate'];
     var where = req.allParams().where;
 
     // If `where` parameter is a string, try to interpret it as JSON.
