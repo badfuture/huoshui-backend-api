@@ -149,20 +149,10 @@ module.exports = {
   },
 
   parseSort: function (req) {
-    var sort = req.param('sort')
-    if (_.isUndefined(sort)) {return undefined;}
-
-    // If `sort` is a string, attempt to JSON.parse() it.
-    // (e.g. `{"name": 1}`)
-    if (_.isString(sort)) {
-      try {
-        sort = JSON.parse(sort);
-      }
-      // If it is not valid JSON, then fall back to interpreting it as-is.
-      // (e.g. "name ASC")
-      catch(e) {}
-    }
-    return sort;
+    const sort = req.param('sort')
+    if (_.isUndefined(sort)) {return undefined}
+    const params = sort.replace( /["']/g, "").split(' ')
+    return [[params[0], params[1]]]
   },
 
   parseSkip: function (req) {
