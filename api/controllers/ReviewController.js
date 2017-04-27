@@ -17,7 +17,8 @@ module.exports = {
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: includeOption
+      include: includeOption,
+      distinct: true
     }
 
     const isPaginateFormat =  ActionUtil.parsePaginate(req);
