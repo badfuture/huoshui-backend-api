@@ -266,6 +266,7 @@ var seedProfs = function(job, next) {
       prof.exp = entry.exp;
     }
     prof.group = entry.group;
+    prof.motto = entry.motto;
     prof.intro = entry.intro;
     prof.education = entry.education;
     prof.research = entry.research;
