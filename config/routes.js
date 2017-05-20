@@ -15,6 +15,7 @@ var schoolRoute = require('../api/routes/schoolRoute');
 var swaggerRoute = require('../api/routes/swaggerRoute');
 var tagRoute = require('../api/routes/tagRoute');
 var userRoute = require('../api/routes/userRoute');
+var feedbackRoute = require('../api/routes/feedbackRoute');
 var otherRoute = require('../api/routes/otherRoute');
 
 // Dynamic include custom routes from api

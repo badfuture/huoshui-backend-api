@@ -65,6 +65,10 @@ module.exports = {
       as: 'Comments',
       foreignKey: 'author_id'
     }); // 1:n
+    User.hasMany(Feedback, {
+      as: 'Feedbacks',
+      foreignKey: 'user_id'
+    }); // 1:n
     User.hasMany(Kelist, {
       as: 'OwnsKelists',
       foreignKey: 'author_id'
