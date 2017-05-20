@@ -30,7 +30,7 @@ module.exports = {
       { model: User, as: 'Author'},
     ];
     var includeOption = ActionUtil.populateEach(req, defaultInclude);
-    
+
     Dept.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {
@@ -41,4 +41,40 @@ module.exports = {
     });
   },
 
+	create: (req, res) => {
+    const {commentable, commentableId, text, authorId, parentId} = ActionUtil.parseValues(req)
+    let newComment = null
+		let Model = req._sails.models[commentable]
+
+    Comment.create({
+      commentable,
+			text,
+    }).then((newRecord) => {
+			newComment = newRecord
+		}).then(() => {
+			return User
+        .findOne({where: {id: authorId}})
+        .then((userFound) => {
+          userFound.addComment(newComment)
+        })
+		}).then(() => {
+      return Model
+        .findOne({where: {id: commentableId}})
+        .then((commentableFound) => {
+          commentableFound.addComment(newComment)
+        })
+		}).then(() => {
+      if (parentId != null && parentId != '') {
+        return Comment
+          .findOne({where: {id: parentId}})
+          .then((commentFound) => {
+            commentFound.addSubcomment(newComment)
+          })
+      }
+		}).then(() => {
+      res.created()
+    }).catch((err) => {
+      return res.serverError(err)
+    })
+  },
 };

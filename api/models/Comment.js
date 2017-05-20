@@ -42,12 +42,12 @@ module.exports = {
       foreignKey: 'kelist_id',
       constraints: false
     });  // n:1
-    Comment.belongsTo(Comment, {
-      as: 'Parent',
-      foreignKey: 'comment_id'
-    }); // n:1
+    Comment.hasMany(Comment, {
+      as: 'Subcomments',
+      foreignKey: 'parent_id',
+      constraints: false
+    });  // n:1
   },
-  //TODO: thread: 1:n
   options: {
     tableName: 'comment',
     underscored: true,

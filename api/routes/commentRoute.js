@@ -8,5 +8,10 @@ module.exports = {
     model: "comment",
     controller: "CommentController",
     action: "findOne"
+  },
+  'POST /comments': {
+    model: "comment",
+    controller: "CommentController",
+    action: "create"
   }
 }

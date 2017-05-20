@@ -63,7 +63,7 @@ module.exports = {
     }); // 1:n
     User.hasMany(Comment, {
       as: 'Comments',
-      foreignKey: 'user_id'
+      foreignKey: 'author_id'
     }); // 1:n
     User.hasMany(Kelist, {
       as: 'OwnsKelists',

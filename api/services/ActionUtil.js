@@ -52,6 +52,8 @@ module.exports = {
               as: 'meta',
               attributes: ['brief_comment']
             };
+          } else if (rel.target.name == 'Comment' && reqModel == 'review') {
+            obj.include = [{model: Comment, as: 'Subcomments'}];
           }
           if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;

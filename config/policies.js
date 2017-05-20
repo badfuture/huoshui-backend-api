@@ -21,6 +21,7 @@ module.exports.policies = {
   CommentController: {
     'find': true,
     'findOne': true,
+    'create': true,
     '*': false
   },
   CourseController: {
