@@ -43,5 +43,6 @@ module.exports.routes = routes([
   swaggerRoute,
   tagRoute,
   userRoute,
+  feedbackRoute,
   otherRoute
 ]);

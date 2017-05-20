@@ -12,5 +12,10 @@ module.exports = {
     action: "findOne",
     isPlural: false,
     swagger: {}
+  },
+  'POST /feedback': {
+    model: "feedback",
+    controller: "FeedbackController",
+    action: "create"
   }
 }

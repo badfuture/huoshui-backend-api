@@ -38,5 +38,27 @@ module.exports = {
     });
   },
 
+  create: (req, res) => {
+    const {name, contact, content, userId} = ActionUtil.parseValues(req)
+    let newFeedback = null
 
+    Feedback.create({
+      name,
+			contact,
+      content,
+    }).then((feedbackCreated) => {
+      newFeedback = feedbackCreated
+      if (userId) {
+        return User
+          .findOne({where: {id: userId}})
+          .then((userFound) => {
+            userFound.addFeedback(newFeedback)
+          })
+      }
+    }).then(() => {
+      res.created()
+    }).catch((err) => {
+      return res.serverError(err)
+    })
+  },
 };

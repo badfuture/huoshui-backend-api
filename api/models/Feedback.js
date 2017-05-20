@@ -18,8 +18,8 @@ module.exports = {
       unique: false,
       comment: "contact info (email, phone, qq, wechat)"
     },
-    comment: {
-      field: "comment",
+    content: {
+      field: "content",
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,

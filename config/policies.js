@@ -18,6 +18,12 @@ module.exports.policies = {
   AuthController: {
     '*': true
   },
+  FeedbackController: {
+    'find': true,
+    'findOne': true,
+    'create': true,
+    '*': false
+  },
   CommentController: {
     'find': true,
     'findOne': true,
