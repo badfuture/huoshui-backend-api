@@ -42,6 +42,10 @@ module.exports = {
     const {name, contact, content, userId} = ActionUtil.parseValues(req)
     let newFeedback = null
 
+    if (!content) {
+      return res.badRequest("feedback content cannot be empty")
+    }
+
     Feedback.create({
       name,
 			contact,
