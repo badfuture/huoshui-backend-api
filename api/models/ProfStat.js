@@ -172,7 +172,7 @@ module.exports = {
       comment: "划重点 次数"
     },
     countExamOpenbook: {
-      field: "countExamDetails",
+      field: "countExamOpenbook",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -181,7 +181,7 @@ module.exports = {
       comment: "开卷 次数"
     },
     countExamOldquestion: {
-      field: "countExamDetails",
+      field: "countExamOldquestion",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -190,7 +190,7 @@ module.exports = {
       comment: "原题 次数"
     },
     countExamEasymark: {
-      field: "countExamDetails",
+      field: "countExamEasymark",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
