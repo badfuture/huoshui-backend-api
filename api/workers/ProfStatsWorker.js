@@ -1,14 +1,4 @@
-var pub = sails.hooks.publisher;
-
-var isGoodReview = (review)=>{
-    var professional = review.professional;
-    var expressive = review.expressive;
-    var kind = review.kind;
-    var total = professional + expressive + kind;
-    if (total > 11){
-        return true;
-    }
-};
+const pub = sails.hooks.publisher;
 
 var statsModelFactory = ()=>{
     var model = {
@@ -18,6 +8,8 @@ var statsModelFactory = ()=>{
         kind: 0,
         countReview: 0,
         countGoodReview: 0,
+        countAverageReview: 0,
+        countBadReview: 0,
         scoreOverall: 0,
 
         //secondary stats
@@ -45,8 +37,14 @@ var updateStats = (sModel, review)=>{
     sModel.professional += review.professional;
     sModel.expressive += review.expressive;
     sModel.kind += review.kind;
-    if (isGoodReview(review)) {
+
+    let totalScore = review.professional + review.expressive + review.kind
+    if (totalScore >= 12) {
         sModel.countGoodReview++;
+    } else if (totalScore <= 11 && totalScore >= 8) {
+        sModel.countAverageReview++;
+    } else if (totalScore <= 7) {
+        sModel.countBadReview++;
     }
 
     //homework

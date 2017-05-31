@@ -97,6 +97,24 @@ module.exports = {
       validate: {min: 0},
       comment: "好评次数"
     },
+    countAverageReview: {
+      field: "countAverageReview",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "average review count"
+    },
+    countBadReview: {
+      field: "countBadReview",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "bad review count"
+    },
     countHomework: {
       field: "countHomework",
       type: Sequelize.INTEGER,
