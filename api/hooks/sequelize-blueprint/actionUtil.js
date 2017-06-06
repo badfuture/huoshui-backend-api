@@ -27,7 +27,7 @@ module.exports = {
    * @param  {Request} req
    * @return {Object}
    */
-  populateEach: function (req) {
+  parsePopulate: function (req) {
     var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
     var aliasFilter = req.param('populate');
     var associations = [];

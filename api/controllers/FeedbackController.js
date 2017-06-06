@@ -8,7 +8,7 @@ module.exports = {
 
   find: (req,res) => {
     let defaultInclude = [];
-    let includeOption = ActionUtil.populateEach(req, defaultInclude);
+    let includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Feedback.findAll({
       where: ActionUtil.parseWhere(req),
@@ -26,7 +26,7 @@ module.exports = {
   findOne: function(req,res){
     let pk = ActionUtil.requirePk(req);
     let defaultInclude = [];
-    let includeOption = ActionUtil.populateEach(req, defaultInclude);
+    let includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Feedback.findById(pk, {
       include: includeOption

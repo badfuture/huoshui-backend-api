@@ -8,7 +8,7 @@ module.exports = {
 
   find: function(req,res){
     var defaultInclude = [];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     CourseStat.findAll({
       where: ActionUtil.parseWhere(req),
@@ -26,7 +26,7 @@ module.exports = {
   findOne: function(req,res){
     var pk = ActionUtil.requirePk(req);
     var defaultInclude = [];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     CourseStat.findById(pk, {
       include: includeOption

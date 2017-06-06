@@ -7,10 +7,10 @@ var JSONP_CALLBACK_PARAM = 'callback';
 
 module.exports = {
 
-  populateEach: function (req, defaultInclude) {
+  parsePopulate: function (req, defaultInclude, targetModel) {
     var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
     var customInclude = req.param('populate');
-    var reqModel = req.options.model;
+    var reqModel = targetModel ? targetModel : req.options.model;
     var modelRelations = sails.models[reqModel].associations;
 
     if (!customInclude) {
@@ -64,6 +64,26 @@ module.exports = {
     });
 
     return associations;
+  },
+
+  parseScope: (req, defaultScope) => {
+    let customScope = req.param('scope');
+    if (!customScope) {
+      return defaultScope
+    } else if (customScope === 'all') {
+      return defaultScope
+    } else if (typeof customScope === 'string') {
+      // add support for array format
+      // /model?scope=alias1,alias2,alias3
+      // /model?scope=[alias1,alias2,alias3]
+      customScope = customScope.replace(/\[|\]/g, '');
+      customScope = (customScope) ? customScope.split(',') : [];
+      if (typeof customScope === 'array' && customScope.length === 0) {
+        return defaultScope
+      } else {
+        return customScope
+      }
+    }
   },
 
   parsePk: function ( req ) {

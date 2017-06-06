@@ -36,7 +36,7 @@ module.exports = function findRecords (req, res) {
     offset = actionUtil.parseSkip(req),
     page = actionUtil.parsePage(req),
     perPage = actionUtil.parsePerPage(req),
-    populate = actionUtil.populateEach(req);
+    populate = actionUtil.parsePopulate(req);
 
   if(page && perPage){
     limit = perPage;

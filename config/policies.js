@@ -78,4 +78,8 @@ module.exports.policies = {
     'findOne': true,
     '*': false
   },
+  SearchController: {
+    'find': true,
+    '*': false
+  },
 };

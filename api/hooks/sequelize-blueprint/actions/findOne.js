@@ -22,7 +22,7 @@ var actionUtil = require('../actionUtil'),
 module.exports = function findOneRecord (req, res) {
   var Model = actionUtil.parseModel(req);
   var pk = actionUtil.requirePk(req);
-  var populate = actionUtil.populateEach(req);
+  var populate = actionUtil.parsePopulate(req);
 
   Model.findById(pk, {include: req._sails.config.blueprints.populate ?
                                (_.isEmpty(populate) ? [{ all : true}] : populate) : []

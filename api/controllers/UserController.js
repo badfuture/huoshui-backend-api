@@ -11,7 +11,7 @@ module.exports = {
       { model: Dept, as: 'Dept'},
       { model: School, as: 'School'}
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     User.findAll({
       where: ActionUtil.parseWhere(req),
@@ -32,7 +32,7 @@ module.exports = {
       { model: Dept, as: 'Dept'},
       { model: School, as: 'School'}
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     User.findById(pk, {
       include: includeOption

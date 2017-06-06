@@ -81,7 +81,7 @@ module.exports = function remove(req, res) {
   function returnParentModel () {
     Model.findById(parentPk, { include: req._sails.config.blueprints.populate ? [{ all: true }] : [] })
     // .populate(relation)
-    // TODO: use populateEach util instead
+    // TODO: use parsePopulate util instead
     .then(function(parentRecord) {
       if (!parentRecord) return res.serverError();
       if (!parentRecord[Model.primaryKeys.id.fieldName]) return res.serverError();

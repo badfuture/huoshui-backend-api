@@ -9,7 +9,7 @@ module.exports = {
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-		var includeOption = ActionUtil.populateEach(req, defaultInclude);
+		var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Dept.findAll({
       where: ActionUtil.parseWhere(req),
@@ -29,7 +29,7 @@ module.exports = {
     var defaultInclude = [
       { model: User, as: 'Author'},
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Dept.findById(pk, {
       include: includeOption

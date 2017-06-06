@@ -12,7 +12,7 @@ module.exports = {
       { model: Prof, as: 'Prof'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     const queryParams = {
       where: ActionUtil.parseWhere(req),
@@ -50,7 +50,7 @@ module.exports = {
       { model: Tag, as: 'Tags'},
       { model: Dept, as: 'Depts'},
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Course.findById(pk, {
       include: includeOption

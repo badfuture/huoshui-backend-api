@@ -12,7 +12,7 @@ module.exports = {
       { model: Position, as: 'Position'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Prof.findAll({
       where: ActionUtil.parseWhere(req),
@@ -36,7 +36,7 @@ module.exports = {
       { model: Course, as: 'Courses'},
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Prof.findById(pk, {
       include: includeOption

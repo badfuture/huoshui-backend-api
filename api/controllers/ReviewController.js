@@ -10,7 +10,7 @@ module.exports = {
       { model: Course, as: 'Course'},
       { model: Tag, as: 'Tags'}
     ];
-    let includeOption = ActionUtil.populateEach(req, defaultInclude);
+    let includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     const queryParams = {
       where: ActionUtil.parseWhere(req),
@@ -53,7 +53,7 @@ module.exports = {
       },
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = ActionUtil.populateEach(req, defaultInclude);
+    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Review.findById(pk, {
       include: includeOption
