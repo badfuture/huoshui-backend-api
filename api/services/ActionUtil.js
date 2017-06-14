@@ -35,7 +35,7 @@ module.exports = {
     _.each(customInclude, function(includeRel){
       _.each(modelRelations, function(rel){
         if(includeRel === rel.options.as) {
-          var obj = { model: rel.target, as: rel.options.as };
+          var obj = { model: rel.target, as: rel.options.as, "duplicating":false };
           if (rel.target.name == 'User') {
             obj.attributes = {exclude: ['password', 'salt']};
           } else if (rel.target.name == 'Tag') {
