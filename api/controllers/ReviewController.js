@@ -4,6 +4,24 @@
  * @description :: Server-side logic for managing Review
  */
 
+const getNormalizedComments = (comments) => {
+   let subcommentsIdArr = []
+   if (!comments) return false
+   comments.forEach((comment) => {
+     let subcomments = comment.Subcomments
+     if (subcomments) {
+       subcomments.forEach((subcomment) => {
+         subcommentsIdArr.push(subcomment.id)
+       })
+     }
+   })
+   return comments.filter((comment) => {
+     let isDuplicate = (subcommentsIdArr.indexOf(comment.id) > -1)
+     return !isDuplicate
+   })
+}
+
+
 module.exports = {
   find: function(req,res){
     let defaultInclude = [
@@ -25,14 +43,22 @@ module.exports = {
 
     if (isPaginateFormat) {
       Review.findAndCountAll(queryParams)
-      .then(function(recordsFound){
-        return res.ok(recordsFound);
-      }).catch(function(err){
+      .then((result) => {
+        result.rows.forEach((record) => {
+          if (record.Comments)
+            return record.set('Comments', getNormalizedComments(record.Comments))
+        })
+        return res.ok(result);
+      }).catch((err) => {
         return res.serverError(err);
       })
     } else {
       Review.findAll(queryParams)
       .then(function(recordsFound){
+        recordsFound.forEach((record) => {
+          if (record.Comments)
+            return record.set('Comments', getNormalizedComments(record.Comments))
+        })
         return res.ok(recordsFound);
       }).catch(function(err){
         return res.serverError(err);
@@ -59,6 +85,7 @@ module.exports = {
       include: includeOption
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
+      recordFound.set('Comments', getNormalizedComments(recordFound.Comments))
       res.ok(recordFound);
     }).catch(function(err){
       return res.serverError(err);

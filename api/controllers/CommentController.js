@@ -11,7 +11,7 @@ module.exports = {
     ];
 		var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
-    Dept.findAll({
+    Comment.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
@@ -31,7 +31,7 @@ module.exports = {
     ];
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
-    Dept.findById(pk, {
+    Comment.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
@@ -46,35 +46,72 @@ module.exports = {
     let newComment = null
 		let Model = req._sails.models[commentable]
 
-    Comment.create({
-      commentable,
-			text,
-    }).then((newRecord) => {
-			newComment = newRecord
-		}).then(() => {
-			return User
-        .findOne({where: {id: authorId}})
-        .then((userFound) => {
-          userFound.addComment(newComment)
-        })
-		}).then(() => {
-      return Model
-        .findOne({where: {id: commentableId}})
-        .then((commentableFound) => {
-          commentableFound.addComment(newComment)
-        })
-		}).then(() => {
-      if (parentId != null && parentId != '') {
-        return Comment
-          .findOne({where: {id: parentId}})
-          .then((commentFound) => {
-            commentFound.addSubcomment(newComment)
-          })
-      }
-		}).then(() => {
-      res.created()
-    }).catch((err) => {
-      return res.serverError(err)
-    })
+
+
+		if (parentId != null && parentId != '') {
+			return Comment
+				.findOne({where: {id: parentId}})
+				.then((commentFound) => {
+					// forbid commenting on a subcomment
+					if (commentFound && !commentFound.parent_id) {
+						Comment.create({
+							commentable,
+							text,
+						}).then((newRecord) => {
+							newComment = newRecord
+							commentFound.addSubcomment(newComment)
+						}).then(() => {
+							return User
+								.findOne({where: {id: authorId}})
+								.then((userFound) => {
+									userFound.addComment(newComment)
+								})
+						}).then(() => {
+							return Model
+								.findOne({where: {id: commentableId}})
+								.then((commentableFound) => {
+									commentableFound.addComment(newComment)
+								})
+						}).then(() => {
+							res.created()
+						}).catch((err) => {
+				      return res.serverError(err)
+				    })
+					} else {
+						return res.badRequest('cannot comment on a subcomment')
+					}
+				})
+		} else {
+			Comment.create({
+	      commentable,
+				text,
+	    }).then((newRecord) => {
+				newComment = newRecord
+			}).then(() => {
+				return User
+	        .findOne({where: {id: authorId}})
+	        .then((userFound) => {
+	          userFound.addComment(newComment)
+	        })
+			}).then(() => {
+	      return Model
+	        .findOne({where: {id: commentableId}})
+	        .then((commentableFound) => {
+	          commentableFound.addComment(newComment)
+	        })
+			}).then(() => {
+	      if (parentId != null && parentId != '') {
+	        return Comment
+	          .findOne({where: {id: parentId}})
+	          .then((commentFound) => {
+							commentFound.addSubcomment(newComment)
+	          })
+	      }
+			}).then(() => {
+	      res.created()
+	    }).catch((err) => {
+	      return res.serverError(err)
+	    })
+		}
   },
 };
