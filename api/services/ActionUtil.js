@@ -53,7 +53,23 @@ module.exports = {
               attributes: ['brief_comment']
             };
           } else if (rel.target.name == 'Comment' && reqModel == 'review') {
-            obj.include = [{model: Comment, as: 'Subcomments'}];
+            obj.include = [{
+              model: Comment,
+              as: 'Subcomments',
+              include: [
+                { model: User, as: 'Author',
+                  attributes: {
+                    exclude: ['password', 'salt']
+                  }
+                },
+              ]
+            }, {
+              model: User,
+              as: 'Author',
+              attributes: {
+                exclude: ['password', 'salt']
+              }
+            }];
           }
           if(rel.associationType === 'HasMany') {
             obj.limit = DEFAULT_POPULATE_LIMIT;
