@@ -34,7 +34,7 @@ module.exports = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
-      order: ActionUtil.parseSort(req) || [['Comments', 'datePosted', 'DESC']],
+      order: ActionUtil.parseSort(req),
       include: includeOption,
       distinct: true
     }
