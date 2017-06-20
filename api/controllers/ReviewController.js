@@ -34,7 +34,7 @@ module.exports = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
-      order: ActionUtil.parseSort(req),
+      order: ActionUtil.parseSort(req) || [['Comments', 'datePosted', 'DESC']],
       include: includeOption,
       distinct: true
     }
@@ -79,10 +79,13 @@ module.exports = {
       },
       { model: Tag, as: 'Tags'}
     ];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Review.findById(pk, {
-      include: includeOption
+      include: ActionUtil.parsePopulate(req, defaultInclude),
+      order: ActionUtil.parseSort(req) || [
+        [{ model: Comment, as: 'Comments'}, 'datePosted', 'DESC'],
+        [{ model: Comment, as: 'Comments'}, {model: Comment, as: 'Subcomments'}, 'datePosted', 'DESC']
+      ],
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       recordFound.set('Comments', getNormalizedComments(recordFound.Comments))

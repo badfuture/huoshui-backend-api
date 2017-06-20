@@ -53,9 +53,13 @@ module.exports = {
               attributes: ['brief_comment']
             };
           } else if (rel.target.name == 'Comment' && reqModel == 'review') {
+            obj.separate = false
+            obj.duplicating = false
             obj.include = [{
               model: Comment,
               as: 'Subcomments',
+              duplicating: false,
+              separate: false,
               include: [
                 { model: User, as: 'Author',
                   attributes: {
