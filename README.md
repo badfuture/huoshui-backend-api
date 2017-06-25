@@ -2,6 +2,11 @@
 
 活水后端负责给活水各客户端(Android, iOS & Webapp)提供数据接口支持(API)
 
+## Live Demo
+* **production (aliyun)** -  [https://api.huoshui.org](https://api.huoshui.org)
+* **development (amazon EC2)** -  [https://api.huoshui.tk](https://api.huoshui.tk)
+* **UI** -  [https://webapp.huoshui.org](https://webapp.huoshui.org)
+
 ## 准备条件
 
 SailsJs - 基于ExpressJs和NodeJs上的后端框架
@@ -69,15 +74,17 @@ pm2 deploy pm2.config.js dev
 - [x] 教授档案 （更全的数据：格言，研究方向，头像，联系方式等）
 - [ ] 课程榜单 （综合最佳，院系推荐，选修课排名，不想上的课）
 - [ ] 课列系统 （用户自定义列表加简评，参考豆列）
-- [ ] 评论功能 （对点评进行评论）
+- [x] 评论功能 （对点评进行评论）
 - [x] 课程推荐 （选修课板块，通识课等关注度高的课程类别）
-- [ ] 社交分享 （生成链接给 微信，微博）
-- [ ] 社交登录 （QQ，微博，github）
 - [x] 常规登录 （用户名密码登录）
+- [o] 社交登录 （QQ，微博，github）
+- [ ] 社交分享 （生成链接给 微信，微博）
+
+## 次要功能
 - [ ] 邮件系统（密码重置，群发信息）
-- [x] 多学校支持 （做到如果要加学校，不用改软件，只用加内容）
 - [ ] 权限控制 （基于角色的权限控制）
 - [ ] 微服务接入（查分功能，挂科率，课程历史打分记录）
+- [x] 多学校支持 （做到如果要加学校，不用改软件，只用加内容）
 - [ ] 半自动数据接口文档生成
 
 ## 用以下技术制作
