@@ -7,8 +7,16 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: true,
+      unique: 'indexNameProvider',
       comment: "用户名"
+    },
+    provider: {
+      field: "provider",
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'local',
+      unique: 'indexNameProvider',
+      comment: "登录提供方"
     },
     password: {
       field: "password",
@@ -31,7 +39,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: true,
+      unique: false,
       comment: "邮箱"
     },
     firstYear: {
@@ -43,6 +51,14 @@ module.exports = {
       validate: { min: 2000, max: 2020},
       comment: "入学年份"
     },
+    avatar: {
+      field: "avatar",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "头像"
+    }
   },
   associations: function() {
     User.belongsTo(School, {
@@ -102,7 +118,18 @@ module.exports = {
         return values;
       }
     },
-    validate: {},
+    validate: {
+      isEmailUnique() {
+        if (this.provider === 'local') {
+          User.findOne({
+            where: {email: this.email},
+            attributes: ['email']
+          }).then((user) => {
+            if(user) throw new Error('User email already in use!')
+          })
+        }
+      }
+    },
     hooks: {
       beforeCreate: function(user, options) {
         return CipherService.hashPassword(user);

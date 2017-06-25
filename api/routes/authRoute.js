@@ -6,5 +6,11 @@ module.exports = {
   'POST /auth/login': {
     controller: "AuthController",
     action: "login"
-  }
+  },
+
+  //github authentication
+  'GET /auth/github/callback': {
+    controller: "AuthGithubController",
+    action: "login"
+  },
 }
