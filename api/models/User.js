@@ -7,7 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
-      unique: 'indexNameProvider',
+      unique: 'uniqueUserProvider',
       comment: "用户名"
     },
     provider: {
@@ -15,8 +15,16 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: 'local',
-      unique: 'indexNameProvider',
+      unique: 'uniqueUserProvider',
       comment: "登录提供方"
+    },
+    providerUid: {
+      field: "provider_uid",
+      type: Sequelize.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: 'uniqueUserProvider',
+      comment: "登录提供方用户id"
     },
     password: {
       field: "password",
@@ -37,7 +45,7 @@ module.exports = {
     email: {
       field: "email",
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
       unique: false,
       comment: "邮箱"
@@ -58,7 +66,15 @@ module.exports = {
       defaultValue: null,
       unique: false,
       comment: "头像"
-    }
+    },
+    gender: {
+      field: "gender",
+      type: Sequelize.ENUM('男', '女'),
+      allowNull: true,
+      defaultValue: null,
+      unique: false,
+      comment: "性别"
+    },
   },
   associations: function() {
     User.belongsTo(School, {
@@ -119,10 +135,15 @@ module.exports = {
       }
     },
     validate: {
-      isEmailUnique() {
+      isEmailValid() {
         if (this.provider === 'local') {
+          // workaround for sequelize bug
+          // validate will be called twice, with 2nd call having attributes all NULL
+          if (!this.get('email') && this.get('password')) {
+            throw new Error('User email cannot be empty for local auth!')
+          }
           User.findOne({
-            where: {email: this.email},
+            where: {email: this.email, provider: 'local'},
             attributes: ['email']
           }).then((user) => {
             if(user) throw new Error('User email already in use!')

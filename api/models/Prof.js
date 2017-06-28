@@ -21,7 +21,7 @@ module.exports = {
     },
     gender: {
       field: "gender",
-      type: Sequelize.ENUM('male', 'female'),
+      type: Sequelize.ENUM('男', '女'),
       allowNull: true,
       defaultValue: null,
       unique: false,

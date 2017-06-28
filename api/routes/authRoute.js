@@ -8,6 +8,12 @@ module.exports = {
     action: "login"
   },
 
+  //QQ authentication
+  'GET /auth/qq/callback': {
+    controller: "AuthQQController",
+    action: "login"
+  },
+
   //github authentication
   'GET /auth/github/callback': {
     controller: "AuthGithubController",

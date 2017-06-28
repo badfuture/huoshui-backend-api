@@ -21,6 +21,9 @@ module.exports.policies = {
   AuthGithubController: {
     '*': true
   },
+  AuthQQController: {
+    '*': true
+  },
   FeedbackController: {
     'find': true,
     'findOne': true,

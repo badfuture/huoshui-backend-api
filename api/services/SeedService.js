@@ -251,9 +251,9 @@ var seedProfs = function(job, next) {
     prof.code = entry.code;
     prof.name = entry.name;
     if (entry.gender == "男") {
-      prof.gender = "male";
+      prof.gender = "男";
     } else if (entry.gender == "女") {
-      prof.gender = "female";
+      prof.gender = "女";
     }
     prof.email = entry.email;
     prof.phone = entry.phone;

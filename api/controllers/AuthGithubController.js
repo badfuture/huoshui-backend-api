@@ -35,7 +35,6 @@ module.exports = {
 		})
 	  .then(function (resp) {
 			let token = resp.data.access_token
-			const tokenEncoded = encodeToken(token)
 			sails.log.verbose("AuthGithubController: access_token", code)
 			github.authenticate({
 				type: "oauth",
@@ -54,6 +53,7 @@ module.exports = {
 					if (userFound) {
 						// if oauth user already exsit, find and return user info
 						const userUrlEncoded = encodeData(userFound)
+						const tokenEncoded = encodeToken(CipherService.createToken(userFound))
 						return res.redirect(
 							`${webUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 						)
@@ -68,6 +68,7 @@ module.exports = {
 						})
 						.then(function(userCreated){
 							const userUrlEncoded = encodeData(userCreated)
+							const tokenEncoded = encodeToken(CipherService.createToken(userCreated))
 							return res.redirect(
 								`${webUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 							)
