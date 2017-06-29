@@ -1,8 +1,8 @@
 const qiniu = require('qiniu')
 
-const accessKey = 'CTtEN_6ga3gjXiTBBLwHTVWVjqKIWI63xMDz9_KC'
-const secretKey = 'tlcCOtw3KJq8yVxYVLQBG2ZLmOOvNmU6k7tYRSEX'
-const bucket = 'huoshui-oss'
+const accessKey = sails.config.objectStorage.accessKey
+const secretKey = sails.config.objectStorage.secretKey
+const bucket = sails.config.objectStorage.bucket
 
 createUploadToken = (accessKey, secretKey, bucket) => {
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
