@@ -13,5 +13,12 @@ module.exports = {
     action: "findOne",
     isPlural: false,
     swagger: {}
+  },
+  'POST /users/avatar': {
+    model: "user",
+    controller: "UserController",
+    action: "uploadAvatar",
+    isPlural: false,
+    swagger: {}
   }
 }

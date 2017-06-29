@@ -109,15 +109,50 @@ module.exports = {
     });
   },
 
-  populate: function(req,res){
+  /**
+   * Upload avatar for currently logged-in user
+   * (POST /user/avatar)
+   */
+  uploadAvatar: (req, res) => {
+    const imgDir = require('path').resolve(sails.config.appPath, 'assets/images')
+    sails.log.debug('UserController: avatar upload local path', imgDir)
 
+    let filename = ''
+
+    req.file('avatar').upload({
+      dirname: imgDir,
+      maxBytes: 10000000 // limit upload size to ~10MB
+    },function whenDone(err, files) {
+      if (err) {
+        return res.negotiate(err)
+      }
+      if (files.length === 0){
+        return res.badRequest('No file was uploaded')
+      }
+
+      filename = require('path').basename(files[0].fd)
+      sails.log.debug('UserController: avatar filename', filename)
+
+      localPath = files[0].fd
+      sails.log.debug('UserController: avatar local path', localPath)
+
+      ObjectStorageService
+      .upload(filename, localPath)
+      .then((resp) => {
+        const ossDomain = sails.config.objectStorage.domain
+        return ossDomain + '/' + filename
+      })
+      .then((imgUrl) => {
+        //TODO: update user after image upload
+        res.ok()
+      })
+      .catch((err) => {
+        res.serverError(err)
+      })
+    })
   },
 
-  add: function(req,res){
-
+  downloadAvatar: (req, res) => {
+    // handled by object server provider
   },
-
-  remove: function(req,res){
-
-  }
 };

@@ -14,18 +14,11 @@ module.exports = {
     migrate: 'safe'
   },
 
-  /***************************************************************************
-   * Set the port in the production environment to 80                        *
-   ***************************************************************************/
-
-  // port: 80,
-
-  /***************************************************************************
-   * Set the log level in production environment to "silent"                 *
-   ***************************************************************************/
-
-  // log: {
-  //   level: "silent"
-  // }
+  objectStorage: {
+    bucket: 'huoshui-oss',
+    accessKey: 'CTtEN_6ga3gjXiTBBLwHTVWVjqKIWI63xMDz9_KC',
+    secretKey: 'tlcCOtw3KJq8yVxYVLQBG2ZLmOOvNmU6k7tYRSEX',
+    domain: 'http://oss.huoshui.org'
+  }
 
 };

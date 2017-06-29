@@ -82,6 +82,7 @@ module.exports.policies = {
   UserController: {
     'find': true,
     'findOne': true,
+    'uploadAvatar': true,
     '*': false
   },
   SearchController: {
