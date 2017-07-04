@@ -117,9 +117,17 @@ module.exports = {
     const imgDir = require('path').resolve(sails.config.appPath, 'assets/images')
     sails.log.debug('UserController: avatar upload local path', imgDir)
 
+    const token = CipherService.verifyToken(req)
+    const tokenUser = token.user
+    if (!tokenUser) {
+      return res.unauthorized()
+    }
 
-    var uuid = require('node-uuid')
-    var filename = 'user_avatar_' + uuid.v1() + '.jpeg'
+    const uuid = require('node-uuid')
+    const filename = `user_avatar_${tokenUser.id}_${uuid.v1()}.jpeg`
+    sails.log.debug('UserController: avatar filename', filename)
+
+    let imgUrl = ''
 
     req.file('avatar').upload({
       dirname: imgDir,
@@ -135,9 +143,6 @@ module.exports = {
         return res.badRequest('No file was uploaded')
       }
 
-      filename = require('path').basename(files[0].fd)
-      sails.log.debug('UserController: avatar filename', filename)
-
       localPath = files[0].fd
       sails.log.debug('UserController: avatar local path', localPath)
 
@@ -147,9 +152,21 @@ module.exports = {
         const ossDomain = sails.config.objectStorage.domain
         return ossDomain + '/' + filename
       })
-      .then((imgUrl) => {
-        //TODO: update user after image upload
-        res.ok()
+      .then((ossImgUrl) => {
+        imgUrl = ossImgUrl
+        return User.findOne({
+          where: {
+            id: tokenUser.id
+          }
+        })
+      })
+      .then((userFound) => {
+        userFound.update({
+          avatar: imgUrl
+        })
+        .then(() => {
+          return res.created
+        })
       })
       .catch((err) => {
         res.serverError(err)

@@ -14,7 +14,7 @@ module.exports = {
     isPlural: false,
     swagger: {}
   },
-  'POST /users/avatar': {
+  'POST /user/avatar': {
     model: "user",
     controller: "UserController",
     action: "uploadAvatar",

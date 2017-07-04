@@ -134,23 +134,6 @@ module.exports = {
         return values;
       }
     },
-    validate: {
-      isEmailValid() {
-        if (this.provider === 'local') {
-          // workaround for sequelize bug
-          // validate will be called twice, with 2nd call having attributes all NULL
-          if (!this.get('email') && this.get('password')) {
-            throw new Error('User email cannot be empty for local auth!')
-          }
-          User.findOne({
-            where: {email: this.email, provider: 'local'},
-            attributes: ['email']
-          }).then((user) => {
-            if(user) throw new Error('User email already in use!')
-          })
-        }
-      }
-    },
     hooks: {
       beforeCreate: function(user, options) {
         return CipherService.hashPassword(user);
