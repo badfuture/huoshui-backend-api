@@ -117,11 +117,16 @@ module.exports = {
     const imgDir = require('path').resolve(sails.config.appPath, 'assets/images')
     sails.log.debug('UserController: avatar upload local path', imgDir)
 
-    let filename = ''
+
+    var uuid = require('node-uuid')
+    var filename = 'user_avatar_' + uuid.v1() + '.jpeg'
 
     req.file('avatar').upload({
       dirname: imgDir,
-      maxBytes: 10000000 // limit upload size to ~10MB
+      maxBytes: 10000000, // limit upload size to ~10MB
+      saveAs: (__newFileStream, next) => {
+        return next(undefined, filename)
+      }
     },function whenDone(err, files) {
       if (err) {
         return res.negotiate(err)
