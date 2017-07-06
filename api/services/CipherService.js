@@ -35,7 +35,6 @@ const sha512Encode = function(password, salt) {
 }
 
 const getToken = function(req) {
-  console.log(req.headers);
   const header = req.headers['authorization']
   return header.split(' ')[1]
 }

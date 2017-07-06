@@ -165,7 +165,7 @@ module.exports = {
           avatar: imgUrl
         })
         .then(() => {
-          return res.created
+          return res.created(userFound)
         })
       })
       .catch((err) => {
