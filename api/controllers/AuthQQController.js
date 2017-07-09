@@ -23,6 +23,7 @@
  */
 
 const axios = require('axios')
+const { DOMAIN_API, DOMAIN_WEBAPP} = require('../constants/domain.js')
 
 const encodeToken = (token) => {
 	return encodeURIComponent(JSON.stringify(token))
@@ -65,8 +66,8 @@ module.exports = {
 		const provider = 'qq'
 		const client_id = '101410908'
 		const client_secret = '216357c3962198f0d5f3b6b65cdfcc21'
-		const redirectURI = 'http://localhost:1337/auth/qq/callback'
-		const webappUrl = 'http://localhost:8080'
+		const redirectURI = `${DOMAIN_API}/auth/qq/callback`
+		const webappUrl = `${DOMAIN_WEBAPP}`
 		let access_token = ''
 		let openId = ''
 		let username = ''

@@ -14,6 +14,12 @@ module.exports = {
     action: "login"
   },
 
+  //QQ authentication
+  'GET /auth/weibo/callback': {
+    controller: "AuthWeiboController",
+    action: "login"
+  },
+
   //github authentication
   'GET /auth/github/callback': {
     controller: "AuthGithubController",

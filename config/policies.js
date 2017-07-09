@@ -18,10 +18,13 @@ module.exports.policies = {
   AuthController: {
     '*': true
   },
-  AuthGithubController: {
+  AuthQQController: {
     '*': true
   },
-  AuthQQController: {
+  AuthWeiboController: {
+    '*': true
+  },
+  AuthGithubController: {
     '*': true
   },
   FeedbackController: {
