@@ -3,9 +3,11 @@
 活水后端负责给活水各客户端(Android, iOS & Webapp)提供数据接口支持(API)
 
 ## Live Demo
-* **production (aliyun)** -  [https://api.huoshui.org](https://api.huoshui.org)
-* **development (amazon EC2)** -  [https://api.huoshui.tk](https://api.huoshui.tk)
+* **Production Server (aliyun)** -  [https://api.huoshui.org](https://api.huoshui.org)
+* **Development Server (amazon EC2)** -  [https://api.huoshui.tk](https://api.huoshui.tk)
 * **UI** -  [https://webapp.huoshui.org](https://webapp.huoshui.org)
+* **API Doc** -  [http://doc.huoshui.org](http://doc.huoshui.org/?url=https://api.huoshui.org/swagger/doc)
+* **OpenAPI 2.0 Description** -  [https://api.huoshui.org/swagger/doc](https://api.huoshui.org/swagger/doc)
 
 ## 准备条件
 
