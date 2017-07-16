@@ -9,10 +9,7 @@ module.exports = {
         description:
           "## Find multiple courses\n" +
           "* Use 'populate=all' to populate all possible associations\n" +
-          "* All course properties can aslo be queried as a param \n" +
-          "## Quick Example\n" +
-          "* find and paginate courses in a department:\n" +
-          "[API call](https://api.huoshui.org/courses?populate=[Prof,School,Depts,Stat]&$Depts.shortname$=土木&sort=id+ASC&limit=50&skip=0)"
+          "* All course properties can aslo be queried as params \n"
         ,
         summary: "Find multiple courses",
         operationId: "getCourses",
@@ -41,10 +38,7 @@ module.exports = {
         summary: "Find a single course",
         description:
           "## Find a single course\n" +
-          "* Use 'populate=all' to populate all possible associations\n" +
-          "## Quick Example\n" +
-          "* find a single course with all associations included:\n" +
-          "[API call](https://api.huoshui.org/courses/4706?populate=all)"
+          "* Use 'populate=all' to populate all possible associations\n"
         ,
         operationId: "getCourseByFind",
         paramList: ["id", "populate"],
