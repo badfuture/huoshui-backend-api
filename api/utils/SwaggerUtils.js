@@ -37,6 +37,15 @@ const sailsToSwagTypeMap = (sailsType) => {
 
 const actionToParamMap = (action) => {
   var mapping = {
+    id: {
+      "name": "id",
+      "in": "path",
+      "description": "id of the course to find",
+      "required": true,
+      "default": 1,
+      "type": "integer",
+      "format": "int32"
+    },
     limit: {
       "name": "limit",
       "in": "query",
@@ -66,7 +75,7 @@ const actionToParamMap = (action) => {
     populate: {
       "name": "populate",
       "in": "query",
-      "description": "populate the records",
+      "description": "include associations of the record(s)",
       "required": false,
       "default": "Prof,School,Depts,Stat",
       "type": "string"
@@ -83,35 +92,24 @@ const actionToParamMap = (action) => {
   return mapping[action]
 }
 
-module.exports = {
-  defaultResp: () => ({
-    "200": {
-      "description": "success: return a single object"
-    },
-    "404": {
-      "description": "data not found"
-    }
-  }),
+const getDefaultResponses = () => ({
+  "200": {
+    "description": "success: return a single object"
+  },
+  "400": {
+    "description": "bad request"
+  },
+  "404": {
+    "description": "data not found"
+  },
+  "500": {
+    "description": "internal server error"
+  },
+})
 
-  actionToWord: (action) => {
-    var word = "";
-    switch (action) {
-      case "get":
-        word = "find";
-        break;
-      case "post":
-        word = "create";
-        break;
-      case "put":
-        word = "update";
-        break;
-      case "delete":
-        word = "remove";
-        break;
-      default:
-        word = action;
-    }
-    return word;
+module.exports = {
+  sailsToSwagResponses: (sailsResponses) => {
+    return Object.assign({}, getDefaultResponses(), sailsResponses)
   },
 
   sailsToSwagAction: (sailsPath) => {

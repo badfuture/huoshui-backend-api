@@ -58,7 +58,7 @@ const parseSailsRoutes = (sailsRoute) => {
       swagActionDetail.produces = swagConfig.produces ? swagConfig.produces : ['application/json']
       swagActionDetail.tags = swagConfig.tags ? swagConfig.tags : (modelName ? [modelName] : ["other"])
       swagActionDetail.parameters = swagConfig.parameters ? swagConfig.parameters : Utils.actionListToSwagParams(swagParamList)
-      swagActionDetail.responses = swagConfig.responses ? swagConfig.responses : Utils.defaultResp()
+      swagActionDetail.responses = Utils.sailsToSwagResponses(swagConfig.responses)
 
       swaggerSpec.paths[swagPath] = {}
       swaggerSpec.paths[swagPath][swagAction] = swagActionDetail
