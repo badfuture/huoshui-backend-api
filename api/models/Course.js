@@ -7,6 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
+      exampleValue: "大学计算机基础A",
       unique: false,
       comment: "课名"
     },
@@ -15,6 +16,7 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       allowNull: true,
       defaultValue: null,
+      exampleValue: false,
       unique: false,
       comment: "是否选修"
     },
@@ -23,6 +25,7 @@ module.exports = {
       type: Sequelize.ENUM('all_undergrad', 'general_edu'),
       allowNull: true,
       defaultValue: null,
+      exampleValue: 'all_undergrad',
       unique: false,
       comment: "优选人群／课程性质"
     },
@@ -31,6 +34,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "http://somecourses.org/1",
       unique: false,
       comment: "课程主页"
     },
@@ -39,6 +43,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "算法入门",
       unique: false,
       comment: "课本"
     },
@@ -47,6 +52,7 @@ module.exports = {
       type: Sequelize.DECIMAL(10, 2),
       allowNull: true,
       defaultValue: null,
+      exampleValue: 1.00,
       unique: false,
       comment: "学分"
     },
@@ -57,6 +63,7 @@ module.exports = {
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: 2.556,
       unique: false,
       validate: {min: 0, max: 5},
       comment: "综合评分"
