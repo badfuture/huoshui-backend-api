@@ -36,6 +36,7 @@ const sailsToSwagTypeMap = (sailsType) => {
 }
 
 const actionToParamMap = (action) => {
+
   var mapping = {
     id: {
       "name": "id",
@@ -89,7 +90,14 @@ const actionToParamMap = (action) => {
       "type": "string"
     }
   }
-  return mapping[action]
+
+  if (typeof action === 'string' || action instanceof String) {
+    return mapping[action]
+  } else {
+    let mappedAction = mapping[action.name]
+    mappedAction = Object.assign(mappedAction, action)
+    return mappedAction
+  }
 }
 
 const getDefaultResponses = () => ({

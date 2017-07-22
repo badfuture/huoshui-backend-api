@@ -8,6 +8,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
+      exampleValue: "王英",
       unique: false,
       comment: "教师名字"
     },
@@ -16,6 +17,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "code1234",
       unique: false,
       comment: "教师编号，每个学校不同规则"
     },
@@ -24,6 +26,7 @@ module.exports = {
       type: Sequelize.ENUM('男', '女'),
       allowNull: true,
       defaultValue: null,
+      exampleValue: "男",
       unique: false,
       comment: "性别"
     },
@@ -32,6 +35,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "1980",
       unique: false,
       validate: {min: 1930, max: 2010},
       comment: "生日"
@@ -41,6 +45,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "武汉",
       unique: false,
       comment: "家乡"
     },
@@ -49,6 +54,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "享受学习的过程，体会成功的幸福",
       unique: false,
       comment: "语录"
     },
@@ -59,6 +65,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "foo@email.com",
       unique: false,
       comment: "邮件"
     },
@@ -67,6 +74,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "6475228868",
       unique: false,
       comment: "电话"
     },
@@ -75,14 +83,16 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "http://ze.swjtu.com",
       unique: false,
-      comment: "学校官网"
+      comment: "学校教师官网"
     },
     blog: {
       field: "blog",
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "http://ze.blog.com",
       unique: false,
       comment: "博客"
     },
@@ -93,6 +103,7 @@ module.exports = {
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
+      exampleValue: 10,
       unique: false,
       validate: {min: 0, max: 100},
       comment: "教龄"
@@ -102,6 +113,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "疯狂研究组",
       unique: false,
       comment: "研究组"
     },
@@ -111,6 +123,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "很长的个人介绍",
       unique: false,
       comment: "个人介绍"
     },
@@ -119,6 +132,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "很长的教育背景",
       unique: false,
       comment: "教育背景"
     },
@@ -127,6 +141,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "很长的研究背景",
       unique: false,
       comment: "研究背景"
     },
@@ -135,6 +150,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "很长的教育成果",
       unique: false,
       comment: "教育成果"
     },
@@ -143,6 +159,7 @@ module.exports = {
       type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "过去教过的课程",
       unique: false,
       comment: "过去课程"
     },
@@ -153,6 +170,7 @@ module.exports = {
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "综合评分",
       unique: false,
       validate: {min: 0, max: 5},
       comment: "综合评分"

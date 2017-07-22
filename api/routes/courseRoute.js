@@ -40,7 +40,7 @@ module.exports = {
           "## Find a single course\n" +
           "* Use 'populate=all' to populate all possible associations\n"
         ,
-        operationId: "getCourseByFind",
+        operationId: "getCourseById",
         paramList: ["id", "populate"],
         responses: {
           "200": {
