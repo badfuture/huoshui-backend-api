@@ -7,6 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
+      exampleValue: "幽默",
       unique: true,
       comment: "标签名"
     },
@@ -15,6 +16,7 @@ module.exports = {
       type: Sequelize.BOOLEAN,
       allowNull: true,
       defaultValue: null,
+      exampleValue: false,
       unique: false,
       comment: "标签是否正面"
     },
@@ -23,6 +25,7 @@ module.exports = {
       type: Sequelize.ENUM('course', 'prof', 'kelist'),
       allowNull: true,
       defaultValue: null,
+      exampleValue: 'course',
       unique: false,
       comment: "标签的类型"
     },

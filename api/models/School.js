@@ -7,6 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
+      exampleValue: "西南交通大学",
       unique: "indexNameCampus",
       comment: "校名"
     },
@@ -15,6 +16,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
+      exampleValue: "犀浦",
       unique: "indexNameCampus",
       comment: "校区"
     }

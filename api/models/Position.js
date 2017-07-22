@@ -7,6 +7,7 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
       defaultValue: null,
+      exampleValue: "教授",
       unique: true,
       comment: "职位名称"
     },
