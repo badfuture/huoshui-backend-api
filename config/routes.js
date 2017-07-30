@@ -17,6 +17,7 @@ var tagRoute = require('../api/routes/tagRoute');
 var userRoute = require('../api/routes/userRoute');
 var feedbackRoute = require('../api/routes/feedbackRoute');
 var searchRoute = require('../api/routes/searchRoute');
+var statRoute = require('../api/routes/statRoute');
 var otherRoute = require('../api/routes/otherRoute');
 
 // Dynamic include custom routes from api
@@ -46,5 +47,6 @@ module.exports.routes = routes([
   userRoute,
   feedbackRoute,
   searchRoute,
+  statRoute,
   otherRoute
 ]);

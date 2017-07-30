@@ -92,4 +92,8 @@ module.exports.policies = {
     'find': true,
     '*': false
   },
+  StatController: {
+    'getGlobalStat': true,
+    '*': false
+  },
 };
