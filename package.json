@@ -42,11 +42,8 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ze/sails_huoshui.git"
+    "url": "git://github.com/badfuture/huoshui-backend-api.git"
   },
   "author": "ze",
-  "license": "",
-  "devDependencies": {
-    "swagger-ui": "^2.2.10"
-  }
+  "license": "MIT"
 }

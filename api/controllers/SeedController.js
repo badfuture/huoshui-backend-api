@@ -6,12 +6,18 @@
 
 module.exports = {
   seedDB: function(req, res) {
-		if (!sails.isSeeded) {
-			res.ok("seeding is started!");
-			sails.isSeeded = true;
-			SeedService.seedDB();
-		} else {
-			res.ok("seeding is already done! Skip seeding...");
-		}
+		Meta.findAll()
+		.then((results) => {
+      let meta = results[0]
+      if (meta && meta.seeded){
+        res.badRequest("Database is seeding or has already been seeded!")
+      } else {
+				res.ok("Starting to seed DB!")
+				SeedService.seedDB()
+			}
+		})
+		.catch((err) => {
+			res.serverError(err)
+		})
 	}
 };

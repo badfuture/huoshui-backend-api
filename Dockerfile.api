@@ -1,0 +1,22 @@
+# base image
+FROM alpine:3.5
+
+# environment variables
+ENV NODE_ENV production
+
+# install OS packages
+RUN apk add --update nodejs
+
+# copy dist dir
+COPY . /app/
+
+# install node packages
+WORKDIR /app
+RUN npm install
+
+# expose port
+EXPOSE 1337
+EXPOSE 3000
+
+# run command on start
+CMD ["node", "app.js"]

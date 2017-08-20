@@ -1,0 +1,31 @@
+version: "3.2"
+services:
+  redis:
+    image: huoshui-redis:3.2
+    restart: always
+    ports:
+     - "6379:6379"
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+  psql:
+    image: huoshui-psql:9.6.4
+    restart: always
+    ports:
+      - "5432:5432"
+    build:
+      context: .
+      dockerfile: Dockerfile.psql
+    volumes:
+      - /var/lib/psql:/var/lib/postgresql/data
+  api:
+    image: huoshui-api:1.0
+    restart: always
+    ports:
+      - "1337:1337"
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    links:
+      - psql
+      - redis

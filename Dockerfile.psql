@@ -1,0 +1,7 @@
+# base image
+FROM postgres:9.6.4
+
+# environment variables
+ENV POSTGRES_USER admin
+ENV POSTGRES_PASSWORD huoshui
+ENV POSTGRES_DB huoshui_api

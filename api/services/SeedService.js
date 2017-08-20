@@ -787,7 +787,7 @@ module.exports = {
     var publisher = sails.hooks.publisher;
     var queue = publisher.queue;
     var seedJob = publisher.create('seed_service', {
-      title: 'seed initial data for db'
+      Title: 'seed initial data for db'
     })
     .priority('medium')
     .save();
@@ -807,7 +807,24 @@ module.exports = {
         seedDislikedReviews.bind(this, job)
       ];
 
+      Meta.findAll()
+      .then((results) => {
+        let meta = results[0]
+        if (meta) {
+          meta.seeded = true
+          meta.save()
+        } else {
+          Meta.create({
+            seeded: true
+          })
+        }
+      })
+      .catch((err) => {
+        res.serverError(err)
+      })
+
       async.series(orderedActionList, function (err, resultsArray) {
+        // update metadata
         if (err) {
           sails.log.error("error", err);
         } else {
@@ -819,13 +836,7 @@ module.exports = {
     });
   },
 
-  isDbSeeded: ()=> {
-    School.findOne({where: {"name": "西南交通大学"}})
-    .then(function(data){
-      sails.isSeeded = (data) ? true : false;
-    })
-    .catch(function(err){
-      console.log("bootstrap error");
-    });
+  initDB: () => {
   }
+
 };

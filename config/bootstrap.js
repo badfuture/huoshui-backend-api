@@ -15,13 +15,6 @@ module.exports.bootstrap = function(done) {
       warnings: false,
   });
 
-  //initialize db seeding status
-  if (!SeedService.isDbSeeded()) {
-    sails.isSeeded = false;
-  } else {
-    sails.isSeeded = true;
-  }
-
   //job queue service
   JobService.removeAllJobs();
   setTimeout(JobService.updateCourseStats, 10 * 60 * 1000); // start in 10 mins

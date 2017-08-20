@@ -3,13 +3,13 @@ var sails = require("sails");
 //change the params below to match your local server setting
 module.exports.connections = {
   localPostgresqlServer: {
-    user: 'postgres',
-    password: 'postgres',
-    database: 'test',
+    user: 'admin',
+    password: 'huoshui',
+    database: 'huoshui_api',
     options: {
       //db options
       dialect: 'postgres',
-      host   : 'localhost',
+      host   : 'psql',
       port   : 5432,
       logging: sails.log.verbose,
 

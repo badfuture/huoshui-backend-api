@@ -19,7 +19,7 @@ module.exports = function(sails) {
       var connectName = sails.config.models.connection;
       var connection = sails.config.connections[connectName];
       if (connection) {
-        sails.log.verbose('Using connection named ' + connectName);
+        sails.log.debug('Using connection named ' + connectName);
       } else {
         throw new Error('Connection \'' + sails.config.models.connection + '\' not found in config');
       }
@@ -32,7 +32,7 @@ module.exports = function(sails) {
 
       //setup migration
       var migrate = sails.config.models.migrate;
-      sails.log.verbose('Migration: ' + migrate);
+      sails.log.debug('Migration: ' + migrate);
 
       //sequalize initalization
       var sequelize;
@@ -45,7 +45,7 @@ module.exports = function(sails) {
       sequelize
         .authenticate()
         .then(function(err) {
-          sails.log.verbose('Database connection has been established successfully!');
+          sails.log.debug('Database connection has been established successfully!');
         })
         .catch(function (err) {
           sails.log.error('Unable to connect to the database:', err);
@@ -72,15 +72,16 @@ module.exports = function(sails) {
           hook.setDefaultScope(modelDef);
         }
 
-        if(migrate === 'safe') {
-          return next();
-        } else {
-          var forceSync = migrate === 'drop';
-          sequelize.sync({ force: forceSync }).then(function() {
-            return next();
-          });
-        }
-      });
+        var forceSync = migrate === 'drop'
+        sequelize.sync({
+          force: forceSync
+        }).then((result) => {
+          return next()
+        }).catch(() => {
+          sails.log.debug("Database sync error!")
+          return next()
+        })
+      })
     },
 
     initAdapters: function() {

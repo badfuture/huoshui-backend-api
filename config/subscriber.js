@@ -12,7 +12,7 @@ module.exports.subscriber = {
         //default redis server port
         port: 6379,
         //default redis server host
-        host: '127.0.0.1'
+        host: 'redis'
     },
     //number of milliseconds
     //to wait for workers to
