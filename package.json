@@ -4,12 +4,6 @@
   "version": "1.0.0",
   "description": "Huoshui Backend API",
   "keywords": [],
-  "scripts": {
-    "deploy:dev:setup": "pm2 deploy pm2.config.js dev setup",
-    "deploy:dev": "pm2 deploy pm2.config.js dev",
-    "deploy:prod:setup": "pm2 deploy pm2.config.js prod setup",
-    "deploy:prod": "pm2 deploy pm2.config.js prod"
-  },
   "dependencies": {
     "async": "^2.0.1",
     "axios": "^0.16.2",

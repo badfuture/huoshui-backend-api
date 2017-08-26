@@ -1,31 +1,45 @@
 version: "3.2"
 services:
-  redis:
-    image: huoshui-redis:3.2
-    restart: always
+  webapp:
+    image: huoshui-webapp:1.0
     ports:
-     - "6379:6379"
-    build:
-      context: .
-      dockerfile: Dockerfile.redis
-  psql:
-    image: huoshui-psql:9.6.4
-    restart: always
-    ports:
-      - "5432:5432"
-    build:
-      context: .
-      dockerfile: Dockerfile.psql
-    volumes:
-      - /var/lib/psql:/var/lib/postgresql/data
+     - "10084:10084"
+    deploy:
+      replicas: 3
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 100M
+      restart_policy:
+        condition: on-failure
+    networks:
+      - front_net
   api:
     image: huoshui-api:1.0
     restart: always
     ports:
       - "1337:1337"
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    links:
-      - psql
-      - redis
+    networks:
+      - front_net
+      - back_net
+  redis:
+    image: huoshui-redis:3.2
+    restart: always
+    ports:
+     - "6379:6379"
+    networks:
+      - back_net
+  psql:
+    image: huoshui-psql:9.6.4
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - psql_data:/var/lib/postgresql/data
+    networks:
+      - back_net
+volumes:
+  psql_data:
+networks:
+  front_net:
+  back_net:

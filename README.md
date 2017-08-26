@@ -5,9 +5,9 @@
 ## Live Demo
 * **Production Server (aliyun)** -  [https://api.huoshui.org](https://api.huoshui.org)
 * **Development Server (amazon EC2)** -  [https://api.huoshui.tk](https://api.huoshui.tk)
-* **UI** -  [https://webapp.huoshui.org](https://webapp.huoshui.org)
+* **Webapp UI** -  [https://webapp.huoshui.org](https://webapp.huoshui.org)
 * **API Doc** -  [http://doc.huoshui.org](http://doc.huoshui.org/?url=https://api.huoshui.org/swagger/doc)
-* **OpenAPI 2.0 Description** -  [https://api.huoshui.org/swagger/doc](https://api.huoshui.org/swagger/doc)
+* **OpenAPI 2.0 Specification** -  [https://api.huoshui.org/swagger/doc](https://api.huoshui.org/swagger/doc)
 
 ## 准备条件
 
@@ -48,25 +48,12 @@ sails lift
 ```
 
 ## 部署
-在dev和local环境安装PM2
-```
-npm install pm2 -g
-```
+在staging server和production server安装 [Docker](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/)
 
-local生成SSH key，并将public key加入dev服务器
+部署 (包括webapp和后端)
 ```
-ssh-keygen -t rsa
-ssh-copy-id -i path/to/my/key user@dev_hostname
-```
-
-进行部署配置
-```
-pm2 deploy pm2.config.js dev setup
-```
-
-部署
-```
-pm2 deploy pm2.config.js dev
+docker swarm init
+docker stack deploy -c docker-compose.yml huoshui-stack
 ```
 
 ## 主要功能
@@ -98,11 +85,10 @@ pm2 deploy pm2.config.js dev
 * PosgreSQL - SQL结构化数据储存 （主数据库）
 * Redis / Kue - Job Scheduler (任务调度管理)
 * Nginx - 负载均衡 / 伺服
+* Docker - 虚拟化 / 部署
 * Cloud IaaS 服务
-  * 阿里云 ECS (compute)
-  * 阿里云 RDS (data)
-  * 七牛云 (image)
-  * CDN (delivery)
+  * 阿里云 ECS (Compute + Data Store)
+  * 七牛云 (CDN + Object Storage)
 
 ### 其它技术
 * PassportJs: 用户鉴别与授权(Basic Auth + JWT)
