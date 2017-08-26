@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   webapp:
-    image: huoshui-webapp:1.0
+    image: huoshui/huoshui-webapp:1.0
     ports:
      - "10084:10084"
     deploy:
@@ -15,7 +15,7 @@ services:
     networks:
       - front_net
   api:
-    image: huoshui-api:1.0
+    image: huoshui/huoshui-api:1.0
     restart: always
     ports:
       - "1337:1337"
@@ -23,14 +23,14 @@ services:
       - front_net
       - back_net
   redis:
-    image: huoshui-redis:3.2
+    image: huoshui/huoshui-redis:3.2
     restart: always
     ports:
      - "6379:6379"
     networks:
       - back_net
   psql:
-    image: huoshui-psql:9.6.4
+    image: huoshui/huoshui-psql:9.6.4
     restart: always
     ports:
       - "5432:5432"
