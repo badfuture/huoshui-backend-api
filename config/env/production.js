@@ -6,7 +6,7 @@
 module.exports = {
 
   models: {
-    connection: 'localPostgresqlServer',
+    connection: 'prodPsqlServer',
     schema: true,
     autoPK: true,
     autoCreatedAt: true,

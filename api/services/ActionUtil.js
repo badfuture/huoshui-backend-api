@@ -46,7 +46,14 @@ module.exports = {
           } else if (rel.target.name == 'Review') {
             obj.through = {
               attributes: []
-            };
+            }
+            obj.include = [{
+              model: User,
+              as: 'Author',
+              attributes: {
+                exclude: ['password', 'salt']
+              }
+            }]
           } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
             obj.through = {
               as: 'meta',

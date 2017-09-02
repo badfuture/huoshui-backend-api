@@ -63,7 +63,7 @@ module.exports = {
       field: "avatar",
       type: Sequelize.STRING,
       allowNull: true,
-      defaultValue: null,
+      defaultValue: "http://oss.huoshui.org/default_avatar.jpg",
       unique: false,
       comment: "头像"
     },
