@@ -421,13 +421,13 @@ var seedReviews = function(job, next) {
     review.easymark = entry.exam.easiness.checked;
 
     //optional: exam data
-    review.checkAttend = entry.attendance.value + 1;
-    review.birdy = entry.bird.value + 1;
-    review.lotsHomework = entry.homework.value + 1;
-    review.examHard = 0;
+    review.meanAttend = entry.attendance.value + 1;
+    review.meanBirdy = entry.bird.value + 1;
+    review.meanHomework = entry.homework.value + 1;
+    review.meanExam = 0;
     if (entry.exam.difficulty && entry.exam.difficulty.value
                               && entry.exam.difficulty.value > 0) {
-      review.examHard = entry.exam.difficulty.value;
+      review.meanExam = entry.exam.difficulty.value;
     } else if (review.hasExam) {
       var examEasyVal = getExamEasyVal({
         examprep: review.examprep,
@@ -435,7 +435,7 @@ var seedReviews = function(job, next) {
         oldquestion: review.oldquestion,
         easymark: review.easymark
       });
-      review.examHard = Math.round(5 - examEasyVal);
+      review.meanExam = Math.round(5 - examEasyVal);
     }
 
     //optional: upvote/downvote
@@ -546,7 +546,7 @@ var seedReviews = function(job, next) {
     })
     .catch((err)=> {
       if (err) {
-        console.log(review.examHard);
+        console.log(review.meanExam);
         sails.log.error("course name", entry.courseName );
         sails.log.error("prof name", entry.profName);
         sails.log.error("review", review);

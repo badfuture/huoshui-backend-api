@@ -57,16 +57,76 @@ module.exports = {
       comment: "学分"
     },
 
-    // redundent stats (used to reduce # of api calls)
+    // aggregated stats
     scoreOverall: {
       field: "scoreOverall",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
-      exampleValue: 2.556,
+      exampleValue: 2.5,
       unique: false,
       validate: {min: 0, max: 5},
       comment: "综合评分"
+    },
+    scoreHot: {
+      field: "scoreHot",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "热门评分"
+    },
+    scoreRepute: {
+      field: "scoreRepute",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "声誉评分"
+    },
+    scoreBirdy: {
+      field: "scoreBirdy",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "水课评分"
+    },
+    scoreAttend: {
+      field: "scoreAttend",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "点名频繁评分"
+    },
+    scoreExam: {
+      field: "scoreExam",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "考试评分"
+    },
+    scoreHomework: {
+      field: "scoreHomework",
+      type: Sequelize.FLOAT,
+      allowNull: true,
+      defaultValue: null,
+      exampleValue: 2.5,
+      unique: false,
+      validate: {min: 0, max: 5},
+      comment: "作业评分"
     },
   },
   associations: function() {

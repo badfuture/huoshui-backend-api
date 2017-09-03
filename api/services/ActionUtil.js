@@ -53,6 +53,9 @@ module.exports = {
               attributes: {
                 exclude: ['password', 'salt']
               }
+            },{
+              model: Tag,
+              as: 'Tags'
             }]
           } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
             obj.through = {

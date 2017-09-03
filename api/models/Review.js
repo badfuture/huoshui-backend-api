@@ -59,8 +59,8 @@ module.exports = {
     },
 
     //optional stats
-    lotsHomework: {
-      field: "lotsHomework",
+    meanHomework: {
+      field: "meanHomework",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
@@ -68,8 +68,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "作业多少，分高作业多"
     },
-    checkAttend: {
-      field: "checkAttend",
+    meanAttend: {
+      field: "meanAttend",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
@@ -77,8 +77,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "点名多少，分高点名多"
     },
-    birdy: {
-      field: "birdy",
+    meanBirdy: {
+      field: "meanBirdy",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,
@@ -86,8 +86,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "课程水分，越高越水"
     },
-    examHard: {
-      field: "examHard",
+    meanExam: {
+      field: "meanExam",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: null,

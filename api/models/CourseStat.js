@@ -41,8 +41,8 @@ module.exports = {
     },
 
     //secondary stats
-    lotsHomework: {
-      field: "lotsHomework",
+    meanHomework: {
+      field: "meanHomework",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -50,8 +50,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "作业多少，分高作业多"
     },
-    checkAttend: {
-      field: "checkAttend",
+    meanAttend: {
+      field: "meanAttend",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -59,8 +59,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "点名多少，分高点名多"
     },
-    birdy: {
-      field: "birdy",
+    meanBirdy: {
+      field: "meanBirdy",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -68,8 +68,8 @@ module.exports = {
       validate: {min: 0, max: 5},
       comment: "课程水分，越高越水"
     },
-    examHard: {
-      field: "examHard",
+    meanExam: {
+      field: "meanExam",
       type: Sequelize.FLOAT,
       allowNull: true,
       defaultValue: null,
@@ -197,7 +197,36 @@ module.exports = {
       unique: false,
       validate: {min: 0},
       comment: "题目容易 次数"
-    }
+    },
+
+    // Tag stats
+    countNetGoodTag: {
+      field: "countNetGoodTag",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "好的标签 - 坏的标签"
+    },
+    countGoodTag: {
+      field: "countGoodTag",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "好的标签"
+    },
+    countBadTag: {
+      field: "countBadTag",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "坏的标签"
+    },
   },
   associations: function() {
     CourseStat.belongsTo(Course, {

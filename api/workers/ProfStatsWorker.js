@@ -14,13 +14,13 @@ var statsModelFactory = ()=>{
 
         //secondary stats
         countHomework: 0,
-        lotsHomework: 0,
+        meanHomework: 0,
         countAttend: 0,
-        checkAttend: 0,
+        meanAttend: 0,
         countBird: 0,
-        birdy: 0,
+        meanBirdy: 0,
         countExam: 0,
-        examHard: 0,
+        meanExam: 0,
 
         //exam details stats
         countExamDetails: 0,
@@ -48,24 +48,24 @@ var updateStats = (sModel, review)=>{
     }
 
     //homework
-    if (review.lotsHomework !== 0) {
+    if (review.meanHomework !== 0) {
       sModel.countHomework++;
-      sModel.lotsHomework += review.lotsHomework;
+      sModel.meanHomework += review.meanHomework;
     }
     //attend
-    if (review.checkAttend !== 0) {
+    if (review.meanAttend !== 0) {
       sModel.countAttend++;
-      sModel.checkAttend += review.checkAttend;
+      sModel.meanAttend += review.meanAttend;
     }
     //bird
-    if (review.birdy !== 0) {
+    if (review.meanBirdy !== 0) {
       sModel.countBird++;
-      sModel.birdy += review.birdy;
+      sModel.meanBirdy += review.meanBirdy;
     }
     //exam
-    if (review.examHard !== 0) {
+    if (review.meanExam !== 0) {
       sModel.countExam++;
-      sModel.examHard += review.examHard;
+      sModel.meanExam += review.meanExam;
     }
 
     //exam details
@@ -93,16 +93,16 @@ var normalizeStats = (sModel)=>{
       sModel.kind /= sModel.countReview;
     }
     if (sModel.countHomework > 0) {
-        sModel.lotsHomework /= sModel.countHomework;
+        sModel.meanHomework /= sModel.countHomework;
     }
     if (sModel.countAttend > 0) {
-        sModel.checkAttend /= sModel.countAttend;
+        sModel.meanAttend /= sModel.countAttend;
     }
     if (sModel.countBird > 0) {
-        sModel.birdy /= sModel.countBird;
+        sModel.meanBirdy /= sModel.countBird;
     }
     if (sModel.countExam > 0) {
-        sModel.examHard /= sModel.countExam;
+        sModel.meanExam /= sModel.countExam;
     }
 
 };

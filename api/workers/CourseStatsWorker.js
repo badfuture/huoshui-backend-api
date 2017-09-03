@@ -1,7 +1,10 @@
 const pub = sails.hooks.publisher;
 
 var statsModelFactory = ()=>{
-    var model = {
+    return {
+        //aggregated stats
+        scoreOverall: 0,
+
         //core stats
         professional: 0,
         expressive: 0,
@@ -10,17 +13,19 @@ var statsModelFactory = ()=>{
         countGoodReview: 0,
         countAverageReview: 0,
         countBadReview: 0,
-        scoreOverall: 0,
+        countNetGoodTag: 0,
+        countGoodTag: 0,
+        countBadTag: 0,
 
         //secondary stats
         countHomework: 0,
-        lotsHomework: 0,
+        meanHomework: 0,
         countAttend: 0,
-        checkAttend: 0,
+        meanAttend: 0,
         countBird: 0,
-        birdy: 0,
+        meanBirdy: 0,
         countExam: 0,
-        examHard: 0,
+        meanExam: 0,
 
         //exam details stats
         countExamDetails: 0,
@@ -28,8 +33,7 @@ var statsModelFactory = ()=>{
         countExamOpenbook: 0,
         countExamOldquestion: 0,
         countExamEasymark: 0,
-    };
-    return model;
+    }
 };
 
 var updateStats = (sModel, review)=>{
@@ -47,25 +51,38 @@ var updateStats = (sModel, review)=>{
         sModel.countBadReview++;
     }
 
+    //tags
+    if (review.Tags) {
+      review.Tags.forEach((tag) => {
+        if (tag.isPositive) {
+          sModel.countGoodTag++
+          sModel.countNetGoodTag++
+        } else {
+          sModel.countBadTag++
+          sModel.countNetGoodTag--
+        }
+      })
+    }
+
     //homework
-    if (review.lotsHomework !== 0) {
+    if (review.meanHomework !== 0) {
       sModel.countHomework++;
-      sModel.lotsHomework += review.lotsHomework;
+      sModel.meanHomework += review.meanHomework;
     }
     //attend
-    if (review.checkAttend !== 0) {
+    if (review.meanAttend !== 0) {
       sModel.countAttend++;
-      sModel.checkAttend += review.checkAttend;
+      sModel.meanAttend += review.meanAttend;
     }
     //bird
-    if (review.birdy !== 0) {
+    if (review.meanBirdy !== 0) {
       sModel.countBird++;
-      sModel.birdy += review.birdy;
+      sModel.meanBirdy += review.meanBirdy;
     }
     //exam
-    if (review.examHard !== 0) {
+    if (review.meanExam !== 0) {
       sModel.countExam++;
-      sModel.examHard += review.examHard;
+      sModel.meanExam += review.meanExam;
     }
 
     //exam details
@@ -93,33 +110,36 @@ var normalizeStats = (sModel)=>{
       sModel.kind /= sModel.countReview;
     }
     if (sModel.countHomework > 0) {
-        sModel.lotsHomework /= sModel.countHomework;
+        sModel.meanHomework /= sModel.countHomework;
     }
     if (sModel.countAttend > 0) {
-        sModel.checkAttend /= sModel.countAttend;
+        sModel.meanAttend /= sModel.countAttend;
     }
     if (sModel.countBird > 0) {
-        sModel.birdy /= sModel.countBird;
+        sModel.meanBirdy /= sModel.countBird;
     }
     if (sModel.countExam > 0) {
-        sModel.examHard /= sModel.countExam;
+        sModel.meanExam /= sModel.countExam;
     }
 
 };
 
-var computeScoreOverall = (sModel)=>{
+let setAggregatedScores = (sModel) => {
+  sModel.scoreOverall = RankService.getScoreOverall(sModel)
+  sModel.scoreHot = RankService.getScoreHot(sModel)
+  sModel.scoreRepute = RankService.getScoreRepute(sModel)
+  sModel.scoreBirdy = RankService.getScoreBirdy(sModel)
+  sModel.scoreAttend = RankService.getScoreAttend(sModel)
+  sModel.scoreExam = RankService.getScoreExam(sModel)
+  sModel.scoreHomework = RankService.getScoreHomework(sModel)
+}
 
-  var C = 3.5; // mean score all score gravitates to (when votes are small)
-  var M = 1; // minimum # of votes to be considered effective
-  var r = (sModel.professional + sModel.expressive + sModel.kind)/3; // rating of the course
-  var v = sModel.countReview; // # of reviews
-  var score = (v / (v + M)) * r + (M / (v + M)) * (C);
-  return score;
-};
+let getAggregatedScores = ({
+    scoreOverall, scoreHot, scoreRepute, scoreBirdy, scoreAttend, scoreExam, scoreHomework
+}) => ({
+    scoreOverall, scoreHot, scoreRepute, scoreBirdy, scoreAttend, scoreExam, scoreHomework
+})
 
-var setScores = (sModel)=>{
-  sModel.scoreOverall = computeScoreOverall(sModel);
-};
 
 module.exports = {
     concurrency: 1,
@@ -144,7 +164,11 @@ module.exports = {
         .then((courses)=> {
             courses.forEach((course)=>{
                 course.getReviews({
-                    where: {'course_id': course.id}
+                    where: {'course_id': course.id},
+                    include: {
+                      model: Tag,
+                      as: 'Tags'
+                    }
                 })
                 .then((reviews)=>{
                     //get metadata
@@ -157,20 +181,18 @@ module.exports = {
 
                     //aggregate review stats
                     sModel.countReview = cReviewCount;
-                    reviews.forEach((review)=>{
-                        updateStats(sModel, review);
+                    reviews.forEach((review) => {
+                        updateStats(sModel, review)
                     });
 
                     //normalize stats
                     normalizeStats(sModel);
 
-                    //set scores
-                    setScores(sModel);
+                    //set aggregated scores
+                    setAggregatedScores(sModel);
 
                     //update stats model
-                    course.update({
-                      scoreOverall: sModel.scoreOverall
-                    })
+                    course.update(getAggregatedScores(sModel))
                     .then(() => course.getStat())
                     .then((stat)=>{
                         if(stat) {
