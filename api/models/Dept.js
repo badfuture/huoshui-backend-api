@@ -1,4 +1,5 @@
 "use strict";
+const domain = require('../constants/domain')
 
 module.exports = {
   attributes: {
@@ -62,6 +63,28 @@ module.exports = {
       },
       comment: "院系别名"
     },
+    image: {
+      field: "image",
+      type: Sequelize.STRING,
+      type_swag: "string",
+      allowNull: false,
+      defaultValue: null,
+      comment: "院系图片",
+      get() {
+        return domain.OBJECT_STORAGE + '/site' +  this.getDataValue('image')
+      }
+    },
+    icon: {
+      field: "icon",
+      type: Sequelize.STRING,
+      type_swag: "string",
+      allowNull: false,
+      defaultValue: null,
+      comment: "院系icon",
+      get() {
+        return domain.OBJECT_STORAGE + '/site' + this.getDataValue('icon')
+      }
+    }
   },
   associations: function() {
     Dept.belongsTo(School, {

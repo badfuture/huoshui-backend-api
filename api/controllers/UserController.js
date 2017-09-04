@@ -149,7 +149,7 @@ module.exports = {
       ObjectStorageService
       .upload(filename, localPath)
       .then((resp) => {
-        const ossDomain = sails.config.objectStorage.domain
+        const ossDomain = sails.config.objectStorage.host
         return ossDomain + '/' + filename
       })
       .then((ossImgUrl) => {

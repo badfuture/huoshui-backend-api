@@ -105,6 +105,8 @@ var seedDepts = function(job, next) {
     var deptCreated= null;
     dept.shortname = entry.shortname;
     dept.longname = entry.longname;
+    dept.image = entry.image;
+    dept.icon = entry.icon;
     if (entry.hasOwnProperty("alias")) {
       dept.alias = entry.alias;
     }

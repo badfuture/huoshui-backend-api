@@ -1,4 +1,6 @@
 "use strict";
+const url = require('url')
+const domain = require('../constants/domain')
 
 module.exports = {
   attributes: {
@@ -63,9 +65,12 @@ module.exports = {
       field: "avatar",
       type: Sequelize.STRING,
       allowNull: true,
-      defaultValue: "http://oss.huoshui.org/default_avatar.jpg",
+      defaultValue: 'default_avatar.jpg',
       unique: false,
-      comment: "头像"
+      comment: "头像",
+      get() {
+        return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar'))
+      }
     },
     gender: {
       field: "gender",
