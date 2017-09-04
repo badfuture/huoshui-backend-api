@@ -75,7 +75,6 @@ module.exports = {
       defaultValue: null,
       exampleValue: 2.5,
       unique: false,
-      validate: {min: 0, max: 5},
       comment: "热门评分"
     },
     scoreRepute: {
@@ -85,7 +84,6 @@ module.exports = {
       defaultValue: null,
       exampleValue: 2.5,
       unique: false,
-      validate: {min: 0, max: 5},
       comment: "声誉评分"
     },
     scoreBirdy: {
