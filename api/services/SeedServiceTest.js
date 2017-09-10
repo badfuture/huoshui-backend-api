@@ -28,8 +28,7 @@ var getExamEasyVal = function(exam) {
 var path_common = sails.config.appPath + "/migration/data_common/";
 var path_leancloud_full = sails.config.appPath + "/migration/data_raw_full/";
 var path_leancloud_part = sails.config.appPath + "/migration/data_raw_part/";
-
-var path_leancloud = path_leancloud_full;
+var path_leancloud = path_leancloud_part;
 
 var file_position = "position.json";
 var file_school = "school.json";
