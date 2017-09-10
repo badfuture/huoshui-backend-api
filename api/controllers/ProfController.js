@@ -39,7 +39,10 @@ module.exports = {
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 
     Prof.findById(pk, {
-      include: includeOption
+      include: includeOption,
+      sort: ActionUtil.parseSort(req) || [
+        [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
+      ]
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       res.ok(recordFound);
