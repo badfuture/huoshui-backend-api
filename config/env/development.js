@@ -4,14 +4,14 @@
  */
 
 module.exports = {
-  
+
    models: {
      connection: 'devPsqlServer',
      schema: true,
      autoPK: true,
      autoCreatedAt: true,
      autoUpdatedAt: true,
-     migrate: 'drop'
+     migrate: 'safe'
    },
 
    objectStorage: {

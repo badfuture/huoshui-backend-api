@@ -44,7 +44,7 @@ module.exports = {
     pub.createJob(jobName, {
       title: 'update course stats',
       name: jobName,
-      interval: 10 * 60 * 1000,
+      interval: 20 * 60 * 1000,
       removeOnComplete: false
     }).save();
   },
@@ -54,7 +54,7 @@ module.exports = {
     pub.createJob(jobName, {
       title: 'update prof stats',
       name: jobName,
-      interval: 10 * 60 * 1000,
+      interval: 20 * 60 * 1000,
       removeOnComplete: false
     }).save();
   }

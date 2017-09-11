@@ -46,9 +46,13 @@ module.exports = {
     let newComment = null
 		let Model = req._sails.models[commentable]
 
-
+    // return if the comment is malformed
+    if (!commentable || !commentableId || !text || !authorId) {
+      return res.badRequest('commentable, commentableId, text and authorId fields are required')
+    }
 
 		if (parentId != null && parentId != '') {
+      // commenting on an existing comment
 			return Comment
 				.findOne({where: {id: parentId}})
 				.then((commentFound) => {
@@ -82,6 +86,7 @@ module.exports = {
 					}
 				})
 		} else {
+      // create a new first level comment
 			Comment.create({
 	      commentable,
 				text,
@@ -99,14 +104,6 @@ module.exports = {
 	        .then((commentableFound) => {
 	          commentableFound.addComment(newComment)
 	        })
-			}).then(() => {
-	      if (parentId != null && parentId != '') {
-	        return Comment
-	          .findOne({where: {id: parentId}})
-	          .then((commentFound) => {
-							commentFound.addSubcomment(newComment)
-	          })
-	      }
 			}).then(() => {
 	      res.created()
 	    }).catch((err) => {

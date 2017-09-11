@@ -96,4 +96,8 @@ module.exports.policies = {
     'getGlobalStat': true,
     '*': false
   },
+  JobController: {
+    'startJobs': true,
+    '*': false
+  },
 };
