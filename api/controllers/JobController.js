@@ -1,8 +1,16 @@
 module.exports = {
+  startCourseJobs: (req, res) => {
+    setTimeout(JobService.updateCourseStats, 1 * 1000)
+    res.ok("course jobs started")
+  },
 
-  startJobs: (req, res) => {
-    setTimeout(JobService.updateCourseStats, 1.0 * 60 * 1000) // start in 1.0 mins
-    setTimeout(JobService.updateProfStats, 2.0 * 60 * 1000) // start in 2.0 mins
-    res.ok("jobs started")
+  startProfJobs: (req, res) => {
+    setTimeout(JobService.updateProfStats, 1 * 1000)
+    res.ok("prof jobs started")
+  },
+
+  removeAllJobs: (req, res) => {
+    setTimeout(JobService.removeAllJobs, 1 * 1000)
+    res.ok("all jobs removed")
   },
 };

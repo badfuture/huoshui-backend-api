@@ -97,7 +97,12 @@ module.exports.policies = {
     '*': false
   },
   JobController: {
-    'startJobs': true,
+    'startCourseJobs': true,
+    'startProfJobs': true,
+    'removeAllJobs': true,
     '*': false
+  },
+  DataValidateController: {
+    '*': true
   },
 };

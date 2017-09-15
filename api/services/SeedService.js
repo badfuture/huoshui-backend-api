@@ -62,8 +62,6 @@ var likedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_re
 var dislikedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_disliked_reviews));
 var likedCoursesData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_Courses));
 
-
-
 var seedSchools = function(job, next) {
   sails.log.debug("seeding schools");
   async.eachSeries(schoolData, function(entry, next){
@@ -239,6 +237,7 @@ var seedUsers = function(job, next) {
 //code,name,gender,position,dept,school,email,phone,birth,hometown,exp,group,motto,intro,legacy_courses,achievement,research,link
 var seedProfs = function(job, next) {
   sails.log.debug("seeding profs");
+  sails.log.debug("length", profData.length)
   async.eachSeries(profData, function(entry, next){
     var profCreated = {};
     var prof = {};
@@ -267,7 +266,7 @@ var seedProfs = function(job, next) {
     prof.achievement = entry.achievement;
     prof.legacyCourses = entry.legacyCourses;
     prof.official_site = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID=" + entry.code;
-
+    sails.log.info("seed prof " + prof.name);
     Prof.create(prof)
     .then(function(results){
       profCreated = results;
@@ -296,7 +295,7 @@ var seedProfs = function(job, next) {
       return Prof.count();
     })
     .then(function(countProf){
-      sails.log.info("seed prof " + countProf + ": " + prof.name);
+      sails.log.info("seeded prof " + countProf + ": " + prof.name);
       next();
     })
     .catch(function(err){

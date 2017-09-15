@@ -133,8 +133,8 @@ module.exports = {
       validate: {min: 0},
       comment: "点名评论次数"
     },
-    countBird: {
-      field: "countBird",
+    countBirdy: {
+      field: "countBirdy",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -206,7 +206,6 @@ module.exports = {
       allowNull: true,
       defaultValue: 0,
       unique: false,
-      validate: {min: 0},
       comment: "好的标签 - 坏的标签"
     },
     countGoodTag: {

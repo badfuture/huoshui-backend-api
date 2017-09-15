@@ -5,6 +5,12 @@ module.exports = {
     action: "seedDB"
   },
 
+  //check review duplicate
+  'GET /checkReviewDuplicate': {
+    controller: "DataValidateController",
+    action: "checkReviewDuplicate"
+  },
+
   //seed Email
   'POST /sendEmail': {
     controller: "EmailController",

@@ -51,7 +51,7 @@ module.exports = {
     },
     motto: {
       field: "motto",
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: true,
       defaultValue: null,
       exampleValue: "享受学习的过程，体会成功的幸福",

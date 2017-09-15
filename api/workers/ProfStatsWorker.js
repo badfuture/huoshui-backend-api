@@ -142,6 +142,9 @@ module.exports = {
 
         Prof.findAll({})
         .then((profs)=> {
+            profs.sort((a, b) => {
+                return a.id - b.id
+            })
             profs.forEach((prof)=>{
                 prof.getReviews({
                     where: {'prof_id': prof.id}
@@ -150,7 +153,7 @@ module.exports = {
                     //get metadata
                     var pName = prof.name;
                     var pReviewCount = reviews.length;
-                    job.log("name: " + pName + " | " + "review count: " + pReviewCount);
+                    sails.log.debug(`ProfStatWorker: id: ${prof.id} | name: ${prof.name} | review count: ${reviews.length}`)
 
                     //initialize stats model
                     var sModel = statsModelFactory();
@@ -174,15 +177,12 @@ module.exports = {
                     .then(() => prof.getStat())
                     .then((stat)=>{
                         if(stat) {
-                            stat.update(sModel).then(()=>{
-                                job.log("updated name: " + pName + " | "
-                                    + "review count: " + pReviewCount);
-                            });
+                          return stat.update(sModel).then(()=>{})
                         } else {
-                            ProfStat.create(sModel)
-                            .then((newStat)=>{
-                                prof.setStat(newStat);
-                            })
+                          return ProfStat.create(sModel)
+                          .then((newStat)=>{
+                              return prof.setStat(newStat)
+                          })
                         }
                     })
                     .catch((err)=> {
@@ -193,10 +193,10 @@ module.exports = {
         });
         //schedule next job
         pub.createJob(jobName, {
-            title: title,
-            name: jobName,
-            interval: interval,
-            removeOnComplete: doRemove
+          title: title,
+          name: jobName,
+          interval: interval,
+          removeOnComplete: doRemove
         }).delay(interval).removeOnComplete(doRemove).save();
 
         done();

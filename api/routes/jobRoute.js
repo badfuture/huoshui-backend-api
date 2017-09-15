@@ -1,6 +1,14 @@
 module.exports = {
-  'PUT /jobs': {
+  'PUT /jobs/prof': {
     controller: "JobController",
-    action: "startJobs"
+    action: "startProfJobs"
+  },
+  'PUT /jobs/course': {
+    controller: "JobController",
+    action: "startCourseJobs"
+  },
+  'Delete /jobs': {
+    controller: "JobController",
+    action: "removeAllJobs"
   }
 }
