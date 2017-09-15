@@ -57,9 +57,7 @@ module.exports = {
         var executeTime = 5000;
         sails.log.debug("processing job: " + id + " | name: " + jobName)
 
-        Prof.findAll({
-          sort: [['id', 'ASC']]
-        })
+        Prof.findAll({})
         .then((profs)=> {
           profs.sort((a, b) => {
             return a.id - b.id
