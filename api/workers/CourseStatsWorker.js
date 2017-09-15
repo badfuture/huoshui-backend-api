@@ -2,7 +2,6 @@ const pub = sails.hooks.publisher
 const Promise = require('bluebird')
 const courseStatModel = require('../classes/courseStatModel')
 
-
 const updateCourseStats = (courses) => {
     return courses.reduce((promise, course) => {
         return promise.then(() => {
@@ -34,7 +33,7 @@ const updateCourseStats = (courses) => {
                               return course.setStat(newStat)
                           })
                           .then(() => {
-                              sails.log.debug(`New Stat Created: id: ${course.id} | name: ${course.name} [completed]`)
+                              sails.log.debug(`New Stat Created: id: ${course.id} | name: ${course.name}`)
                               return
                           })
                         )
@@ -61,18 +60,17 @@ module.exports = {
         var interval = data.interval;
         var doRemove = data.removeOnComplete;
         var executeTime = 5000;
-        sails.log.debug("processing job: " + id + " | name: " + jobName);
+        sails.log.debug("processing job: " + id + " | name: " + jobName)
 
-        Course.findAll({
-          sort: [['id', 'ASC']]
-        })
+        Course.findAll({})
         .then((courses)=> {
-            courses.sort((a, b) => {
-                return a.id - b.id
+            course.sort((a, b) => {
+              return a.id - b.id
             })
             return updateCourseStats(courses)
         }).then(() => {
             sails.log.debug(`CourseStatWorker: all done!`)
+            done()
         })
 
         //schedule next job
@@ -81,8 +79,6 @@ module.exports = {
             name: jobName,
             interval: interval,
             removeOnComplete: doRemove
-        }).delay(interval).removeOnComplete(doRemove).save();
-
-        done();
+        }).delay(interval).removeOnComplete(doRemove).save()
     }
 };

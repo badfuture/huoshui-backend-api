@@ -15,14 +15,16 @@ module.exports = {
         return e.comment
       }).indexOf(review.comment)
       if (firstPos !== currentPos) {
-        original = reviews[firstPos]
+        orig = reviews[firstPos]
         dup = reviews[currentPos]
-        sails.log.debug(`Original: authorId ${original.authorId.objectId}`)
-        sails.log.debug(`Original: courseName ${original.courseName}`)
-        sails.log.debug(`Original: text ${original.comment}`)
-        sails.log.debug(`Duplicate: authorId ${dup.authorId.objectId}`)
-        sails.log.debug(`Duplicate: courseName ${dup.courseName}`)
-        sails.log.debug(`Duplicate: text ${dup.comment}`)
+        if (orig.courseName === dup.courseName ) {
+          sails.log.debug(`Orig: authorId ${orig.authorId.objectId}`)
+          sails.log.debug(`Orig: courseName ${orig.courseName}`)
+          sails.log.debug(`Orig: text ${orig.comment}`)
+          sails.log.debug(`Dup: authorId ${dup.authorId.objectId}`)
+          sails.log.debug(`Dup: courseName ${dup.courseName}`)
+          sails.log.debug(`Dup: text ${dup.comment}`)
+        }
       }
     })
     res.ok('duplicate checking complete!')

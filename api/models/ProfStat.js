@@ -133,8 +133,8 @@ module.exports = {
       validate: {min: 0},
       comment: "点名评论次数"
     },
-    countBird: {
-      field: "countBird",
+    countBirdy: {
+      field: "countBirdy",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
