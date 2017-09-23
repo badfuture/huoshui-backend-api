@@ -21,39 +21,43 @@ module.exports = {
 	},
 
 	signup: function(req, res) {
-		sails.log.verbose("signup user: " + req.param('email'));
-		var existEmail = false;
-		var existUsername = false;
+		sails.log.verbose("signup user: " + req.param('email'))
+		var existEmail = false
+		var existUsername = false
 
 		User.findOne({
 			where: {email: req.param('email')}
 		}).then(function(user){
-			if (user) {existEmail = true;}
+			if (user) {existEmail = true}
 			return User.findOne({
 				where: {username: req.param('username')}
 			})
-		}).then(function(user){
-			if (user) { existUsername = true;}
+		}).then((user) => {
+			if (user) { existUsername = true}
 			if (existUsername) {
-				res.badRequest("user username already exists!");
+				res.badRequest("user username already exists!")
 			} else if (existEmail) {
-				res.badRequest("user email already exists!");
+				res.badRequest("user email already exists!")
 			} else {
+				let userCreated = null
 				User.create(_.omit(req.allParams(), 'id'))
-				.then(function(user) {
-					var userData = user.dataValues;
-					delete userData.password;
-					delete userData.salt;
-					return {
+				.then((user) => {
+					var userData = user.dataValues
+					delete userData.password
+					delete userData.salt
+					userCreated = {
 						token: CipherService.createToken(user),
 						user: userData
-					};
+					}
+					return KelistService.createDefaultKelist()
+				}).then((defaultKelist) => {
+					return user.addOwnsKelists(defaultKelist)
+				}).then(() => {
+					return res.created(userCreated)
 				})
-				.then(function(user){
-					res.created(user);
-				});
+
 			}
-		}).catch(res.serverError);
+		}).catch(res.serverError)
 	},
 
 };

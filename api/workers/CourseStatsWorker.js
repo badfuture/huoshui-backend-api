@@ -64,7 +64,7 @@ module.exports = {
 
         Course.findAll({})
         .then((courses)=> {
-            course.sort((a, b) => {
+            courses.sort((a, b) => {
               return a.id - b.id
             })
             return updateCourseStats(courses)

@@ -12,11 +12,11 @@ module.exports = {
     },
     category: {
       field: "category",
-      type: Sequelize.ENUM('default_liked_courses'),
+      type: Sequelize.ENUM('default_personal_kelist'),
       allowNull: true,
       defaultValue: null,
       unique: false,
-      comment: "标签的类型"
+      comment: "课列类别"
     },
     description: {
       field: "description",
@@ -34,23 +34,13 @@ module.exports = {
       unique: false,
       comment: "封面图片"
     },
-    countCourse: {
-      field: "countCourse",
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue: 0,
+    isPublic: {
+      field: "isPublic",
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
       unique: false,
-      validate: {min: 0},
-      comment: "课列包含课程个数"
-    },
-    countView: {
-      field: "countView",
-      type: Sequelize.INTEGER,
-      allowNull: true,
-      defaultValue: 0,
-      unique: false,
-      validate: {min: 0},
-      comment: "点击次数"
+      comment: "课列是否公开"
     }
   },
   associations: function() {
