@@ -20,5 +20,20 @@ module.exports = {
     action: "uploadAvatar",
     isPlural: false,
     swagger: {}
-  }
+  },
+  'PUT /users/:userId/liked-profs': {
+    model: "user",
+    controller: "UserController",
+    action: "addLikedProf",
+  },
+  'PUT /users/:userId/liked-profs/:profId': {
+    model: "user",
+    controller: "UserController",
+    action: "addLikedProf",
+  },
+  'DELETE /users/:userId/liked-profs/:profId': {
+    model: "user",
+    controller: "UserController",
+    action: "deleteLikedProf",
+  },
 }

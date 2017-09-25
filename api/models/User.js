@@ -125,6 +125,11 @@ module.exports = {
       through: 'Join_User_DislikedReviews_Review',
       foreignKey: 'user_id'
     }); // m:n
+    User.belongsToMany(Prof, {
+      as: 'LikedProfs',
+      through: 'Join_User_LikedProfs_Prof',
+      foreignKey: 'user_id'
+    }); // m:n
   },
   options: {
     tableName: 'user',

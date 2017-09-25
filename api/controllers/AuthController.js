@@ -39,21 +39,23 @@ module.exports = {
 			} else if (existEmail) {
 				res.badRequest("user email already exists!")
 			} else {
+				let allUserInfo = null
 				let userCreated = null
 				User.create(_.omit(req.allParams(), 'id'))
 				.then((user) => {
-					var userData = user.dataValues
+					userCreated = user
+					let userData = user.dataValues
 					delete userData.password
 					delete userData.salt
-					userCreated = {
+					allUserInfo = {
 						token: CipherService.createToken(user),
 						user: userData
 					}
 					return KelistService.createDefaultKelist()
 				}).then((defaultKelist) => {
-					return user.addOwnsKelists(defaultKelist)
+					return userCreated.addOwnsKelists(defaultKelist)
 				}).then(() => {
-					return res.created(userCreated)
+					return res.created(allUserInfo)
 				})
 
 			}

@@ -86,6 +86,8 @@ module.exports.policies = {
     'find': true,
     'findOne': true,
     'uploadAvatar': true,
+    'addLikedProf': true,
+    'deleteLikedProf': true,
     '*': false
   },
   SearchController: {

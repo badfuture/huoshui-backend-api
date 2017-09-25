@@ -204,10 +204,7 @@ var seedUsers = function(job, next) {
       }
     })
     .then(()=> {
-      return Kelist.create({
-        name: '我喜欢的课程',
-        category: 'default_liked_courses'
-      });
+      return KelistService.createDefaultKelist()
     })
     .then((results)=> {
       var kelistCreated = results;

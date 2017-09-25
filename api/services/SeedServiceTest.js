@@ -207,7 +207,7 @@ var seedUsers = function(job, next) {
     .then(()=> {
       return Kelist.create({
         name: '我喜欢的课程',
-        category: 'default_liked_courses'
+        category: 'default_personal_kelist'
       });
     })
     .then((results)=> {
@@ -599,7 +599,7 @@ var seedKelists = function(job, next) {
     .then((results)=> {
       userFound = results;
       return userFound.getOwnsKelists({
-        where: {category: 'default_liked_courses'}
+        where: {category: 'default_personal_kelist'}
       });
     })
     .then((results)=> {

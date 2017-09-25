@@ -4,6 +4,8 @@
  * @description :: Server-side logic for managing Users
  */
 
+const Promise = require('bluebird')
+
 module.exports = {
 
   find: function(req,res){
@@ -176,5 +178,49 @@ module.exports = {
 
   downloadAvatar: (req, res) => {
     // handled by object server provider
+  },
+
+  /**
+   * add Prof to User's LikedProfs
+   * (PUT /users/:userId/liked-profs)
+   */
+  addLikedProf: (req, res) => {
+    sails.log.debug("UserController addLikedProf")
+    const { userId, profId } = ActionUtil.parseValues(req)
+    Promise.all([
+      QueryService.findUserById(userId),
+      QueryService.findProfById(profId)
+    ]).then(([userFound, profFound]) => {
+      if (!userFound || !profFound) {
+        return res.badRequest('User or Prof is not found')
+      } else {
+        return userFound.addLikedProfs(profFound)
+        .then(() => {
+          return res.ok('prof added to user collection')
+        })
+      }
+    })
+  },
+
+  /**
+   * remove Prof from User's LikedProf
+   * (DELETE /users/:userId/liked-profs)
+   */
+  deleteLikedProf: (req, res) => {
+    sails.log.debug("UserController deleteLikedProf")
+    const { userId, profId } = ActionUtil.parseValues(req)
+    Promise.all([
+      QueryService.findUserById(userId),
+      QueryService.findProfById(profId)
+    ]).then(([userFound, profFound]) => {
+      if (!userFound || !profFound) {
+        return res.badRequest('User or Prof is not found')
+      } else {
+        return userFound.removeLikedProfs(profFound)
+        .then(() => {
+          return res.ok('prof removed from user collection')
+        })
+      }
+    })
   },
 };

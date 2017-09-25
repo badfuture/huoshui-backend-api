@@ -47,7 +47,7 @@ module.exports = {
     var kelistCreated = null;
 
     // return if try to create a default kelist
-    if (category === 'default_liked_courses') {
+    if (category === 'default_personal_kelist') {
       return res.badRequest('The default kelist is created on user registration');
     }
 

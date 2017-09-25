@@ -200,6 +200,11 @@ module.exports = {
       foreignKey: 'prof_id'
     }); // 1:n
 
+    Prof.belongsToMany(User, {
+      as: 'LikedUsers',
+      through: 'Join_User_LikedProfs_Prof',
+      foreignKey: 'prof_id'
+    }); // m:n
     Prof.belongsToMany(Dept, {
       as: 'Depts',
       through: 'prof_dept',
