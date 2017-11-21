@@ -40,7 +40,7 @@ module.exports = {
 
     Prof.findById(pk, {
       include: includeOption,
-      sort: ActionUtil.parseSort(req) || [
+      order: ActionUtil.parseSort(req) || [
         [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
       ]
     }).then(function(recordFound) {

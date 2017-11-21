@@ -35,7 +35,11 @@ module.exports = {
     _.each(customInclude, function(includeRel){
       _.each(modelRelations, function(rel){
         if(includeRel === rel.options.as) {
-          var obj = { model: rel.target, as: rel.options.as, "duplicating":false };
+          var obj = {
+            model: rel.target,
+            as: rel.options.as,
+            duplicating: false
+          };
           if (rel.target.name == 'User') {
             obj.attributes = {exclude: ['password', 'salt']};
           } else if (rel.target.name == 'Tag') {
@@ -57,6 +61,19 @@ module.exports = {
               model: Tag,
               as: 'Tags'
             }]
+
+            if (reqModel === 'course') {
+              delete obj.through
+              delete obj.duplicating
+            }
+            if (reqModel == 'prof') {
+              delete obj.through
+              delete obj.duplicating
+              obj.include.push({
+                model: Course,
+                as: 'Course'
+              })
+            }
           } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
             obj.through = {
               as: 'meta',
@@ -84,7 +101,9 @@ module.exports = {
             }];
           }
           if(rel.associationType === 'HasMany') {
-            obj.limit = DEFAULT_POPULATE_LIMIT;
+            if (reqModel != 'course' && reqModel != 'prof') {
+              obj.limit = DEFAULT_POPULATE_LIMIT
+            }
           }
           associations.push(obj);
         }
