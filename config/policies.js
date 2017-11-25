@@ -67,7 +67,7 @@ module.exports.policies = {
   ReviewController: {
     'find': true,
     'findOne': true,
-    'create': true,
+    'create': ['isAuthorized'],
     '*': false
   },
   SchoolController: {

@@ -5,11 +5,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 
-var EXPIRES_IN_MINUTES = 60 * 24 * 30; // one month
+var EXPIRES_IN_MINUTES = 60 * 24 * 30 * 12; // one year
 var SECRET = process.env.tokenSecret || "huoshui_rock";
 var ALGORITHM = "HS256";
-var ISSUER = "https://api.huoshui.org"; //issuer of the JWT
-var AUDIENCE = "https://api.huoshui.org"; //resource being acccessed
+var ISSUER = "api.huoshui.org"; //issuer of the JWT
+var AUDIENCE = "huoshui.org"; //resource being acccessed
 
 
 // Configuration object for local strategy
@@ -25,10 +25,10 @@ var JWT_STRATEGY_CONFIG = {
   issuer: ISSUER,
   audience: AUDIENCE,
   passReqToCallback: false,
-  jwtFromRequest: ExtractJwt.fromAuthHeader()
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 };
 
-// Triggers when user authenticates via local strategy
+// Triggers after user is authenticated via local strategy
 function _onLocalStrategyAuth(email, password, next) {
   User.findOne({
       where: {email: email}
@@ -53,7 +53,7 @@ function _onLocalStrategyAuth(email, password, next) {
     });
 }
 
-// Triggers when user authenticates via JWT strategy
+// Triggers after user is authenticated via JWT strategy
 function _onJwtStrategyAuth(payload, next) {
   var user = payload.user;
   return next(null, user, {});

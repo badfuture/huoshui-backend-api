@@ -116,17 +116,18 @@ module.exports = {
   },
 
   create: (req,res) => {
-    const {courseId, professional, expressive, kind, text} = ActionUtil.parseValues(req)
-    let userId = 1
-    let profId = 1
-    // add asscoiation
-    // course, prof, user
+    const {user, courseId, professional, expressive, kind, text} = ActionUtil.parseValues(req)
 
+    let userId = req.user ? req.user.id : null
     let newReview = null
+    let course = null
 
     if (!courseId || !professional || !expressive || !kind || !text) {
       return res.badRequest('courseId, professional, expressive, kind, text fields are required')
     }
+
+    // create new review and add asscoiations for:
+    // course, prof, user
     Review.create({
       text,
       professional,
@@ -144,11 +145,12 @@ module.exports = {
       return Course
         .findOne({where: {id: courseId}})
         .then((courseFound) => {
+          course = courseFound
           courseFound.addReview(newReview)
         })
     }).then(() => {
-      return Prof
-        .findOne({where: {id: profId}})
+      return course
+        .getProf()
         .then((profFound) => {
           profFound.addReview(newReview)
         })
