@@ -71,7 +71,27 @@ module.exports = {
     var pk = ActionUtil.requirePk(req);
     var defaultInclude = [
       { model: Course, as: 'Course'},
-      { model: Comment, as: 'Comments'},
+      { model: Comment, as: 'Comments',
+        separate: false,
+        include: [{
+          model: Comment,
+          as: 'Subcomments',
+          separate: false,
+          include: [
+            { model: User, as: 'Author',
+              attributes: {
+                exclude: ['password', 'salt']
+              }
+            },
+          ]
+        }, {
+          model: User,
+          as: 'Author',
+          attributes: {
+            exclude: ['password', 'salt']
+          }
+        }]
+      },
       { model: User, as: 'Author',
         attributes: {
           exclude: ['password', 'salt']
@@ -93,5 +113,50 @@ module.exports = {
     }).catch(function(err){
       return res.serverError(err);
     });
+  },
+
+  create: (req,res) => {
+    const {courseId, professional, expressive, kind, text} = ActionUtil.parseValues(req)
+    let userId = 1
+    let profId = 1
+    // add asscoiation
+    // course, prof, user
+
+    let newReview = null
+
+    if (!courseId || !professional || !expressive || !kind || !text) {
+      return res.badRequest('courseId, professional, expressive, kind, text fields are required')
+    }
+    Review.create({
+      text,
+      professional,
+      expressive,
+      kind,
+    }).then((newRecord) => {
+      newReview = newRecord
+    }).then(() => {
+      return User
+        .findOne({where: {id: userId}})
+        .then((userFound) => {
+          userFound.addReview(newReview)
+        })
+    }).then(() => {
+      return Course
+        .findOne({where: {id: courseId}})
+        .then((courseFound) => {
+          courseFound.addReview(newReview)
+        })
+    }).then(() => {
+      return Prof
+        .findOne({where: {id: profId}})
+        .then((profFound) => {
+          profFound.addReview(newReview)
+        })
+      }).then(() => {
+	      res.created()
+	    }).catch((err) => {
+	      return res.serverError(err)
+	    })
+
   },
 };

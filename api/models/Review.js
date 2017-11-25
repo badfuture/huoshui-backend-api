@@ -13,7 +13,7 @@ module.exports = {
     downVote: {
       field: "downVote",
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
@@ -22,7 +22,7 @@ module.exports = {
     upVote: {
       field: "upVote",
       type: Sequelize.INTEGER,
-      allowNull: false,
+      allowNull: true,
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
@@ -142,8 +142,8 @@ module.exports = {
     createdAt: {
       field: "created_at",
       type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: null,
+      allowNull: true,
+      defaultValue: Sequelize.NOW,
       unique: false,
       comment: "创建时间"
     },
@@ -151,8 +151,8 @@ module.exports = {
     updatedAt: {
       field: "updated_at",
       type: Sequelize.DATE,
-      allowNull: false,
-      defaultValue: null,
+      allowNull: true,
+      defaultValue: Sequelize.NOW,
       unique: false,
       comment: "更新时间"
     },

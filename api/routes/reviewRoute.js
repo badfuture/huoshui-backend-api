@@ -1,4 +1,11 @@
 module.exports = {
+  'POST /reviews': {
+    model: "review",
+    controller: "ReviewController",
+    action: "create",
+    isPlural: false,
+    swagger: {}
+  },
   'GET /reviews': {
     model: "review",
     controller: "ReviewController",
