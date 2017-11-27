@@ -49,6 +49,7 @@ module.exports = {
       { model: Prof, as: 'Prof'},
       { model: Tag, as: 'Tags'},
       { model: Dept, as: 'Depts'},
+      { model: Review, as: 'Reviews'},
     ];
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
 

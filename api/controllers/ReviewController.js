@@ -116,49 +116,71 @@ module.exports = {
   },
 
   create: (req,res) => {
-    const {user, courseId, professional, expressive, kind, text} = ActionUtil.parseValues(req)
+    const {
+      courseId, professional, expressive, kind, text,
+      tags, rateHomework, rateAttend, rateBirdy, rateExam,
+      examprep, openbook, oldquestion, easymark
+    } = ActionUtil.parseValues(req)
+
+    // parse tags into array
+    if (typeof tags === 'string') {
+      tagsArr = tags.replace(/\[|\]| /g, '')
+      tagsArr = (tagsArr) ? tagsArr.split(',') : []
+    } else {
+      tagsArr = tags
+    }
 
     let userId = req.user ? req.user.id : null
     let newReview = null
     let course = null
 
+    // bad request if required params not found
     if (!courseId || !professional || !expressive || !kind || !text) {
       return res.badRequest('courseId, professional, expressive, kind, text fields are required')
     }
 
-    // create new review and add asscoiations for:
-    // course, prof, user
-    Review.create({
-      text,
-      professional,
-      expressive,
-      kind,
-    }).then((newRecord) => {
-      newReview = newRecord
-    }).then(() => {
-      return User
-        .findOne({where: {id: userId}})
-        .then((userFound) => {
-          userFound.addReview(newReview)
-        })
-    }).then(() => {
-      return Course
-        .findOne({where: {id: courseId}})
-        .then((courseFound) => {
-          course = courseFound
-          courseFound.addReview(newReview)
-        })
-    }).then(() => {
-      return course
-        .getProf()
-        .then((profFound) => {
-          profFound.addReview(newReview)
-        })
-      }).then(() => {
-	      res.created()
-	    }).catch((err) => {
-	      return res.serverError(err)
-	    })
+    // determine if hasExam based on rateExam
+    let hasExam = (rateExam >= 1) ? true: false
 
+    // check if course was reviewed before
+    ReviewService
+      .isReviewDuplicate(userId, courseId)
+      .then((isDuplicate) => {
+        if (isDuplicate) {
+          res.badRequest('User can only review the same course once')
+        } else {
+          // create new review and set asscoiations for:
+          // course, prof, user
+          Review.create({
+            text,
+            professional, expressive, kind,
+            rateHomework, rateAttend, rateBirdy, rateExam,
+            hasExam, examprep, openbook, oldquestion, easymark
+          }).then((newRecord) => {
+            newReview = newRecord
+          }).then(() => {
+            return newReview.setAuthor(userId)
+          }).then(() => {
+            return Course
+              .findOne({where: {id: courseId}})
+              .then((courseFound) => {
+                course = courseFound
+                courseFound.addReview(newReview)
+              })
+          }).then(() => {
+            return course
+              .getProf()
+              .then((profFound) => {
+                profFound.addReview(newReview)
+              })
+          }).then(() => {
+            return newReview.setTags(tagsArr)
+          }).then(() => {
+            res.created()
+          }).catch((err) => {
+            return res.serverError(err)
+          })
+        }
+      })
   },
 };
