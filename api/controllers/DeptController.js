@@ -15,7 +15,7 @@ module.exports = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
-      order: ActionUtil.parseSort(req),
+      order: ActionUtil.parseSort(req) || [['id', 'ASC']],
       include: includeOption
     }).then(function(recordsFound){
       return res.ok(recordsFound);
@@ -30,7 +30,7 @@ module.exports = {
       { model: School, as: 'School'},
     ];
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-    
+
     Dept.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {
