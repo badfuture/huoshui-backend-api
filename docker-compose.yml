@@ -1,7 +1,7 @@
 version: "3.2"
 services:
   webapp:
-    image: huoshui/huoshui-webapp:1.0
+    image: huoshui/huoshui-webapp:1.1
     ports:
      - "10084:10084"
     deploy:
