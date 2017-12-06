@@ -15,7 +15,7 @@ services:
     networks:
       - front_net
   api:
-    image: huoshui/huoshui-api:1.0
+    image: huoshui/huoshui-api:1.1
     restart: always
     ports:
       - "1337:1337"
