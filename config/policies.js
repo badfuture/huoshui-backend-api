@@ -86,7 +86,7 @@ module.exports.policies = {
   UserController: {
     'find': true,
     'findOne': true,
-    'uploadAvatar': true,
+    'uploadAvatar': ['isAuthorized'],
     'addLikedProf': true,
     'deleteLikedProf': true,
     '*': false

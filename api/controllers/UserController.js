@@ -116,24 +116,17 @@ module.exports = {
    * (POST /user/avatar)
    */
   uploadAvatar: (req, res) => {
-    const imgDir = require('path').resolve(sails.config.appPath, 'assets/images')
+    const imgDir = require('path').resolve(sails.config.appPath, '.tmp/images')
     sails.log.debug('UserController: avatar upload local path', imgDir)
 
-    const token = CipherService.verifyToken(req)
-    const tokenUser = token.user
-    if (!tokenUser) {
-      return res.unauthorized()
-    }
-
+    const userId = req.user ? req.user.id : null
     const uuid = require('node-uuid')
-    const filename = `user_avatar_${tokenUser.id}_${uuid.v1()}.jpeg`
+    const filename = `u/${userId}/avatar_${uuid.v1()}.jpg`
     sails.log.debug('UserController: avatar filename', filename)
-
-    let imgUrl = ''
 
     req.file('avatar').upload({
       dirname: imgDir,
-      maxBytes: 10000000, // limit upload size to ~10MB
+      maxBytes: 5000000, // limit upload size to ~5MB
       saveAs: (__newFileStream, next) => {
         return next(undefined, filename)
       }
@@ -151,20 +144,12 @@ module.exports = {
       ObjectStorageService
       .upload(filename, localPath)
       .then((resp) => {
-        const ossDomain = sails.config.objectStorage.host
-        return ossDomain + '/' + filename
-      })
-      .then((ossImgUrl) => {
-        imgUrl = ossImgUrl
-        return User.findOne({
-          where: {
-            id: tokenUser.id
-          }
-        })
+        ObjectStorageService.refreshCdn(filename)
+        return User.findById(userId)
       })
       .then((userFound) => {
         userFound.update({
-          avatar: imgUrl
+          avatar: filename
         })
         .then(() => {
           return res.created(userFound)

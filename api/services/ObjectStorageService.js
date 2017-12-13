@@ -1,8 +1,12 @@
 const qiniu = require('qiniu')
 
-const accessKey = sails.config.objectStorage.accessKey
-const secretKey = sails.config.objectStorage.secretKey
-const bucket = sails.config.objectStorage.bucket
+const {accessKey, secretKey, bucket, domain} = sails.config.objectStorage
+
+createCdnManager = (accessKey, secretKey) => {
+  const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+  const cdnManager = new qiniu.cdn.CdnManager(mac);
+  return cdnManager
+}
 
 createUploadToken = (accessKey, secretKey, bucket) => {
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
@@ -19,7 +23,7 @@ createFormUploader = () => {
 module.exports = {
   upload: (filename, localPath) => {
 
-    const uploadToken = createUploadToken(accessKey, secretKey, bucket)
+    const uploadToken = createUploadToken(accessKey, secretKey, `${bucket}:${filename}`)
     const formUploader = createFormUploader()
     const putExtra = new qiniu.form_up.PutExtra()
 
@@ -27,10 +31,25 @@ module.exports = {
       formUploader.putFile(uploadToken, filename, localPath, putExtra,
         (respErr, respBody, respInfo) => {
           if (respErr) {
+            sails.log.error('OSS upload error', respErr)
             return reject(respErr)
           }
           resolve(respBody)
       })
+    })
+  },
+
+  refreshCdn: (filename) => {
+    const cdnManager = createCdnManager(accessKey, secretKey)
+    var urlsToRefresh = [
+      `${domain}/${filename}`,
+      `${domain}/${filename}?imageView2/1/w/50/h/50`,
+      `${domain}/${filename}?imageView2/1/w/180/h/180`
+    ]
+    cdnManager.refreshUrls(urlsToRefresh, (err, respBody, respInfo) => {
+      if (err) {
+        sails.log.error('refreshCdn upload error', err)
+      }
     })
   }
 }

@@ -72,6 +72,30 @@ module.exports = {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar'))
       }
     },
+    avatarSmall: {
+      field: "avatarSmall",
+      type: Sequelize.VIRTUAL,
+      allowNull: true,
+      defaultValue: 'default_avatar.jpg?imageView2/1/w/50/h/50',
+      unique: false,
+      comment: "头像 (50x50)",
+      get() {
+        return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/50/h/50'
+      }
+    },
+    avatarLarge: {
+      field: "avatarLarge",
+      type: Sequelize.VIRTUAL,
+      allowNull: true,
+      defaultValue: 'default_avatar.jpg?imageView2/1/w/180/h/180',
+      unique: false,
+      comment: "头像 (180x180)",
+      get() {
+        return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/180/h/180'
+      }
+    },
+
+
     gender: {
       field: "gender",
       type: Sequelize.ENUM('男', '女'),
