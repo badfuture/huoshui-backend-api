@@ -51,16 +51,27 @@ module.exports = {
             obj.through = {
               attributes: []
             }
-            obj.include = [{
-              model: User,
-              as: 'Author',
-              attributes: {
-                exclude: ['password', 'salt']
+            obj.include = [
+              {
+                model: User,
+                as: 'Author',
+                attributes: {
+                  exclude: ['password', 'salt']
+                }
+              },
+              {
+                model: Course,
+                as: 'Course'
+              },
+              {
+                model: Prof,
+                as: 'Prof'
+              },
+              {
+                model: Tag,
+                as: 'Tags'
               }
-            },{
-              model: Tag,
-              as: 'Tags'
-            }]
+            ]
 
             if (reqModel === 'course') {
               delete obj.through
