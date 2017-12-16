@@ -98,9 +98,6 @@ docker stack deploy -c docker-compose.yml huoshui-stack
 * Bash: 服务器环境自动化
 
 ## 维护人员
-
-* **wzbazinga** -  [wzbazinga github](https://github.com/wzbazinga)
-
 * **游侠** -  [paladinze github](https://github.com/paladinze)
 
 ## 授权许可
