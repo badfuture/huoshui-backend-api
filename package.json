@@ -11,7 +11,7 @@
     "bluebird": "^3.5.0",
     "continuation-local-storage": "^3.2.0",
     "csv": "^1.1.0",
-    "ejs": "2.3.4",
+    "ejs": "2.5.5",
     "flaverr": "^1.0.0",
     "github": "^9.2.0",
     "include-all": "~0.1.6",
