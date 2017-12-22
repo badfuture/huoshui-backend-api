@@ -35,7 +35,6 @@ module.exports = {
       { model: School, as: 'School'}
     ];
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
     User.findById(pk, {
       include: includeOption
     }).then(function(recordFound) {

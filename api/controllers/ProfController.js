@@ -34,10 +34,10 @@ module.exports = {
       { model: School, as: 'School'},
       { model: Position, as: 'Position'},
       { model: Course, as: 'Courses'},
+      { model: Review, as: 'Reviews'},
       { model: Tag, as: 'Tags'}
     ];
     var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
     Prof.findById(pk, {
       include: includeOption,
       order: ActionUtil.parseSort(req) || [

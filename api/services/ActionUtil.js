@@ -80,10 +80,6 @@ module.exports = {
             if (reqModel == 'prof') {
               delete obj.through
               delete obj.duplicating
-              obj.include.push({
-                model: Course,
-                as: 'Course'
-              })
             }
           } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
             obj.through = {
