@@ -148,7 +148,8 @@ module.exports = {
 				where: {
 					provider,
 					providerUid,
-				}
+				},
+				QueryService.populateUser(['Reviews']),
 			})
 		})
 		.then((userFound) => {

@@ -95,7 +95,6 @@ module.exports = {
       }
     },
 
-
     gender: {
       field: "gender",
       type: Sequelize.ENUM('男', '女'),

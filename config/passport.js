@@ -31,7 +31,8 @@ var JWT_STRATEGY_CONFIG = {
 // Triggers after user is authenticated via local strategy
 function _onLocalStrategyAuth(email, password, next) {
   User.findOne({
-      where: {email: email}
+      where: {email: email},
+      include: QueryService.populateUser(['Reviews']),
     })
     .then((user) => {
       if (!user) return next(null, false, {

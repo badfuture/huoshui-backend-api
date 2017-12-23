@@ -1,11 +1,19 @@
-var util = require('util');
-var _ = require('lodash');
-var mergeDefaults = require('merge-defaults');
-var flaverr = require('flaverr');
+var util = require('util')
+var _ = require('lodash')
+var mergeDefaults = require('merge-defaults')
+var flaverr = require('flaverr')
 
-var JSONP_CALLBACK_PARAM = 'callback';
+var JSONP_CALLBACK_PARAM = 'callback'
 
 module.exports = {
+
+  populateAll: (modelName) => {
+    let include = []
+    const relations = sails.models[modelName].associations
+    _.each(relations, (relation) => {
+      include.push(relation.options.as)
+    })
+  },
 
   parsePopulate: function (req, defaultInclude, targetModel) {
     var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;

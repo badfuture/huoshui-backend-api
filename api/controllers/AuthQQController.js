@@ -123,7 +123,8 @@ module.exports = {
 				where: {
 					provider,
 					providerUid: openId,
-				}
+				},
+				QueryService.populateUser(['Reviews'])
 			})
 		})
 		.then((userFound) => {
