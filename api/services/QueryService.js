@@ -16,18 +16,6 @@ const initPopulate = (model, include) => {
 }
 
 module.exports ={
-  findProfById: (id) => {
-    return Prof.findOne({
-      where: {id}
-    })
-  },
-
-  findUserById: (id) => {
-    return User.findOne({
-      where: {id}
-    })
-  },
-
   // populate include option for User model
   populateUser: (includeList) => {
     let model = User

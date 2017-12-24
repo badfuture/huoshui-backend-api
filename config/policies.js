@@ -12,9 +12,6 @@
 
 
 module.exports.policies = {
-
-  //remember to enable this for jwt
-  //'*': ['isAuthorized'], // Everything resctricted by default
   AuthController: {
     '*': true
   },
@@ -87,8 +84,10 @@ module.exports.policies = {
     'find': true,
     'findOne': true,
     'uploadAvatar': ['isAuthorized'],
-    'addLikedProf': true,
-    'deleteLikedProf': true,
+    'likeCourse': ['isAuthorized'],
+    'unlikeCourse': ['isAuthorized'],
+    'likeProf': ['isAuthorized'],
+    'unlikeProf': ['isAuthorized'],
     '*': false
   },
   SearchController: {

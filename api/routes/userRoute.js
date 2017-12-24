@@ -1,5 +1,6 @@
 
 module.exports = {
+  // get user info
   'GET /users': {
     model: "user",
     controller: "UserController",
@@ -14,6 +15,7 @@ module.exports = {
     isPlural: false,
     swagger: {}
   },
+  // upload avatar
   'POST /user/avatar': {
     model: "user",
     controller: "UserController",
@@ -21,19 +23,27 @@ module.exports = {
     isPlural: false,
     swagger: {}
   },
-  'PUT /users/:userId/liked-profs': {
+  // like and unlike course
+  'PUT /users/:userId/liked_courses': {
     model: "user",
     controller: "UserController",
-    action: "addLikedProf",
+    action: "likeCourse",
   },
-  'PUT /users/:userId/liked-profs/:profId': {
+  'DELETE /users/:userId/liked_courses/:courseId': {
     model: "user",
     controller: "UserController",
-    action: "addLikedProf",
+    action: "unlikeCourse",
   },
-  'DELETE /users/:userId/liked-profs/:profId': {
+
+  // like and unlike prof
+  'PUT /users/:userId/liked_profs': {
     model: "user",
     controller: "UserController",
-    action: "deleteLikedProf",
+    action: "likeProf",
+  },
+  'DELETE /users/:userId/liked_profs/:profId': {
+    model: "user",
+    controller: "UserController",
+    action: "unlikeProf",
   },
 }

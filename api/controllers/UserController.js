@@ -160,16 +160,53 @@ module.exports = {
     })
   },
 
-  downloadAvatar: (req, res) => {
-    // handled by object server provider
+  /**
+   * add Prof to User's LikedProfs
+   */
+  likeCourse: (req, res) => {
+    sails.log.debug("UserController likeCourse")
+    const { userId, courseId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Course.findById(courseId),
+    ]).then(([userFound, courseFound]) => {
+      if (!userFound || !courseFound) {
+        return res.badRequest('User or course is not found')
+      } else {
+        return userFound.addLikedCourses(courseFound)
+        .then(() => {
+          return res.ok('course added to user collection')
+        })
+      }
+    })
   },
 
   /**
    * add Prof to User's LikedProfs
-   * (PUT /users/:userId/liked-profs)
    */
-  addLikedProf: (req, res) => {
-    sails.log.debug("UserController addLikedProf")
+  unlikeCourse: (req, res) => {
+    sails.log.debug("UserController unlikeCourse")
+    const { userId, courseId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Course.findById(courseId)
+    ]).then(([userFound, courseFound]) => {
+      if (!userFound || !courseFound) {
+        return res.badRequest('User or course is not found')
+      } else {
+        return userFound.removeLikedCourses(courseFound)
+        .then(() => {
+          return res.ok('course removed from user collection')
+        })
+      }
+    })
+  },
+
+  /**
+   * add Prof to User's LikedProfs
+   */
+  likeProf: (req, res) => {
+    sails.log.debug("UserController likeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
     Promise.all([
       QueryService.findUserById(userId),
@@ -188,10 +225,9 @@ module.exports = {
 
   /**
    * remove Prof from User's LikedProf
-   * (DELETE /users/:userId/liked-profs)
    */
-  deleteLikedProf: (req, res) => {
-    sails.log.debug("UserController deleteLikedProf")
+  unlikeProf: (req, res) => {
+    sails.log.debug("UserController unlikeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
     Promise.all([
       QueryService.findUserById(userId),
