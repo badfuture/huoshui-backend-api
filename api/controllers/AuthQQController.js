@@ -124,7 +124,7 @@ module.exports = {
 					provider,
 					providerUid: openId,
 				},
-				QueryService.populateUser(['Reviews'])
+				include: QueryService.populateUser(['Reviews'])
 			})
 		})
 		.then((userFound) => {

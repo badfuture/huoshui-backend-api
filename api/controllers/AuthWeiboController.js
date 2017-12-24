@@ -149,7 +149,7 @@ module.exports = {
 					provider,
 					providerUid,
 				},
-				QueryService.populateUser(['Reviews']),
+				include: QueryService.populateUser(['Reviews']),
 			})
 		})
 		.then((userFound) => {
