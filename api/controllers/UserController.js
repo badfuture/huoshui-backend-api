@@ -209,8 +209,8 @@ module.exports = {
     sails.log.debug("UserController likeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
     Promise.all([
-      QueryService.findUserById(userId),
-      QueryService.findProfById(profId)
+      User.findById(userId),
+      Prof.findById(profId)
     ]).then(([userFound, profFound]) => {
       if (!userFound || !profFound) {
         return res.badRequest('User or Prof is not found')
@@ -230,8 +230,8 @@ module.exports = {
     sails.log.debug("UserController unlikeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
     Promise.all([
-      QueryService.findUserById(userId),
-      QueryService.findProfById(profId)
+      User.findById(userId),
+      Prof.findById(profId)
     ]).then(([userFound, profFound]) => {
       if (!userFound || !profFound) {
         return res.badRequest('User or Prof is not found')

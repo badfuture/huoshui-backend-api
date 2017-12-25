@@ -144,6 +144,11 @@ module.exports = {
       as: 'Prof',
       foreignKey: 'prof_id'
     }); // n:1
+    Course.belongsToMany(User, {
+      as: 'LikedUsers',
+      through: 'Join_User_LikedCourses_Course',
+      foreignKey: 'course_id'
+    }); // m:n
     Course.belongsToMany(Tag, {
       as: 'Tags',
       through: {

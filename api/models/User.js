@@ -2,6 +2,12 @@
 const url = require('url')
 const domain = require('../constants/domain')
 
+const defaultAvatarIcon = 'default_avatar.jpg'
+const defaultAvatar = url.resolve(domain.OBJECT_STORAGE, defaultAvatarIcon)
+const defaultAvatarSmall = defaultAvatar + '?imageView2/1/w/50/h/50'
+const defaultAvatarLarge = defaultAvatar + '?imageView2/1/w/180/h/180'
+
+
 module.exports = {
   attributes: {
     username: {
@@ -65,7 +71,7 @@ module.exports = {
       field: "avatar",
       type: Sequelize.STRING,
       allowNull: true,
-      defaultValue: 'default_avatar.jpg',
+      defaultValue: defaultAvatar,
       unique: false,
       comment: "头像",
       get() {
@@ -76,7 +82,7 @@ module.exports = {
       field: "avatarSmall",
       type: Sequelize.VIRTUAL,
       allowNull: true,
-      defaultValue: 'default_avatar.jpg?imageView2/1/w/50/h/50',
+      defaultValue: defaultAvatarSmall,
       unique: false,
       comment: "头像 (50x50)",
       get() {
@@ -87,7 +93,7 @@ module.exports = {
       field: "avatarLarge",
       type: Sequelize.VIRTUAL,
       allowNull: true,
-      defaultValue: 'default_avatar.jpg?imageView2/1/w/180/h/180',
+      defaultValue: defaultAvatarLarge,
       unique: false,
       comment: "头像 (180x180)",
       get() {
@@ -150,7 +156,7 @@ module.exports = {
     }); // m:n
     User.belongsToMany(Course, {
       as: 'LikedCourses',
-      through: 'Join_User_LikedCourses_Prof',
+      through: 'Join_User_LikedCourses_Course',
       foreignKey: 'user_id'
     }); // m:n
     User.belongsToMany(Prof, {

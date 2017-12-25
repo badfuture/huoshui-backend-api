@@ -11,7 +11,7 @@ module.exports = {
   associations: function() {
   },
   options: {
-    tableName: 'Join_User_LikedProfs_Prof',
+    tableName: 'Join_User_LikedCourses_Course',
     underscored: true,
     freezeTableName: true,
     timestamps: true,
