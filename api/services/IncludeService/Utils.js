@@ -40,7 +40,7 @@ const applyCommonFilter = (include, obj) => {
   }
 
   // include count in Tag's metadata
-  if (include == 'Tag') {
+  if (include == 'Tags') {
     obj.through = {
       as: 'stat',
       attributes: ['count']
