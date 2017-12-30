@@ -8,8 +8,7 @@ const Promise = require('sequelize').Promise;
 const _ = require('lodash')
 
 module.exports = {
-
-  find: function(req,res){
+  find: (req,res) => {
 
     // get search query string
     const query = req.allParams().query
@@ -22,12 +21,8 @@ module.exports = {
 
     // promise for course search
     const promiseFindCourse = () => {
-      const defaultInclude = [
-        { model: School, as: 'School'},
-        { model: Prof, as: 'Prof'},
-        { model: Dept, as: 'Depts'},
-      ]
-      const includeOption = ActionUtil.parsePopulate(req, defaultInclude, 'course')
+      const includes = ['School', 'Prof', 'Depts']
+      const includeOption = IncludeService.CourseInclude(includes)
       const whereOption = {
         $or: [
     			{ name: { $like: '%' + query + '%' } },
@@ -49,7 +44,8 @@ module.exports = {
         { model: Tag, as: 'Tags'},
         { model: Course, as: 'Courses'}
       ]
-      const includeOption = ActionUtil.parsePopulate(req, defaultInclude, 'prof')
+      const includes = ['School', 'Position', 'Depts', 'Tags', 'Courses']
+      const includeOption = IncludeService.ProfInclude(includes)
       const whereOption = {
         $or: [
     			{ name: { $like: '%' + query + '%' } },
@@ -84,4 +80,4 @@ module.exports = {
     })
   },
 
-};
+}

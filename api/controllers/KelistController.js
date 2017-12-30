@@ -5,16 +5,13 @@
  */
 
 module.exports = {
-	find: function(req,res){
-    var defaultInclude = [];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
+	find: (req,res) => {
     Kelist.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: includeOption
+      include: ActionUtil.parsePopulate(req),
     }).then(function(recordsFound){
       return res.ok(recordsFound);
     }).catch(function(err){
@@ -23,12 +20,10 @@ module.exports = {
   },
 
   findOne: function(req,res){
-    var pk = ActionUtil.requirePk(req);
-    var defaultInclude = [];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
+    const pk = ActionUtil.requirePk(req)
 
     Kelist.findById(pk, {
-      include: includeOption
+      include: ActionUtil.parsePopulate(req)
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       res.ok(recordFound);

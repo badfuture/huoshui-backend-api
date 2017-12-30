@@ -7,19 +7,12 @@
 module.exports = {
 
   find: function(req,res){
-    var defaultInclude = [
-      { model: School, as: 'School'},
-      { model: Prof, as: 'Prof'},
-      { model: Dept, as: 'Depts'},
-    ];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
     const queryParams = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: includeOption,
+      include: ActionUtil.parsePopulate(req),
       distinct: true
     }
 
@@ -43,21 +36,15 @@ module.exports = {
   },
 
   findOne: function(req,res){
-    var pk = ActionUtil.requirePk(req);
-    var defaultInclude = [
-      { model: School, as: 'School'},
-      { model: Prof, as: 'Prof'},
-      { model: Tag, as: 'Tags'},
-      { model: Dept, as: 'Depts'},
-      { model: Review, as: 'Reviews'},
-    ];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
+    const pk = ActionUtil.requirePk(req)
+    const includes = ActionUtil.parsePopulate(req)
+    const sort = ActionUtil.parseSort(req) || [
+      [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
+    ]
 
     Course.findById(pk, {
-      include: includeOption,
-      order: ActionUtil.parseSort(req) || [
-        [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
-      ],
+      include: includes,
+      order: OrderService.validateOrder(includes, 'Reviews') ? sort : null
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       res.ok(recordFound);
@@ -65,6 +52,5 @@ module.exports = {
       return res.serverError(err);
     });
   },
-
 
 };

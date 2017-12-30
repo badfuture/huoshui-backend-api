@@ -8,41 +8,30 @@ const Promise = require('bluebird')
 
 module.exports = {
 
-  find: function(req,res){
-    var defaultInclude = [
-      { model: Dept, as: 'Dept'},
-      { model: School, as: 'School'}
-    ];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
+  find: (req,res) => {
     User.findAll({
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: includeOption
+      include: ActionUtil.parsePopulate(req)
     }).then(function(recordsFound){
-      return res.ok(recordsFound);
+      return res.ok(recordsFound)
     }).catch(function(err){
-      return res.serverError(err);
-    });
+      return res.serverError(err)
+    })
   },
 
-  findOne: function(req,res){
-    var pk = ActionUtil.requirePk(req);
-    var defaultInclude = [
-      { model: Dept, as: 'Dept'},
-      { model: School, as: 'School'}
-    ];
-    var includeOption = ActionUtil.parsePopulate(req, defaultInclude);
+  findOne: (req,res) => {
+    const pk = ActionUtil.requirePk(req)
     User.findById(pk, {
-      include: includeOption
+      include: ActionUtil.parsePopulate(req)
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
-      res.ok(recordFound);
+      res.ok(recordFound)
     }).catch(function(err){
-      return res.serverError(err);
-    });
+      return res.serverError(err)
+    })
   },
 
   create: function(req,res){

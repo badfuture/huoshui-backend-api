@@ -3,129 +3,30 @@ var _ = require('lodash')
 var mergeDefaults = require('merge-defaults')
 var flaverr = require('flaverr')
 
-var JSONP_CALLBACK_PARAM = 'callback'
+const JSONP_CALLBACK_PARAM = 'callback'
+const DEFAULT_POPULATE_LIMIT = 30
 
 module.exports = {
 
-  populateAll: (modelName) => {
-    let include = []
-    const relations = sails.models[modelName].associations
-    _.each(relations, (relation) => {
-      include.push(relation.options.as)
-    })
-  },
+  parsePopulate: (req, targetModel) => {
+    const modelName = targetModel ? targetModel : req.options.model
+    const modelRelations = sails.models[modelName].associations
 
-  parsePopulate: function (req, defaultInclude, targetModel) {
-    var DEFAULT_POPULATE_LIMIT = req._sails.config.blueprints.defaultLimit || 30;
-    var customInclude = req.param('populate');
-    var reqModel = targetModel ? targetModel : req.options.model;
-    var modelRelations = sails.models[reqModel].associations;
-
-    if (!customInclude) {
-      // use default includes if param not exist
-      return defaultInclude;
-    } else if (customInclude === 'all') {
-      // add support for all includes
-      customInclude = [];
-      _.each(modelRelations, function(rel){
-        customInclude.push(rel.options.as);
-      });
+    customInclude = req.param('populate')
+    if (customInclude === 'all') {
+      // do nothing and pass the string forward
     } else if (typeof customInclude === 'string') {
-      // add support for array format
+      // parse populate string into array
       // /model?populate=alias1,alias2,alias3
       // /model?populate=[alias1,alias2,alias3]
-      customInclude = customInclude.replace(/\[|\]/g, '');
-      customInclude = (customInclude) ? customInclude.split(',') : [];
+      customInclude = customInclude.replace(/\[|\]/g, '')
+      customInclude = (customInclude) ? customInclude.split(',') : []
     }
 
-    var associations = [];
-    // iterate through target model associations
-    _.each(customInclude, function(includeRel){
-      _.each(modelRelations, function(rel){
-        if(includeRel === rel.options.as) {
-          var obj = {
-            model: rel.target,
-            as: rel.options.as,
-            duplicating: false
-          };
-          if (rel.target.name == 'User') {
-            obj.attributes = {exclude: ['password', 'salt']};
-          } else if (rel.target.name == 'Tag') {
-            obj.through = {
-              as: 'stat',
-              attributes: ['count']
-            };
-          } else if (rel.target.name == 'Review') {
-            obj.through = {
-              attributes: []
-            }
-            obj.include = [
-              {
-                model: User,
-                as: 'Author',
-                attributes: {
-                  exclude: ['password', 'salt']
-                }
-              },
-              {
-                model: Course,
-                as: 'Course'
-              },
-              {
-                model: Prof,
-                as: 'Prof'
-              },
-              {
-                model: Tag,
-                as: 'Tags'
-              }
-            ]
-
-            if (reqModel === 'course') {
-              delete obj.through
-              delete obj.duplicating
-            }
-            if (reqModel == 'prof') {
-              delete obj.through
-              delete obj.duplicating
-            }
-          } else if (rel.target.name == 'Course' && reqModel == 'kelist') {
-            obj.through = {
-              as: 'meta',
-              attributes: ['brief_comment']
-            };
-          } else if (rel.target.name == 'Comment' && reqModel == 'review') {
-            obj.separate = false
-            obj.include = [{
-              model: Comment,
-              as: 'Subcomments',
-              separate: false,
-              include: [
-                { model: User, as: 'Author',
-                  attributes: {
-                    exclude: ['password', 'salt']
-                  }
-                },
-              ]
-            }, {
-              model: User,
-              as: 'Author',
-              attributes: {
-                exclude: ['password', 'salt']
-              }
-            }];
-          }
-          if(rel.associationType === 'HasMany') {
-            if (reqModel != 'course' && reqModel != 'prof') {
-              obj.limit = DEFAULT_POPULATE_LIMIT
-            }
-          }
-          associations.push(obj);
-        }
-      });
-    });
-
-    return associations;
+    // dynamically call include parsing function based on model name
+    const fnName = `${modelName.charAt(0).toUpperCase() + modelName.slice(1)}Include`
+    var IncludeFn = IncludeService[fnName]
+    return IncludeFn(customInclude)
   },
 
   parseScope: (req, defaultScope) => {

@@ -32,7 +32,7 @@ var JWT_STRATEGY_CONFIG = {
 function _onLocalStrategyAuth(email, password, next) {
   User.findOne({
       where: {email: email},
-      include: QueryService.populateUser(['Reviews']),
+      include: IncludeService.UserInclude(['Reviews']),
     })
     .then((user) => {
       if (!user) return next(null, false, {

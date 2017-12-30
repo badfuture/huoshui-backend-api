@@ -41,5 +41,8 @@
     "url": "git://github.com/badfuture/huoshui-backend-api.git"
   },
   "author": "ze",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jsdoc": "^3.5.5"
+  }
 }

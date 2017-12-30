@@ -23,19 +23,13 @@ const getNormalizedComments = (comments) => {
 
 
 module.exports = {
-  find: function(req,res){
-    let defaultInclude = [
-      { model: Course, as: 'Course'},
-      { model: Tag, as: 'Tags'}
-    ];
-    let includeOption = ActionUtil.parsePopulate(req, defaultInclude);
-
+  find: (req,res) => {
     const queryParams = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
-      include: includeOption,
+      include: ActionUtil.parsePopulate(req),
       distinct: true
     }
 
@@ -67,45 +61,17 @@ module.exports = {
 
   },
 
-  findOne: function(req,res){
-    var pk = ActionUtil.requirePk(req);
-    var defaultInclude = [
-      { model: Course, as: 'Course'},
-      { model: Comment, as: 'Comments',
-        separate: false,
-        include: [{
-          model: Comment,
-          as: 'Subcomments',
-          separate: false,
-          include: [
-            { model: User, as: 'Author',
-              attributes: {
-                exclude: ['password', 'salt']
-              }
-            },
-          ]
-        }, {
-          model: User,
-          as: 'Author',
-          attributes: {
-            exclude: ['password', 'salt']
-          }
-        }]
-      },
-      { model: User, as: 'Author',
-        attributes: {
-          exclude: ['password', 'salt']
-        }
-      },
-      { model: Tag, as: 'Tags'}
-    ];
+  findOne: (req,res) => {
+    const pk = ActionUtil.requirePk(req)
+    const includes = ActionUtil.parsePopulate(req)
+    const sort = ActionUtil.parseSort(req) || [
+      [{ model: Comment, as: 'Comments'}, 'datePosted', 'DESC'],
+      [{ model: Comment, as: 'Comments'}, {model: Comment, as: 'Subcomments'}, 'datePosted', 'DESC']
+    ]
 
     Review.findById(pk, {
-      include: ActionUtil.parsePopulate(req, defaultInclude),
-      order: ActionUtil.parseSort(req) || [
-        [{ model: Comment, as: 'Comments'}, 'datePosted', 'DESC'],
-        [{ model: Comment, as: 'Comments'}, {model: Comment, as: 'Subcomments'}, 'datePosted', 'DESC']
-      ],
+      include: includes,
+      order: OrderService.validateOrder(includes, 'Reviews') ? sort : null
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       recordFound.set('Comments', getNormalizedComments(recordFound.Comments))

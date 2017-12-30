@@ -1,19 +1,19 @@
 module.exports = {
-  'GET /feedback': {
+  'GET /feedbacks': {
     model: "feedback",
     controller: "FeedbackController",
     action: "find",
     isPlural: true,
     swagger: {}
   },
-  'GET /feedback/:id': {
+  'GET /feedbacks/:id': {
     model: "feedback",
     controller: "FeedbackController",
     action: "findOne",
     isPlural: false,
     swagger: {}
   },
-  'POST /feedback': {
+  'POST /feedbacks': {
     model: "feedback",
     controller: "FeedbackController",
     action: "create"

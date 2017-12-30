@@ -41,11 +41,6 @@ module.exports.policies = {
     'findOne': true,
     '*': false
   },
-  CourseStatController: {
-    'find': true,
-    'findOne': true,
-    '*': false
-  },
   DeptController: {
     'find': true,
     'findOne': true,
