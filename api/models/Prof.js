@@ -78,8 +78,8 @@ module.exports = {
       unique: false,
       comment: "电话"
     },
-    official_site: {
-      field: "official_site",
+    officialSite: {
+      field: "officialSite",
       type: Sequelize.STRING,
       allowNull: true,
       defaultValue: null,
@@ -154,16 +154,7 @@ module.exports = {
       unique: false,
       comment: "教育成果"
     },
-    pastCourses: {
-      field: "pastCourses",
-      type: Sequelize.TEXT,
-      allowNull: true,
-      defaultValue: null,
-      exampleValue: "过去教过的课程",
-      unique: false,
-      comment: "过去课程"
-    },
-
+    
     // redundent stats (used to reduce # of api calls)
     scoreOverall: {
       field: "scoreOverall",

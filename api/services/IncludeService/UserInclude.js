@@ -37,6 +37,17 @@ module.exports = (includeList = []) => {
           as: 'Tags'
         }
       ]
+    } else if (include == 'LikedProfs') {
+      obj.include = [
+        {
+          model: Dept,
+          as: 'Depts'
+        },
+        {
+          model: Position,
+          as: 'Position'
+        }
+      ]
     } else if (include == 'LikedCourses') {
       obj.include = [
         {

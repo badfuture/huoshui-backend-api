@@ -262,7 +262,7 @@ var seedProfs = function(job, next) {
     prof.research = entry.research;
     prof.achievement = entry.achievement;
     prof.legacyCourses = entry.legacyCourses;
-    prof.official_site = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID=" + entry.code;
+    prof.officialSite = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID=" + entry.code;
     sails.log.info("seed prof " + prof.name);
     Prof.create(prof)
     .then(function(results){
@@ -410,14 +410,14 @@ var seedReviews = function(job, next) {
     review.oldquestion = entry.exam.oldquestion.checked;
     review.easymark = entry.exam.easiness.checked;
 
-    //optional: exam data
-    review.meanAttend = entry.attendance.value + 1;
-    review.meanBirdy = entry.bird.value + 1;
-    review.meanHomework = entry.homework.value + 1;
-    review.meanExam = 0;
+    //optional: secondary data
+    review.rateAttend = entry.attendance.value + 1;
+    review.rateBirdy = entry.bird.value + 1;
+    review.rateHomework = entry.homework.value + 1;
+    review.rateExam = 0;
     if (entry.exam.difficulty && entry.exam.difficulty.value
                               && entry.exam.difficulty.value > 0) {
-      review.meanExam = entry.exam.difficulty.value;
+      review.rateExam = entry.exam.difficulty.value;
     } else if (review.hasExam) {
       var examEasyVal = getExamEasyVal({
         examprep: review.examprep,
@@ -425,7 +425,7 @@ var seedReviews = function(job, next) {
         oldquestion: review.oldquestion,
         easymark: review.easymark
       });
-      review.meanExam = Math.round(5 - examEasyVal);
+      review.rateExam = Math.round(5 - examEasyVal);
     }
 
     //optional: upvote/downvote
@@ -536,7 +536,6 @@ var seedReviews = function(job, next) {
     })
     .catch((err)=> {
       if (err) {
-        console.log(review.meanExam);
         sails.log.error("course name", entry.courseName );
         sails.log.error("prof name", entry.profName);
         sails.log.error("review", review);
