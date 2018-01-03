@@ -99,6 +99,7 @@ module.exports = {
     let userId = req.user ? req.user.id : null
     let newReview = null
     let course = null
+    let prof = null
 
     // bad request if required params not found
     if (!courseId || !professional || !expressive || !kind || !text) {
@@ -137,8 +138,13 @@ module.exports = {
             return course
               .getProf()
               .then((profFound) => {
+                prof = profFound
                 profFound.addReview(newReview)
               })
+          }).then(() => {
+            return CourseStatService.updateStat(course)
+          }).then(() => {
+            return ProfStatService.updateStat(prof)
           }).then(() => {
             return newReview.setTags(tagsArr)
           }).then(() => {
