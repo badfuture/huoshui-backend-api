@@ -395,6 +395,7 @@ var seedReviews = function(job, next) {
   async.eachSeries(reviewData.results, function(entry, next){
     var reviewCreated = null;
     var courseFound = null;
+    var profFound = null
     var review = {};
 
     //must
@@ -459,7 +460,8 @@ var seedReviews = function(job, next) {
         where: {"name": entry.profName}
       })
     })
-    .then((profFound)=> {
+    .then((results)=> {
+      profFound = results
       return profFound.addReview(reviewCreated);
     })
     .then(function(){
@@ -482,6 +484,12 @@ var seedReviews = function(job, next) {
       } else {
         return courseFound.addReview(reviewCreated);
       }
+    })
+    .then(() => {
+      return CourseStatService.updateStat(courseFound)
+    })
+    .then(() => {
+      return ProfStatService.updateStat(profFound)
     })
     .then(()=> {
       var tagsArray = entry.tags;
