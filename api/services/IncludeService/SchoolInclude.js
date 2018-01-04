@@ -15,7 +15,7 @@ module.exports = (includeList = []) => {
   includeList.forEach((include) => {
     if (!getIncludeModel(model, include)) { return }
     let obj = initInclude(model, include)
-    obj = applyCommonFilter(include, obj)
+    obj = applyCommonFilter(model, include, obj)
 
     result.push(obj)
   })

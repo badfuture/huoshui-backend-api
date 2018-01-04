@@ -60,7 +60,7 @@ module.exports = (includeList = []) => {
         }
       ]
     } else {
-      obj = applyCommonFilter(include, obj)
+      obj = applyCommonFilter(model, include, obj)
     }
 
     result.push(obj)

@@ -21,7 +21,7 @@ module.exports = (includeList = []) => {
         attributes: ['brief_comment']
       }
     } else {
-      obj = applyCommonFilter(include, obj)
+      obj = applyCommonFilter(model, include, obj)
     }
 
     result.push(obj)

@@ -2,7 +2,7 @@
 /**
  * get the model name for a relation of a model
  * @param  {Sequelize.Modal} model   model being queried
- * @param  {string} include relation to be included
+ * @param  {Sequelize.Modal} include relation to be included
  * @return {*}         model name of the relation
  */
 const getIncludeModel = (model, include) => {
@@ -31,9 +31,11 @@ const initInclude = (model, include) => {
   return obj
 }
 
-const applyCommonFilter = (include, obj) => {
-  // hide creds when including User
-  if (include === 'User') {
+const applyCommonFilter = (model, include, obj) => {
+  const modelOfInclude = getIncludeModel(model, include)
+
+  // hide creds when including User model
+  if (modelOfInclude === User) {
     obj.attributes = {
       exclude: ['password', 'salt']
     }
