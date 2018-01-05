@@ -1,68 +1,8 @@
-const Promise = require('sequelize').Promise;
-var fs = require("fs");
-var async = require("async");
-var csv_parse = require('csv-parse/lib/sync');
-var publisher = sails.hooks.publisher;
+const Promise = require('bluebird')
+const async = require("async")
+const SeedData = require('../classes/seedData')
 
-//replace all roman numerals with regular English characters
-var replace_roman = function(roman) {
-    var eng_char = roman;
-    var eng_char = eng_char.replace(/Ⅰ/gi, "I");
-    eng_char = eng_char.replace(/Ⅱ/gi, "II");
-    eng_char = eng_char.replace(/Ⅲ/gi, "III");
-    eng_char = eng_char.replace(/Ⅳ/gi, "IV");
-    return eng_char;
-};
-
-var getExamEasyVal = function(exam) {
-  var easyVal = 0;
-  if (exam.examprep) easyVal++;
-  if (exam.openbook) easyVal++;
-  if (exam.oldquestion) easyVal++;
-  if (exam.easymark) easyVal++;
-  return easyVal;
-};
-
-
-//seed the db with leancloud data
-var path_common = sails.config.appPath + "/migration/data_common/";
-var path_leancloud_full = sails.config.appPath + "/migration/data_raw_full/";
-var path_leancloud_part = sails.config.appPath + "/migration/data_raw_part/";
-
-var path_leancloud = path_leancloud_full;
-
-var file_position = "position.json";
-var file_school = "school.json";
-var file_tag = "tag.json";
-var file_prof = "prof.csv";
-
-var file_user = "_User.json";
-var file_course = "Courses.json";
-var file_review = "Reviews.json";
-
-var file_liked_reviews = "_Join:Reviews:likedReviews:_User.json";
-var file_disliked_reviews = "_Join:Reviews:dislikedReviews:_User.json";
-var file_liked_Courses = "_Join:Courses:likedCourses:_User.json";
-
-//common data
-var positionData = JSON.parse(fs.readFileSync(path_common + file_position));
-var schoolData = JSON.parse(fs.readFileSync(path_common + file_school));
-var deptData = schoolData[0].depts;
-var tagData = JSON.parse(fs.readFileSync(path_common + file_tag));
-
-//leancloud Data
-var userData = JSON.parse(fs.readFileSync(path_leancloud + file_user));
-var courseData = JSON.parse(fs.readFileSync(path_leancloud + file_course));
-var reviewData = JSON.parse(fs.readFileSync(path_leancloud + file_review));
-var profData = fs.readFileSync(path_leancloud + file_prof);
-var profData = csv_parse(profData, {columns: true});
-profData.splice(0, 2);
-
-var likedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_reviews));
-var dislikedReviewsData = JSON.parse(fs.readFileSync(path_leancloud + file_disliked_reviews));
-var likedCoursesData = JSON.parse(fs.readFileSync(path_leancloud + file_liked_Courses));
-
-var seedSchools = function(job, next) {
+var seedSchools = function(schoolData, job, next) {
   sails.log.debug("seeding schools");
   async.eachSeries(schoolData, function(entry, next){
     var school = {};
@@ -88,7 +28,7 @@ var seedSchools = function(job, next) {
   });
 };
 
-var seedDepts = function(job, next) {
+var seedDepts = function(deptData, job, next) {
   sails.log.debug("seeding dept");
   async.eachSeries(deptData, function(entry, next){
     var dept = {};
@@ -127,7 +67,7 @@ var seedDepts = function(job, next) {
 };
 
 
-var seedPositions = function(job, next) {
+var seedPositions = function(positionData, job, next) {
   sails.log.debug("seeding positions");
   Position.bulkCreate(positionData)
   .then(function(res){
@@ -141,7 +81,7 @@ var seedPositions = function(job, next) {
   });
 };
 
-var seedTags = function (job, next) {
+var seedTags = function (tagData, job, next) {
   sails.log.debug("seeding tags");
   Tag.bulkCreate(tagData)
   .then(function(res){
@@ -156,7 +96,7 @@ var seedTags = function (job, next) {
   });
 };
 
-var seedUsers = function(job, next) {
+var seedUsers = function(userData, job, next) {
   sails.log.debug("seeding users");
   async.eachSeries(userData.results, function(entry, next){
     var userCreated = null;
@@ -225,14 +165,14 @@ var seedUsers = function(job, next) {
 
   }, function (err) {
     if (err) sails.log.error("error", err);
-    sails.log.debug("seeded: depts");
+    sails.log.debug("seeded: users");
     job.progress(3, 10);
     next();
   });
 };
 
 //code,name,gender,position,dept,school,email,phone,birth,hometown,exp,group,motto,intro,legacy_courses,achievement,research,link
-var seedProfs = function(job, next) {
+var seedProfs = function(profData, job, next) {
   sails.log.debug("seeding profs");
   sails.log.debug("length", profData.length)
   async.eachSeries(profData, function(entry, next){
@@ -310,7 +250,7 @@ var seedProfs = function(job, next) {
 //must constant: name,
 //must relation: school,dept,prof,
 //not sure: tags, stats, reviews, followers
-var seedCourses = function(job, next) {
+var seedCourses = function(courseData, job, next) {
   sails.log.debug("seeding course");
   async.eachSeries(courseData.results, function(entry, next){
     var courseCreated = null;
@@ -319,7 +259,7 @@ var seedCourses = function(job, next) {
     var stat = {};
 
     // course core
-    course.name = replace_roman(entry.name);
+    course.name = SeedUtil.replaceRoman(entry.name);
     course.isElective = (entry.isElective) ? entry.isElective : null;
     course.audience = (entry.audience) ? entry.audience : null;
 
@@ -390,7 +330,7 @@ var seedCourses = function(job, next) {
   });
 };
 
-var seedReviews = function(job, next) {
+var seedReviews = function(userData, reviewData, job, next) {
   sails.log.debug("seeding review");
   async.eachSeries(reviewData.results, function(entry, next){
     var reviewCreated = null;
@@ -420,13 +360,12 @@ var seedReviews = function(job, next) {
                               && entry.exam.difficulty.value > 0) {
       review.rateExam = entry.exam.difficulty.value;
     } else if (review.hasExam) {
-      var examEasyVal = getExamEasyVal({
+      review.rateExam = SeedUtil.getRateExam({
         examprep: review.examprep,
         openbook: review.openbook,
         oldquestion: review.oldquestion,
         easymark: review.easymark
-      });
-      review.rateExam = Math.round(5 - examEasyVal);
+      })
     }
 
     //optional: upvote/downvote
@@ -438,7 +377,7 @@ var seedReviews = function(job, next) {
     review.updatedAt = entry.updatedAt;
 
     //additional parsing
-    entry.courseName = replace_roman(entry.courseName);
+    entry.courseName = SeedUtil.replaceRoman(entry.courseName);
 
     Review.create(review)
     .then(function(newReview){
@@ -560,10 +499,10 @@ var seedReviews = function(job, next) {
   });
 };
 
-var seedKelists = function(job, next) {
+var seedKelists = function(seedData, job, next) {
   sails.log.debug("seeding Kelists");
 
-  async.eachSeries(likedCoursesData.results, function(entry, next){
+  async.eachSeries(seedData.likedCourse.results, function(entry, next){
     var courseLeanId = entry.relatedId;
     var userLeanId = entry.owningId;
 
@@ -573,14 +512,14 @@ var seedKelists = function(job, next) {
     var courseFound = null;
     var userFound = null;
 
-    userData.results.forEach(function(item, index, arr){
+    seedData.user.results.forEach(function(item, index, arr){
       if (item.objectId == userLeanId) {
         username = item.username;
       }
     });
-    courseData.results.forEach(function(item, index, arr){
+    seedData.course.results.forEach(function(item, index, arr){
       if (item.objectId == courseLeanId) {
-        courseName = replace_roman(item.name);
+        courseName = SeedUtil.replaceRoman(item.name);
         courseProf = item.prof;
       }
     });
@@ -628,9 +567,9 @@ var seedKelists = function(job, next) {
 };
 
 
-var seedLikedReviews = function(job, next) {
+var seedLikedReviews = function(seedData, job, next) {
   sails.log.debug("seeding associations: User:LikedReviews:Review");
-  async.eachSeries(likedReviewsData.results, function(entry, next){
+  async.eachSeries(seedData.likedReview.results, function(entry, next){
     var reviewLeanId = entry.relatedId;
     var userLeanId = entry.owningId;
     var username = null;
@@ -640,17 +579,17 @@ var seedLikedReviews = function(job, next) {
     var reviewFound = null;
     var userFound = null;
 
-    userData.results.forEach(function(item, index, arr){
+    seedData.user.results.forEach(function(item, index, arr){
       if (item.objectId == userLeanId) {
         username = item.username;
       }
     });
-    reviewData.results.forEach(function(item, index, arr){
+    seedData.review.results.forEach(function(item, index, arr){
       if (item.objectId == reviewLeanId) {
         reviewCourse = item.courseName;
         reviewProf = item.profName;
         var authorLeanId = item.authorId.objectId;
-        userData.results.forEach(function(item, index, arr){
+        seedData.user.results.forEach(function(item, index, arr){
           if (item.objectId == authorLeanId) {
             reviewAuthor = item.username;
           }
@@ -704,9 +643,9 @@ var seedLikedReviews = function(job, next) {
 };
 
 
-var seedDislikedReviews = function(job, next) {
+var seedDislikedReviews = function(seedData, job, next) {
   sails.log.debug("seeding associations: User:DislikedReviews:Review");
-  async.eachSeries(dislikedReviewsData.results, function(entry, next){
+  async.eachSeries(seedData.dislikedReview.results, function(entry, next){
     var reviewLeanId = entry.relatedId;
     var userLeanId = entry.owningId;
     var username = null;
@@ -716,17 +655,17 @@ var seedDislikedReviews = function(job, next) {
     var reviewFound = null;
     var userFound = null;
 
-    userData.results.forEach(function(item, index, arr){
+    seedData.user.results.forEach(function(item, index, arr){
       if (item.objectId == userLeanId) {
         username = item.username;
       }
     });
-    reviewData.results.forEach(function(item, index, arr){
+    seedData.review.results.forEach(function(item, index, arr){
       if (item.objectId == reviewLeanId) {
         reviewCourse = item.courseName;
         reviewProf = item.profName;
         var authorLeanId = item.authorId.objectId;
-        userData.results.forEach(function(item, index, arr){
+        seedData.user.results.forEach(function(item, index, arr){
           if (item.objectId == authorLeanId) {
             reviewAuthor = item.username;
           }
@@ -780,7 +719,7 @@ var seedDislikedReviews = function(job, next) {
 };
 
 module.exports = {
-  seedDB: () => {
+  seedDB: (mode) => {
     var publisher = sails.hooks.publisher;
     var queue = publisher.queue;
     var seedJob = publisher.create('seed_service', {
@@ -789,19 +728,21 @@ module.exports = {
     .priority('medium')
     .save();
 
+    const seedData = new SeedData(mode)
+
     queue.process("seed_service", function(job, jobDone){
       var orderedActionList = [
-        seedSchools.bind(this, job),
-        seedDepts.bind(this, job),
-        seedPositions.bind(this, job),
-        seedTags.bind(this, job),
-        seedUsers.bind(this, job),
-        seedProfs.bind(this, job),
-        seedCourses.bind(this, job),
-        seedReviews.bind(this, job),
-        seedKelists.bind(this, job),
-        seedLikedReviews.bind(this, job),
-        seedDislikedReviews.bind(this, job)
+        seedSchools.bind(this, seedData.school, job),
+        seedDepts.bind(this, seedData.dept, job),
+        seedPositions.bind(this, seedData.position, job),
+        seedTags.bind(this, seedData.tag, job),
+        seedUsers.bind(this, seedData.user, job),
+        seedProfs.bind(this, seedData.prof, job),
+        seedCourses.bind(this, seedData.course, job),
+        seedReviews.bind(this, seedData.user, seedData.review, job),
+        seedKelists.bind(this, seedData, job),
+        seedLikedReviews.bind(this, seedData, job),
+        seedDislikedReviews.bind(this, seedData, job)
       ];
 
       Meta.findAll()
@@ -832,8 +773,4 @@ module.exports = {
 
     });
   },
-
-  initDB: () => {
-  }
-
 };

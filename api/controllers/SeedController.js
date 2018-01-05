@@ -23,13 +23,12 @@ module.exports = {
         if (meta && meta.seeded){
           res.badRequest("Database is seeding or has already been seeded!")
         } else {
-
           if (mode === 'prod') {
             res.ok(`Starting to seed DB in ${mode} mode with full data!`)
-            SeedService.seedDB()
+            SeedService.seedDB(mode)
           } else if (mode === 'dev'){
             res.ok(`Starting to seed DB in ${mode} mode with partial data!`)
-            SeedServiceTest.seedDB()
+            SeedService.seedDB(mode)
           } else {
             res.badRequest('Seeding needs to be in either "dev" or "prod" mode!')
           }

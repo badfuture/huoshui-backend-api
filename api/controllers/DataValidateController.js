@@ -1,6 +1,6 @@
 var fs = require("fs")
 let path_common = sails.config.appPath + "/migration/data_common/"
-let path_leancloud_full = sails.config.appPath + "/migration/data_raw_full/"
+let path_leancloud_full = sails.config.appPath + "/migration/data_full/"
 let path_leancloud = path_leancloud_full
 let file_review = "Reviews.json"
 
