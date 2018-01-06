@@ -15,7 +15,12 @@ module.exports = (includeList = []) => {
   includeList.forEach((include) => {
     if (!getIncludeModel(model, include)) { return }
     let obj = initInclude(model, include)
-    if (include == "Comment") {
+    if (include == "Author") {
+      obj.include = [{
+        model: Dept,
+        as: 'Dept',
+      }]
+    } else if (include == "Comment") {
       obj.separate = false
       obj.include = [{
         model: Comment,
