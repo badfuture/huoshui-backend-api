@@ -1,4 +1,5 @@
 "use strict";
+const PROF_HOME = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID="
 
 module.exports = {
   attributes: {
@@ -85,7 +86,10 @@ module.exports = {
       defaultValue: null,
       exampleValue: "http://ze.swjtu.com",
       unique: false,
-      comment: "学校教师官网"
+      comment: "学校教师官网",
+      get() {
+        return PROF_HOME + this.getDataValue('code')
+      }
     },
     blog: {
       field: "blog",
@@ -154,7 +158,7 @@ module.exports = {
       unique: false,
       comment: "教育成果"
     },
-    
+
     // redundent stats (used to reduce # of api calls)
     scoreOverall: {
       field: "scoreOverall",

@@ -1,70 +1,71 @@
 const Promise = require('bluebird')
 const async = require("async")
 const SeedData = require('../classes/seedData')
+const SCHOOL_NAME = "西南交通大学"
 
-var seedSchools = function(schoolData, job, next) {
-  sails.log.debug("seeding schools");
-  async.eachSeries(schoolData, function(entry, next){
-    var school = {};
-    school.name = entry.name;
-    school.campus = entry.campus;
+const seedSchools = (schoolData, job, next) => {
+  sails.log.debug("seeding schools")
+  async.eachSeries(schoolData, (entry, next) => {
+    let school = {}
+    school.name = entry.name
+    school.campus = entry.campus
 
     School.create(school)
-    .then(function(schools){
-      next();
+    .then((schools) => {
+      next()
     })
-    .catch(function(err){
-      sails.log.error(err.errors);
-      next(err);
-    });
-  }, function (err) {
+    .catch((err) => {
+      sails.log.error(err.errors)
+      next(err)
+    })
+  }, (err) => {
     if (err) {
-      sails.log.error("seeding failure: school");
+      sails.log.error("seeding failure: school")
     } else {
-      sails.log.debug("seeded: schools");
+      sails.log.debug("seeded: schools")
     }
-    job.progress(0.5, 10);
-    next();
-  });
-};
+    job.progress(0.5, 10)
+    next()
+  })
+}
 
-var seedDepts = function(deptData, job, next) {
-  sails.log.debug("seeding dept");
-  async.eachSeries(deptData, function(entry, next){
-    var dept = {};
-    var deptCreated= null;
-    dept.shortname = entry.shortname;
-    dept.longname = entry.longname;
-    dept.image = entry.image;
-    dept.icon = entry.icon;
+const seedDepts = (deptData, job, next) => {
+  sails.log.debug("seeding dept")
+  async.eachSeries(deptData, (entry, next) => {
+    let dept = {}
+    let deptCreated= null
+    dept.shortname = entry.shortname
+    dept.longname = entry.longname
+    dept.image = entry.image
+    dept.icon = entry.icon
     if (entry.hasOwnProperty("alias")) {
-      dept.alias = entry.alias;
+      dept.alias = entry.alias
     }
     Dept.create(dept)
-    .then(function(res){
-      deptCreated = res;
-      return School.findOne({ where: {"name": "西南交通大学"}});
+    .then((res) => {
+      deptCreated = res
+      return School.findOne({ where: {"name": SCHOOL_NAME}})
     })
-    .then(function(school){
-      return school.addDept(deptCreated);
+    .then((school) => {
+      return school.addDept(deptCreated)
     })
-    .then(function(){
-      next();
+    .then(() => {
+      next()
     })
-    .catch(function(err){
-      sails.log.error(err.message);
-      next(err);
-    });
-  }, function (err) {
+    .catch((err) => {
+      sails.log.error(err.message)
+      next(err)
+    })
+  }, (err) => {
     if (err) {
-      sails.log.error("seeding failure: dept");
+      sails.log.error("seeding failure: dept")
     } else {
-      sails.log.debug("seeded: depts");
+      sails.log.debug("seeded: depts")
     }
-    job.progress(1, 10);
-    next();
-  });
-};
+    job.progress(1, 10)
+    next()
+  })
+}
 
 
 var seedPositions = function(positionData, job, next) {
@@ -111,7 +112,7 @@ var seedUsers = function(userData, job, next) {
     User.create(user)
     .then(function(user){
       userCreated = user;
-      return School.findOne({ where: {"name": "西南交通大学"}});
+      return School.findOne({ where: {"name": SCHOOL_NAME}});
     })
     .then(function(school){
       return school.addUser(userCreated);
@@ -202,12 +203,11 @@ var seedProfs = function(profData, job, next) {
     prof.research = entry.research;
     prof.achievement = entry.achievement;
     prof.legacyCourses = entry.legacyCourses;
-    prof.officialSite = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID=" + entry.code;
     sails.log.info("seed prof " + prof.name);
     Prof.create(prof)
     .then(function(results){
       profCreated = results;
-      return School.findOne({ where: {"name": "西南交通大学"}});
+      return School.findOne({ where: {"name": SCHOOL_NAME}});
     })
     .then(function(school){
       school.addProf(profCreated);
@@ -285,7 +285,7 @@ var seedCourses = function(courseData, job, next) {
     Course.create(course)
     .then(function(results){
       courseCreated = results;
-      return School.findOne({ where: {"name": "西南交通大学"}});
+      return School.findOne({ where: {"name": SCHOOL_NAME}});
     })
     .then(function(school){
       school.addCourse(courseCreated);
