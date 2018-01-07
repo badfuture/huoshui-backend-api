@@ -88,7 +88,12 @@ module.exports = {
       unique: false,
       comment: "学校教师官网",
       get() {
-        return PROF_HOME + this.getDataValue('code')
+        const code = this.getDataValue('code')
+        if (code) {
+          return PROF_HOME + code
+        } else {
+          return null
+        }
       }
     },
     blog: {

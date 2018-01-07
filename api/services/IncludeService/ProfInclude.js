@@ -38,6 +38,13 @@ module.exports = (includeList = []) => {
           as: 'Tags'
         }
       ]
+    } else if (include == "Courses") {
+      obj.include = [
+        {
+          model: Dept,
+          as: 'Depts',
+        },
+      ]
     } else {
       obj = applyCommonFilter(model, include, obj)
     }

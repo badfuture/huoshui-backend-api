@@ -67,7 +67,9 @@ class seedData {
 
   _readCSV(filepath) {
     const fileData= fs.readFileSync(filepath)
-    return csv_parse(fileData, {columns: true}).splice(0, 2)
+    let parsedData =  csv_parse(fileData, {columns: true}) // columns in the first line will be used as keys
+    parsedData.splice(0, 2) // remove two addtional lines of header
+    return parsedData
   }
 
 }

@@ -5,12 +5,11 @@ var LocalStrategy = require('passport-local').Strategy;
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 
-var EXPIRES_IN_MINUTES = 60 * 24 * 30 * 12; // one year
+var EXPIRES_IN_MINUTES = 60 * 60 * 24 * 60; // two months in seconds 
 var SECRET = process.env.tokenSecret || "huoshui_rock";
 var ALGORITHM = "HS256";
 var ISSUER = "api.huoshui.org"; //issuer of the JWT
 var AUDIENCE = "huoshui.org"; //resource being acccessed
-
 
 // Configuration object for local strategy
 var LOCAL_STRATEGY_CONFIG = {
