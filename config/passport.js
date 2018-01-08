@@ -1,34 +1,19 @@
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const JwtStrategy = require('passport-jwt').Strategy
+const ExtractJwt = require('passport-jwt').ExtractJwt
 
-// passport strategies
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-
-var EXPIRES_IN_MINUTES = 60 * 60 * 24 * 60; // two months in seconds 
-var SECRET = process.env.tokenSecret || "huoshui_rock";
-var ALGORITHM = "HS256";
-var ISSUER = "api.huoshui.org"; //issuer of the JWT
-var AUDIENCE = "huoshui.org"; //resource being acccessed
-
-// Configuration object for local strategy
-var LOCAL_STRATEGY_CONFIG = {
+/**
+ * basic auth configuration
+ */
+const PASSPORT_LOCAL_CONFIG = {
   usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: false
-};
-
-// Configuration object for JWT strategy
-var JWT_STRATEGY_CONFIG = {
-  secretOrKey: SECRET,
-  issuer: ISSUER,
-  audience: AUDIENCE,
-  passReqToCallback: false,
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-};
+}
 
 // Triggers after user is authenticated via local strategy
-function _onLocalStrategyAuth(email, password, next) {
+const _onLocalStrategyAuth = (email, password, next) => {
   User.findOne({
       where: {email: email},
       include: IncludeService.UserInclude(['Reviews']),
@@ -53,21 +38,34 @@ function _onLocalStrategyAuth(email, password, next) {
     });
 }
 
-// Triggers after user is authenticated via JWT strategy
-function _onJwtStrategyAuth(payload, next) {
-  var user = payload.user;
-  return next(null, user, {});
+passport.use(new LocalStrategy(PASSPORT_LOCAL_CONFIG, _onLocalStrategyAuth))
+
+
+/**
+ * JWT auth configuration
+ */
+const JWT_CONFIG = {
+  expiresInMinutes: 60 * 60 * 24 * 60, // two months in seconds
+  secret: process.env.tokenSecret || "huoshui_rock",
+  algorithm: "HS256",
+  issuer: "api.huoshui.org", // issuer of JWT
+  audience: "huoshui.org", // resource being acccessed
 }
 
-passport.use(
-  new LocalStrategy(LOCAL_STRATEGY_CONFIG, _onLocalStrategyAuth));
-passport.use(
-  new JwtStrategy(JWT_STRATEGY_CONFIG, _onJwtStrategyAuth));
+const PASSPORT_JWT_CONFIG = {
+  secretOrKey: JWT_CONFIG.secret,
+  issuer: JWT_CONFIG.issuer,
+  audience: JWT_CONFIG.audience,
+  passReqToCallback: false,
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
+}
 
-module.exports.jwtSettings = {
-  expiresInMinutes: EXPIRES_IN_MINUTES,
-  secret: SECRET,
-  algorithm: ALGORITHM,
-  issuer: ISSUER,
-  audience: AUDIENCE
-};
+const _onJwtStrategyAuth = (payload, next) => {
+  var user = payload.user
+  return next(null, user, {})
+}
+
+passport.use(new JwtStrategy(PASSPORT_JWT_CONFIG, _onJwtStrategyAuth))
+
+// export jwt config
+module.exports.jwtSettings = JWT_CONFIG
