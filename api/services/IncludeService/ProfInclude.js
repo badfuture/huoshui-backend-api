@@ -23,6 +23,10 @@ module.exports = (includeList = []) => {
           as: 'Author',
           attributes: {
             exclude: ['password', 'salt']
+          },
+          include: {
+            model: Dept,
+            as: 'Dept',
           }
         },
         {
