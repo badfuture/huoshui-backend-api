@@ -2,32 +2,23 @@
  * AuthController
  * @description :: Server-side logic for manage user's authorization
  */
-var passport = require('passport');
-
-function _onPassportAuth(req, res, error, user, info) {
-	if (error) return res.serverError(error);
-	if (!user) return res.unauthorized(null, info && info.code, info && info.message);
-
-	return res.ok({
-		token: CipherService.createToken(user),
-		user: user
-	});
-}
 
 module.exports = {
 	login: function(req, res) {
-		passport.authenticate('local',
-			_onPassportAuth.bind(this, req, res))(req, res);
+		AuthService.localAuth(req, res)
 	},
 
 	signup: function(req, res) {
 		sails.log.verbose("signup user: " + req.param('email'))
-		var existEmail = false
-		var existUsername = false
+		let existEmail = false
+		let existUsername = false
+
+		let userCreated = null
+		let jwtToken = null
 
 		User.findOne({
 			where: {email: req.param('email')}
-		}).then(function(user){
+		}).then((user) => {
 			if (user) {existEmail = true}
 			return User.findOne({
 				where: {username: req.param('username')}
@@ -39,27 +30,29 @@ module.exports = {
 			} else if (existEmail) {
 				res.badRequest("user email already exists!")
 			} else {
-				let allUserInfo = null
-				let userCreated = null
 				User.create(_.omit(req.allParams(), 'id'))
 				.then((user) => {
 					userCreated = user
-					let userData = user.dataValues
-					delete userData.password
-					delete userData.salt
-					allUserInfo = {
-						token: CipherService.createToken(user),
-						user: userData
-					}
+					jwtToken = CipherService.createJwtToken(user)
 					return KelistService.createDefaultKelist()
 				}).then((defaultKelist) => {
 					return userCreated.addOwnsKelists(defaultKelist)
 				}).then(() => {
-					return res.created(allUserInfo)
+					return User.findOne({
+						where: { id: userCreated.id },
+						include: IncludeService.UserInclude('all')
+					})
+				}).then((userFullInfo) => {
+					return res.ok({
+						token: CipherService.createJwtToken(userCreated),
+						user: userFullInfo
+					})
 				})
-
 			}
-		}).catch(res.serverError)
+		})
+    .catch((err)=> {
+      res.serverError(err)
+		})
 	},
 
 };

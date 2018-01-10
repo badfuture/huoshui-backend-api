@@ -97,6 +97,21 @@ var seedTags = function (tagData, job, next) {
   });
 };
 
+var seedRoles = function (roleData, job, next) {
+  sails.log.debug("seeding roles");
+  Role.bulkCreate(roleData)
+  .then(function(res){
+    sails.log.debug("seeded: roles");
+    job.progress(2.5, 10);
+    next();
+  })
+  .catch(function(err){
+    sails.log.error("seeding failure: roles");
+    sails.log.error("error", err);
+    next();
+  });
+};
+
 var seedUsers = function(userData, job, next) {
   sails.log.debug("seeding users");
   async.eachSeries(userData.results, function(entry, next){
@@ -142,6 +157,14 @@ var seedUsers = function(userData, job, next) {
         })
       } else {
         dept.addUser(userCreated);
+      }
+    })
+    .then(()=> {
+      if (user.email == "paladinze@hotmail.com") {
+        Role.findOne({where: {name: "admin"}})
+        .then((adminRole) => {
+          userCreated.addRole(adminRole)
+        })
       }
     })
     .then(()=> {
@@ -736,6 +759,7 @@ module.exports = {
         seedDepts.bind(this, seedData.dept, job),
         seedPositions.bind(this, seedData.position, job),
         seedTags.bind(this, seedData.tag, job),
+        seedRoles.bind(this, seedData.role, job),
         seedUsers.bind(this, seedData.user, job),
         seedProfs.bind(this, seedData.prof, job),
         seedCourses.bind(this, seedData.course, job),

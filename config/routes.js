@@ -13,6 +13,7 @@ var reviewRoute = require('../api/routes/reviewRoute');
 var schoolRoute = require('../api/routes/schoolRoute');
 var swaggerRoute = require('../api/routes/swaggerRoute');
 var tagRoute = require('../api/routes/tagRoute');
+var roleRoute = require('../api/routes/roleRoute');
 var userRoute = require('../api/routes/userRoute');
 var feedbackRoute = require('../api/routes/feedbackRoute');
 var searchRoute = require('../api/routes/searchRoute');
@@ -43,6 +44,7 @@ module.exports.routes = routes([
   schoolRoute,
   swaggerRoute,
   tagRoute,
+  roleRoute,
   userRoute,
   feedbackRoute,
   searchRoute,

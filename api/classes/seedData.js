@@ -10,6 +10,7 @@ const {
   file_position,
   file_school,
   file_tag,
+  file_role,
   file_prof,
 
   //leancloud Data
@@ -33,6 +34,7 @@ class seedData {
     const path_position = this._getPath(path_common, file_position)
     const path_school = this._getPath(path_common, file_school)
     const path_tag = this._getPath(path_common, file_tag)
+    const path_role = this._getPath(path_common, file_role)
 
     //unique Data
     const path_user = this._getPath(path_data, file_user)
@@ -48,6 +50,7 @@ class seedData {
     this.dept = this.school[0].depts
     this.position = this._readFile(path_position)
     this.tag = this._readFile(path_tag)
+    this.role = this._readFile(path_role)
     this.user = this._readFile(path_user)
     this.prof = this._readCSV(path_prof)
     this.course = this._readFile(path_course)

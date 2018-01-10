@@ -11,6 +11,7 @@ module.exports = {
   file_position: "position.json",
   file_school: "school.json",
   file_tag: "tag.json",
+  file_role: "role.json",
   file_prof: "prof.csv",
 
   //leancloud Data

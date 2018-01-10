@@ -12,33 +12,34 @@ const PASSPORT_LOCAL_CONFIG = {
   passReqToCallback: false
 }
 
-// Triggers after user is authenticated via local strategy
-const _onLocalStrategyAuth = (email, password, next) => {
+const preprocessLocalAuth = (email, password, next) => {
   User.findOne({
-      where: {email: email},
-      include: IncludeService.UserInclude(['Reviews']),
+      where: {
+        email: email
+      }
     })
     .then((user) => {
+      // return if user is not found
       if (!user) return next(null, false, {
         code: 'E_USER_NOT_FOUND',
         message: email + ' is not found'
-      });
+      })
 
-      if (!CipherService.comparePassword(password, user))
+      // return if password incorrect
+      if (!CipherService.verifyPassword(password, user)) {
         return next(null, false, {
           code: 'E_WRONG_PASSWORD',
           message: 'Password is wrong'
-        });
-
-      return next(null, user, {});
+        })
+      }
+      return next(null, user, {})
     })
     .catch((err) => {
-      sails.log.error(err.message);
-      next(err);
-    });
+      sails.log.error(err.message)
+      next(err)
+    })
 }
-
-passport.use(new LocalStrategy(PASSPORT_LOCAL_CONFIG, _onLocalStrategyAuth))
+passport.use(new LocalStrategy(PASSPORT_LOCAL_CONFIG, preprocessLocalAuth))
 
 
 /**
@@ -60,12 +61,11 @@ const PASSPORT_JWT_CONFIG = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 }
 
-const _onJwtStrategyAuth = (payload, next) => {
+const preprocessJWTAuth = (payload, next) => {
   var user = payload.user
   return next(null, user, {})
 }
-
-passport.use(new JwtStrategy(PASSPORT_JWT_CONFIG, _onJwtStrategyAuth))
+passport.use(new JwtStrategy(PASSPORT_JWT_CONFIG, preprocessJWTAuth))
 
 // export jwt config
 module.exports.jwtSettings = JWT_CONFIG

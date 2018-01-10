@@ -2,6 +2,8 @@
 {
   "results": [
 
+  {"salt":"2crvjf8e119ugy2gmsupqxy2mwcr1z6lf3ub448s1wd4o3hq","email":"paladinze@hotmail.com","sessionToken":"jwjowl9y6dkqg7zn4ztjymf3f","updatedAt":"2017-12-21T18:38:39.768Z","ACL":{"*":{"write":true,"read":true}},"password":"nQLMFV6GFUDNVqgJYwBaGih1AuNdNlx9oxL0pgsV9t4ELnrHqGETZlnI8JnnSc1xH+WSke3O1Zyq2UOvNTWEeA==","objectId":"5641762b00b0bf378b7212a7","username":"游侠","createdAt":"2015-11-10T04:44:27.194Z","emailVerified":false,"year":2017,"dept":"土木","authData":null,"importFromParse":false,"mobilePhoneVerified":false},
+
   {"salt":"g8zf5dqg0i36bpvyexo1rcwuox8b3gcu0goodhcbi9bkubd7","email":"22@4.com","sessionToken":"71xr78pxmizg23att2efvagiw","updatedAt":"2016-01-17T08:43:49.121Z","ACL":{"*":{"write":true,"read":true}},"password":"bAa6bGk8f3\/b30md6sXyxtYcryn1+9FkV6TKRWfLP\/O8JdBqaKK9NeSXlGYvtHNZOytBI0Htwj0mmB2gcuEOZw==","objectId":"569b541800b0b6cb000715f1","username":"LY","createdAt":"2016-01-17T08:43:04.907Z","emailVerified":false,"year":2013,"dept":"电气","authData":null,"mobilePhoneVerified":false},
 
   {"salt":"azh3dlm6cynsjuz29k0jc2ig5awrdyzmuywjg228pwxwjget","email":"angerscofield@163.com","sessionToken":"lswx0jft2ib9ode4k6dawh3pj","updatedAt":"2016-06-12T06:12:40.620Z","ACL":{"*":{"write":true,"read":true}},"password":"4v78v1yh5DlH02\/JjbE2ft+ddujD4jvOtueqxFwR1z2NsRuNgU9HkPx35PkDsMSkhImKukU1goV06hqmWka8xg==","objectId":"566b9f8300b0bf37f5d524ff","username":"Strato","createdAt":"2015-12-12T04:16:03.702Z","emailVerified":false,"year":2015,"dept":"材料","authData":null,"mobilePhoneVerified":false},

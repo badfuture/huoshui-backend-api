@@ -10,19 +10,19 @@ module.exports = {
       unique: true,
       comment: "用户角色"
     }
-    //ACL
   },
   associations: function() {
-    Role.hasMany(User, {
+    Role.belongsToMany(User, {
       as: 'Users',
-      foreignKey: 'role_id',
-    }); // 1:n
+      through: 'Join_User_Roles_Role',
+      foreignKey: 'role_id'
+    }); // m:n
   },
   options: {
     tableName: 'role',
     underscored: true,
     freezeTableName: true,
-    timestamps: true,
+    timestamps: false,
     paranoid: false,
     classMethods: {},
     instanceMethods: {},

@@ -59,6 +59,10 @@ module.exports = (includeList = []) => {
           as: 'Prof'
         }
       ]
+    } else if (include == 'Roles') {
+      obj.through = {
+        attributes: []
+      }
     } else {
       obj = applyCommonFilter(model, include, obj)
     }

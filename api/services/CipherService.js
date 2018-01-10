@@ -20,12 +20,11 @@ JWT Token shape
   iss: 'https://api.huoshui.org' }
  */
 
-var bcrypt = require('bcrypt-nodejs');
-var jwt = require('jsonwebtoken');
-var crypto = require('crypto');
+const bcrypt = require('bcrypt-nodejs')
+const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
 
-
-const sha512Encode = function(password, salt) {
+const sha512Encode = (password, salt) => {
   password = salt + password;
   var result = crypto.createHash('sha512').update(password).digest();
   for (var i = 0; i < 512; i++) {
@@ -34,7 +33,7 @@ const sha512Encode = function(password, salt) {
   return result.toString('base64');
 }
 
-const getToken = function(req) {
+const getToken = (req) => {
   const header = req.headers['authorization']
   return header.split(' ')[1]
 }
@@ -45,42 +44,35 @@ module.exports = {
   audience: sails.config.jwtSettings.audience,
 
   hashPassword: (user) => {
+    // generate salt and password if salt not exist
     if (user.password && !user.salt) {
-      salt = crypto.randomBytes(36).toString('base64');
-      user.salt = salt;
-      user.password = sha512Encode(user.password, user.salt);
-    } else if (user.origin == 'leancloud' &&
-      user.password && user.salt) { //leancloud user migration
-      user.password = sha512Encode(user.password, user.salt);
+      user.salt = crypto.randomBytes(36).toString('base64')
+      user.password = sha512Encode(user.password, user.salt)
     }
   },
 
-  comparePassword: (password, user) => {
-    var realPassword = user.password;
-    var inputPassword = password;
-    var salt = user.salt;
+  verifyPassword: (password, user) => {
+    // verify claimed password with stored password
+    const storedPassword = user.password
+    const storedSalt = user.salt
 
-    hashedPassword = sha512Encode(inputPassword, salt);
-
-    sails.log.debug("input: " + inputPassword);
-    sails.log.debug("real: " + realPassword);
-    sails.log.debug("hashed: " + hashedPassword);
-
-    return (realPassword == hashedPassword) ? true : false;
+    const claimedPassword = password
+    const hashedPassword = sha512Encode(claimedPassword, storedSalt)
+    return (storedPassword == hashedPassword)
   },
 
-  createToken: (user) => {
-    return jwt.sign({
-        user: user.toJSON()
-      },
-      sails.config.jwtSettings.secret,
-      {
-        algorithm: sails.config.jwtSettings.algorithm,
-        expiresIn: sails.config.jwtSettings.expiresInMinutes,
-        issuer: sails.config.jwtSettings.issuer,
-        audience: sails.config.jwtSettings.audience
-      }
-    )
+  createJwtToken: (user) => {
+    // create JWT token
+    const { algorithm, expiresIn, issuer, audience } = sails.config.jwtSettings
+    const payload = { user: user.toJSON() }
+    const secret = sails.config.jwtSettings.secret
+    const options = {
+      algorithm,
+      expiresIn,
+      issuer,
+      audience
+    }
+    return jwt.sign(payload, secret, options)
   },
 
    verifyTokenAsync: (token, callback) => {

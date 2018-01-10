@@ -53,7 +53,7 @@ module.exports = {
 					if (userFound) {
 						// if oauth user already exsit, find and return user info
 						const userUrlEncoded = encodeData(userFound)
-						const tokenEncoded = encodeToken(CipherService.createToken(userFound))
+						const tokenEncoded = encodeToken(CipherService.createJwtToken(userFound))
 						return res.redirect(
 							`${webUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 						)
@@ -68,7 +68,7 @@ module.exports = {
 						})
 						.then(function(userCreated){
 							const userUrlEncoded = encodeData(userCreated)
-							const tokenEncoded = encodeToken(CipherService.createToken(userCreated))
+							const tokenEncoded = encodeToken(CipherService.createJwtToken(userCreated))
 							return res.redirect(
 								`${webUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 							)

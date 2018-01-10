@@ -115,10 +115,6 @@ module.exports = {
       as: 'School',
       foreignKey: 'school_id'
     }); // n:1
-    User.belongsTo(Role, {
-      as: 'Role',
-      foreignKey: 'role_id'
-    }); // n:1
     User.belongsTo(Dept, {
       as: 'Dept',
       foreignKey: 'dept_id'
@@ -139,6 +135,11 @@ module.exports = {
       as: 'OwnsKelists',
       foreignKey: 'author_id'
     }); // 1:n
+    User.belongsToMany(Role, {
+      as: 'Roles',
+      through: 'Join_User_Roles_Role',
+      foreignKey: 'user_id'
+    }); // n:1
     User.belongsToMany(Kelist, {
       as: 'CollectedKelists',
       through: 'Join_Kelist_Collectors_User',

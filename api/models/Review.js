@@ -61,11 +61,11 @@ module.exports = {
     // determine if is good review based on core stats
     classification: {
       field: "classification",
-      type: Sequelize.ENUM('好评', '中评', '差评'),
+      type: Sequelize.ENUM('好评', '中评', '差评', '未知'),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: '未知',
       unique: false,
-      comment: "评论分级：好评，中评，差评",
+      comment: "评论分级：好评，中评，差评，未知",
       get() {
         const professional = this.getDataValue('professional')
         const expressive = this.getDataValue('expressive')
