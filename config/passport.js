@@ -46,7 +46,7 @@ passport.use(new LocalStrategy(PASSPORT_LOCAL_CONFIG, preprocessLocalAuth))
  * JWT auth configuration
  */
 const JWT_CONFIG = {
-  expiresInMinutes: 60 * 60 * 24 * 60, // two months in seconds
+  expiresIn: '90d', // three months in seconds
   secret: process.env.tokenSecret || "huoshui_rock",
   algorithm: "HS256",
   issuer: "api.huoshui.org", // issuer of JWT
