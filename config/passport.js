@@ -50,7 +50,7 @@ const JWT_CONFIG = {
   secret: process.env.tokenSecret || "huoshui_rock",
   algorithm: "HS256",
   issuer: "api.huoshui.org", // issuer of JWT
-  audience: "huoshui.org", // resource being acccessed
+  audience: "api.huoshui.org", // resource being acccessed
 }
 
 const PASSPORT_JWT_CONFIG = {

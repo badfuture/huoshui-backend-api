@@ -44,7 +44,7 @@ module.exports = {
 					})
 				}).then((userFullInfo) => {
 					return res.ok({
-						token: CipherService.createJwtToken(userCreated),
+						token: jwtToken,
 						user: userFullInfo
 					})
 				})
@@ -54,5 +54,22 @@ module.exports = {
       res.serverError(err)
 		})
 	},
+
+	blacklistToken: (req, res) => {
+		const jwtId = req.param('jti')
+		Token.findOne({
+			where: { jwtId }
+		}).then((token) => {
+			if (token && token.revoked) {
+				res.ok("token was already revoked")
+			} else if (token && !token.revoked) {
+				token.revoked = true
+				token.save()
+				res.ok("token revoked")
+			} else {
+				res.badRequest("token not found")
+			}
+		})
+	}
 
 };

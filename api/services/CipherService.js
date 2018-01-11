@@ -23,6 +23,7 @@ JWT Token shape
 const bcrypt = require('bcrypt-nodejs')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
+const uuid = require('node-uuid')
 
 const sha512Encode = (password, salt) => {
   password = salt + password;
@@ -64,15 +65,28 @@ module.exports = {
   createJwtToken: (user) => {
     // create JWT token
     const { algorithm, expiresIn, issuer, audience } = sails.config.jwtSettings
+    const jwtid = uuid.v1()
+    const subject = `user:${user.id}`
+
     const payload = { user: user.toJSON() }
     const secret = sails.config.jwtSettings.secret
     const options = {
       algorithm,
       expiresIn,
       issuer,
-      audience
+      audience,
+      jwtid,
+      subject,
     }
-    return jwt.sign(payload, secret, options)
+    const signedToken = jwt.sign(payload, secret, options)
+
+    // store token
+    Token.create({
+      jwt: signedToken,
+      jwtId: jwtid,
+      userId: user.id,
+    })
+    return signedToken
   },
 
    verifyTokenAsync: (token, callback) => {

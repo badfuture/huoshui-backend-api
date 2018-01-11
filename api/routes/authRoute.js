@@ -8,6 +8,12 @@ module.exports = {
     action: "login"
   },
 
+  // JWT token blacklist
+  'POST /auth/blacklists/tokens': {
+    controller: "AuthController",
+    action: "blacklistToken"
+  },
+
   //QQ authentication
   'GET /auth/qq/callback': {
     controller: "AuthQQController",
