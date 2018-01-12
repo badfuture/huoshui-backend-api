@@ -13,7 +13,10 @@
 
 module.exports.policies = {
   AuthController: {
-    '*': true
+    'login': ['isAuthenticated'],
+    'signup': ['isAuthenticated'],
+    'blacklistToken': ['isAuthenticated'],
+    '*': false,
   },
   AuthQQController: {
     '*': true
@@ -27,79 +30,81 @@ module.exports.policies = {
   FeedbackController: {
     'find': true,
     'findOne': true,
-    'create': true,
-    '*': false
+    'create': ['isAuthenticated'],
+    '*': false,
   },
   CommentController: {
     'find': true,
     'findOne': true,
-    'create': true,
-    '*': false
+    'create': ['isAuthenticated'],
+    '*': false,
   },
   CourseController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   DeptController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   PositionController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   ProfController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   ReviewController: {
     'find': true,
     'findOne': true,
-    'create': ['isAuthorized'],
-    '*': false
+    'create': ['isAuthenticated'],
+    '*': false,
   },
   SchoolController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   SeedController: {
-    '*': true
+    'seedDB': ['isAuthenticated','isAdmin'],
+    '*': false,
   },
   TagController: {
     'find': true,
     'findOne': true,
-    '*': false
+    '*': false,
   },
   UserController: {
     'find': true,
     'findOne': true,
-    'uploadAvatar': ['isAuthorized'],
-    'likeCourse': ['isAuthorized'],
-    'unlikeCourse': ['isAuthorized'],
-    'likeProf': ['isAuthorized'],
-    'unlikeProf': ['isAuthorized'],
-    '*': false
+    'uploadAvatar': ['isAuthenticated'],
+    'likeCourse': ['isAuthenticated'],
+    'unlikeCourse': ['isAuthenticated'],
+    'likeProf': ['isAuthenticated'],
+    'unlikeProf': ['isAuthenticated'],
+    '*': false,
   },
   SearchController: {
     'find': true,
-    '*': false
+    '*': false,
   },
   StatController: {
     'getGlobalStat': true,
-    '*': false
+    '*': false,
   },
   JobController: {
-    'startCourseJobs': true,
-    'startProfJobs': true,
-    'removeAllJobs': true,
-    '*': false
+    'startCourseJobs': ['isAuthenticated','isAdmin'],
+    'startProfJobs': ['isAuthenticated','isAdmin'],
+    'removeAllJobs': ['isAuthenticated','isAdmin'],
+    '*': false,
   },
   DataValidateController: {
-    '*': true
+    'checkReviewDuplicate': ['isAuthenticated','isAdmin'],
+    '*': false,
   },
 };

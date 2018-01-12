@@ -40,9 +40,13 @@ const getToken = (req) => {
 }
 
 module.exports = {
-  secret: sails.config.jwtSettings.secret,
-  issuer: sails.config.jwtSettings.issuer,
-  audience: sails.config.jwtSettings.audience,
+
+  getJwtId: (req) => {
+    const token = getToken(req)
+    const { secret } = sails.config.jwtSettings
+    const decoded = jwt.verify(token, secret)
+    return decoded.jti
+  },
 
   hashPassword: (user) => {
     // generate salt and password if salt not exist
