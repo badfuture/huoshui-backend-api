@@ -13,8 +13,8 @@
 
 module.exports.policies = {
   AuthController: {
-    'login': ['isAuthenticated'],
-    'signup': ['isAuthenticated'],
+    'login': [''],
+    'signup': [''],
     'blacklistToken': ['isAuthenticated'],
     '*': false,
   },
