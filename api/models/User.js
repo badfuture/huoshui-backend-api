@@ -13,42 +13,10 @@ module.exports = {
     username: {
       field: "username",
       type: Sequelize.STRING,
-      allowNull: false,
+      allowNull: true,
       defaultValue: null,
-      unique: 'uniqueUserProvider',
+      unique: true,
       comment: "用户名"
-    },
-    provider: {
-      field: "provider",
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: 'local',
-      unique: 'uniqueUserProvider',
-      comment: "登录提供方"
-    },
-    providerUid: {
-      field: "provider_uid",
-      type: Sequelize.STRING,
-      allowNull: true,
-      defaultValue: null,
-      unique: 'uniqueUserProvider',
-      comment: "登录提供方用户id"
-    },
-    password: {
-      field: "password",
-      type: Sequelize.STRING,
-      allowNull: false,
-      defaultValue: null,
-      unique: false,
-      comment: "密码"
-    },
-    salt: {
-      field: "salt",
-      type: Sequelize.STRING,
-      allowNull: true,
-      defaultValue: null,
-      unique: false,
-      comment: "密码盐"
     },
     email: {
       field: "email",
@@ -79,22 +47,14 @@ module.exports = {
       }
     },
     avatarSmall: {
-      field: "avatarSmall",
       type: Sequelize.VIRTUAL,
-      allowNull: true,
-      defaultValue: defaultAvatarSmall,
-      unique: false,
       comment: "头像 (50x50)",
       get() {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/50/h/50'
       }
     },
     avatarLarge: {
-      field: "avatarLarge",
       type: Sequelize.VIRTUAL,
-      allowNull: true,
-      defaultValue: defaultAvatarLarge,
-      unique: false,
       comment: "头像 (180x180)",
       get() {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/180/h/180'
@@ -111,6 +71,18 @@ module.exports = {
     },
   },
   associations: function() {
+    User.hasOne(UserLocal, {
+      as: "UserLocal",
+      foreignKey: 'user_id'
+    }); // courseStat: 1:1
+    User.hasOne(UserQQ, {
+      as: "UserQQ",
+      foreignKey: 'user_id'
+    }); // courseStat: 1:1
+    User.hasOne(UserWeibo, {
+      as: "UserWeibo",
+      foreignKey: 'user_id'
+    }); // courseStat: 1:1
     User.belongsTo(School, {
       as: 'School',
       foreignKey: 'school_id'
@@ -171,21 +143,7 @@ module.exports = {
     underscored: true,
     freezeTableName: true,
     classMethods: {},
-    instanceMethods: {
-      toJSON: function () {
-        var values = Object.assign({}, this.get());
-        delete values.password;
-        delete values.salt;
-        return values;
-      }
-    },
-    hooks: {
-      beforeCreate: function(user, options) {
-        return CipherService.hashPassword(user);
-      },
-      beforeUpdate: function(user, options) {
-        return CipherService.hashPassword(user);
-      }
-    }
+    instanceMethods: {},
+    hooks: {}
   }
 };

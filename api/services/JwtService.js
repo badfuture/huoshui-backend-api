@@ -20,50 +20,45 @@ JWT Token shape
   iss: 'https://api.huoshui.org' }
  */
 
-const bcrypt = require('bcrypt-nodejs')
 const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
 const uuid = require('node-uuid')
-
-const sha512Encode = (password, salt) => {
-  password = salt + password;
-  var result = crypto.createHash('sha512').update(password).digest();
-  for (var i = 0; i < 512; i++) {
-    result = crypto.createHash('sha512').update(result).digest();
-  }
-  return result.toString('base64');
-}
+const passport = require('passport')
 
 const getToken = (req) => {
   const header = req.headers['authorization']
-  return header.split(' ')[1]
+  return header.trim().split(/\ +/)[1]
 }
 
 module.exports = {
+
+	authenticate: (req, res, next) => {
+	  passport.authenticate('jwt', function(error, user, info) {
+	    if (error) return res.serverError(error)
+	    if (!user) return res.unauthenticated(null, info && info.code, info && info.message)
+
+			// inject user into req, to be used further down in the pipeline
+	    req.user = user
+
+			Token.findOne({
+				where: {
+					jwtId: JwtService.getJwtId(req),
+					revoked: true,
+				}
+			}).then((token) => {
+				if (token) {
+					return res.unauthenticated(null, null, "token already revoked")
+				} else {
+					next()
+				}
+			})
+	  })(req, res, next)
+	},
 
   getJwtId: (req) => {
     const token = getToken(req)
     const { secret } = sails.config.jwtSettings
     const decoded = jwt.verify(token, secret)
     return decoded.jti
-  },
-
-  hashPassword: (user) => {
-    // generate salt and password if salt not exist
-    if (user.password && !user.salt) {
-      user.salt = crypto.randomBytes(36).toString('base64')
-      user.password = sha512Encode(user.password, user.salt)
-    }
-  },
-
-  verifyPassword: (password, user) => {
-    // verify claimed password with stored password
-    const storedPassword = user.password
-    const storedSalt = user.salt
-
-    const claimedPassword = password
-    const hashedPassword = sha512Encode(claimedPassword, storedSalt)
-    return (storedPassword == hashedPassword)
   },
 
   createJwtToken: (user) => {

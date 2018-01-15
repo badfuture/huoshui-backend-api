@@ -35,7 +35,7 @@ module.exports = {
   },
 
   create: function(req,res){
-    //handled in AuthController.signup
+    //handled in AuthLocalController.signup
   },
 
   update: function(req,res){

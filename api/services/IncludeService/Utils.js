@@ -35,7 +35,7 @@ const applyCommonFilter = (model, include, obj) => {
   const modelOfInclude = getIncludeModel(model, include)
 
   // hide creds when including User model
-  if (modelOfInclude === User) {
+  if (modelOfInclude === UserLocal) {
     obj.attributes = {
       exclude: ['password', 'salt']
     }
@@ -84,7 +84,12 @@ const getAllIncludes = (model) => {
   const relations = model.associations
   includeList = []
   _.each(relations, (rel) => {
-    includeList.push(rel.options.as)
+    const as = rel.options.as
+    if (
+      as == "UserLocal" ||
+      as == "UserQQ" || as == "UserWeibo"
+    ) { return }
+    includeList.push(as)
   })
   return includeList
 }

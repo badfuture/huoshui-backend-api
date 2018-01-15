@@ -112,22 +112,32 @@ var seedRoles = function (roleData, job, next) {
   });
 };
 
-var seedUsers = function(userData, job, next) {
-  sails.log.debug("seeding users");
-  async.eachSeries(userData.results, function(entry, next){
-    var userCreated = null;
-    var kelistCreated = null;
-    var user = {};
-    user.username = entry.username;
-    user.password = entry.password;
-    user.salt = entry.salt;
-    user.email = entry.email;
-    user.firstYear = entry.year;
+const seedUsers = (userData, job, next) => {
+  sails.log.debug("seeding users")
+  async.eachSeries(userData.results, (entry, next) => {
+    let userCreated = null
+    let userLocalCreated = null
+    let kelistCreated = null
+    let user = {
+      username: entry.username,
+      email: entry.email,
+      firstYear: entry.year,
+    }
+    let userLocal = {
+      email: entry.email,
+      salt: entry.salt,
+      password: entry.password,
+    }
 
-    User.create(user)
-    .then(function(user){
-      userCreated = user;
-      return School.findOne({ where: {"name": SCHOOL_NAME}});
+    UserLocal.create(userLocal)
+    .then((created) => {
+      userLocalCreated = created
+      return User.create(user)
+    })
+    .then((created) => {
+      userCreated = created
+      userCreated.setUserLocal(userLocalCreated)
+      return School.findOne({ where: {"name": SCHOOL_NAME}})
     })
     .then(function(school){
       return school.addUser(userCreated);

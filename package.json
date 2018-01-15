@@ -1,7 +1,7 @@
 {
   "name": "huoshui_backend_api",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Huoshui Backend API",
   "keywords": [],
   "dependencies": {
@@ -19,7 +19,6 @@
     "kue": "^0.11.5",
     "lodash": "^4.17.2",
     "merge-defaults": "^0.2.1",
-    "mysql": "^2.12.0",
     "node-uuid": "^1.4.8",
     "nodemailer": "^3.0.2",
     "passport": "^0.3.2",
@@ -40,9 +39,6 @@
     "type": "git",
     "url": "git://github.com/badfuture/huoshui-backend-api.git"
   },
-  "author": "ze",
-  "license": "MIT",
-  "devDependencies": {
-    "jsdoc": "^3.5.5"
-  }
+  "author": "paladinze",
+  "license": "MIT"
 }

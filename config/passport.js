@@ -13,31 +13,29 @@ const PASSPORT_LOCAL_CONFIG = {
 }
 
 const preprocessLocalAuth = (email, password, next) => {
-  User.findOne({
-      where: {
-        email: email
-      }
+  UserLocal.findOne({
+    where: { email }
+  })
+  .then((userLocal) => {
+    // return if user is not found
+    if (!userLocal) return next(null, false, {
+      code: 'E_USER_NOT_FOUND',
+      message: 'User is not found'
     })
-    .then((user) => {
-      // return if user is not found
-      if (!user) return next(null, false, {
-        code: 'E_USER_NOT_FOUND',
-        message: email + ' is not found'
-      })
 
-      // return if password incorrect
-      if (!CipherService.verifyPassword(password, user)) {
-        return next(null, false, {
-          code: 'E_WRONG_PASSWORD',
-          message: 'Password is wrong'
-        })
-      }
-      return next(null, user, {})
-    })
-    .catch((err) => {
-      sails.log.error(err.message)
-      next(err)
-    })
+    // return if password incorrect
+    if (!LocalAuthService.verifyPassword(password, userLocal)) {
+      return next(null, false, {
+        code: 'E_WRONG_PASSWORD',
+        message: 'Password is wrong'
+      })
+    }
+    return next(null, userLocal, {})
+  })
+  .catch((err) => {
+    sails.log.error(err.message)
+    next(err)
+  })
 }
 passport.use(new LocalStrategy(PASSPORT_LOCAL_CONFIG, preprocessLocalAuth))
 

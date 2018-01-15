@@ -74,31 +74,30 @@ const encodeData = (data) => {
 
 const prepareRedirectUrl = (baseUrl, user) => {
 	const userUrlEncoded = encodeData(user)
-	const tokenEncoded = encodeToken(CipherService.createJwtToken(user))
+	const tokenEncoded = encodeToken(JwtService.createJwtToken(user))
 	return `${baseUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 }
 
+// get access token using code, client_id and client_secret
+// get user info using access_token and user id
 module.exports = {
 	login: (req, res) => {
-		const controller = req.options.controller
-		const provider = 'weibo'
 		const client_id = '3486860384'
 		const client_secret = '526fc595b736390ad23d280b40fee1bd'
 		const redirectURI = `${DOMAIN_API}/auth/weibo/callback`
 		const webappUrl = `${DOMAIN_WEBAPP}`
-		let access_token = ''
-		let providerUid = ''
-		let username = ''
-		let avatar = ''
-		let gender = ''
+		let access_token = null
+		let providerUid = null
+		let userFormatted = {}
+
 		const code = req.param('code')
 		const error = req.param('error')
 		if (error) {
 			return res.redirect(webappUrl + '?error=' + error)
 		}
 
-		sails.log.warn("AuthWeiboController: code", code)
-		sails.log.warn("AuthWeiboController: redirectURI", redirectURI)
+		sails.log.debug("AuthWeiboController: code", code)
+		sails.log.debug("AuthWeiboController: redirectURI", redirectURI)
 
 		axios({
 		  method: 'post',
@@ -112,21 +111,10 @@ module.exports = {
 		  }
 		})
 	  .then((resp) => {
-			sails.log.verbose("AuthWeiboController: token response", resp.data)
 			access_token = resp.data.access_token
-			sails.log.warn("AuthWeiboController: token", access_token)
-
-			return axios({
-			  method: 'post',
-			  url: 'https://api.weibo.com/oauth2/get_token_info',
-			  params: {
-					access_token
-			  }
-			})
-		})
-		.then((resp) => {
+			sails.log.debug("AuthWeiboController: access token", access_token)
 			providerUid = resp.data.uid
-			sails.log.warn("AuthWeiboController: provider uid ", providerUid)
+			sails.log.debug("AuthWeiboController: uid ", providerUid)
 			return axios({
 				method: 'get',
 				url: 'https://api.weibo.com/2/users/show.json',
@@ -137,35 +125,25 @@ module.exports = {
 			})
 		})
 		.then((resp) => {
-			sails.log.verbose("AuthWeiboController: user info ", resp.data)
 			const userData = resp.data
-			const { screen_name, avatar_large, avatar_hd, idstr } = userData
-			username = screen_name
-			providerUid = idstr
-			gender = userData.gender
-			avatar = avatar_large || avatar_hd
+			userFormatted = OauthService.formatWeiboProfile(userData)
+			sails.log.debug("AuthWeiboController: user info ", userFormatted)
+
 			return User.findOne({
 				where: {
-					provider,
-					providerUid,
+					provider: userFormatted.provider,
+					providerUid: userFormatted.providerUid,
 				},
 				include: IncludeService.UserInclude('all'),
 			})
 		})
 		.then((userFound) => {
-
 			if (userFound) {
-				sails.log.debug("AuthWeiboController")
+				sails.log.debug("AuthWeiboController: logging in existing user")
 				return res.redirect(prepareRedirectUrl(webappUrl, userFound))
 			} else {
-				// if oauth user not exist, create and return user info
-				User.create({
-					username,
-					password: 'dummy_password',
-					provider,
-					providerUid,
-					avatar,
-				})
+				sails.log.debug("AuthWeiboController: sign up Oauth user")
+				User.create(userFormatted)
 				.then(function(userCreated){
 					return res.redirect(prepareRedirectUrl(webappUrl, userCreated))
 				})

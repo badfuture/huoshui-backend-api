@@ -1,16 +1,16 @@
 module.exports = {
   'POST /auth/signup': {
-    controller: "AuthController",
+    controller: "AuthLocalController",
     action: "signup"
   },
   'POST /auth/login': {
-    controller: "AuthController",
+    controller: "AuthLocalController",
     action: "login"
   },
 
   // JWT token blacklist
   'POST /auth/blacklists/tokens': {
-    controller: "AuthController",
+    controller: "AuthLocalController",
     action: "blacklistToken"
   },
 
@@ -20,15 +20,9 @@ module.exports = {
     action: "login"
   },
 
-  //QQ authentication
+  //weibo authentication
   'GET /auth/weibo/callback': {
     controller: "AuthWeiboController",
-    action: "login"
-  },
-
-  //github authentication
-  'GET /auth/github/callback': {
-    controller: "AuthGithubController",
     action: "login"
   },
 }

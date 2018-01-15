@@ -5,5 +5,5 @@
 var passport = require('passport');
 
 module.exports = function(req, res, next) {
-  AuthService.jwtAuth(req, res, next)
+  JwtService.authenticate(req, res, next)
 }

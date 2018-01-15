@@ -12,9 +12,9 @@
 
 
 module.exports.policies = {
-  AuthController: {
-    'login': [''],
-    'signup': [''],
+  AuthLocalController: {
+    'login': true,
+    'signup': true,
     'blacklistToken': ['isAuthenticated'],
     '*': false,
   },
@@ -22,9 +22,6 @@ module.exports.policies = {
     '*': true
   },
   AuthWeiboController: {
-    '*': true
-  },
-  AuthGithubController: {
     '*': true
   },
   FeedbackController: {
@@ -71,7 +68,8 @@ module.exports.policies = {
     '*': false,
   },
   SeedController: {
-    'seedDB': ['isAuthenticated','isAdmin'],
+    'seedDB': true,
+    'cleanDB': ['isAuthenticated'],
     '*': false,
   },
   TagController: {

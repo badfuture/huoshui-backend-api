@@ -5,6 +5,11 @@ module.exports = {
     action: "seedDB"
   },
 
+  'PUT /cleandb': {
+    controller: "SeedController",
+    action: "cleanDB"
+  },
+
   //check review duplicate
   'GET /checkReviewDuplicate': {
     controller: "DataValidateController",

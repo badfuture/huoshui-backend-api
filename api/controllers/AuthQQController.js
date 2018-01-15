@@ -39,7 +39,7 @@ const encodeData = (data) => {
 
 const prepareRedirectUrl = (baseUrl, user) => {
 	const userUrlEncoded = encodeData(user)
-	const tokenEncoded = encodeToken(CipherService.createJwtToken(user))
+	const tokenEncoded = encodeToken(JwtService.createJwtToken(user))
 	return `${baseUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
 }
 
