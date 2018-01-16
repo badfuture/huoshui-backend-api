@@ -39,7 +39,7 @@ module.exports = {
 
   signup: (req, res) => {
 		const { username, email, password } = req.allParams()
-		sails.log.debug("signup user: " + email)
+		sails.log.debug(`sign up email: ${email} | username ${username}`)
 		let userCreated = null
 		let userLocalCreated = null
 		let jwtToken = null
@@ -49,15 +49,17 @@ module.exports = {
 		})
 		.then((userLocal) => {
 			if (userLocal) {
-				throw new ErrorService.EmailExist()
+				throw new ErrorModel.err(ErrorCode.EmailTaken)
 			}
+		})
+    .then(() => {
 			return User.findOne({
 				where: { username }
 			})
-		})
+    })
 		.then((user) => {
 			if (user) {
-				throw new ErrorService.UsernameExist()
+				throw new ErrorModel.err(ErrorCode.UsernameTaken)
 			}
 		})
 		.then(() => {

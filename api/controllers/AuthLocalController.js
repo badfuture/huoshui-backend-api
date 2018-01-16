@@ -2,7 +2,8 @@
  * AuthLocalController
  * @description :: Server-side logic for manage user's authorization
  */
-const { UsernameExist, EmailExist } = ErrorService
+const EmailTaken = new ErrorModel.err(ErrorCode.EmailTaken)
+const UsernameTaken = new ErrorModel.err(ErrorCode.UsernameTaken)
 
 module.exports = {
 	login: function(req, res) {
@@ -11,12 +12,15 @@ module.exports = {
 
 	signup: function(req, res) {
 		LocalAuthService.signup(req, res)
-		.catch(EmailExist, (e) => {
-			return res.badRequest("user email already exists!")
+		.catch({code: EmailTaken.code}, (e) => {
+			return res.badRequest(EmailTaken.toJson)
 		})
-		.catch((UsernameExist, e) => {
-			return res.badRequest("user username already exists!")
+		.catch({code: UsernameTaken.code}, (e) => {
+			return res.badRequest(UsernameTaken.toJson)
 		})
+		.catch((e) => {
+     	return res.serverError(e)
+ 	  })
 	},
 
 	blacklistToken: (req, res) => {
