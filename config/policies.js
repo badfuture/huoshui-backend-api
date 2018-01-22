@@ -69,7 +69,7 @@ module.exports.policies = {
   },
   SeedController: {
     'seedDB': true,
-    'cleanDB': ['isAuthenticated'],
+    'cleanDB': true,
     '*': false,
   },
   TagController: {

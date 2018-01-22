@@ -60,7 +60,6 @@ module.exports = {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/180/h/180'
       }
     },
-
     gender: {
       field: "gender",
       type: Sequelize.ENUM('男', '女'),
@@ -68,6 +67,14 @@ module.exports = {
       defaultValue: null,
       unique: false,
       comment: "性别"
+    },
+    isInitialized: {
+      field: "isInitialized",
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: true,
+      unique: false,
+      comment: "是否已经初始化（本地登录默认为true，仅社交登录需要初始化）"
     },
   },
   associations: function() {

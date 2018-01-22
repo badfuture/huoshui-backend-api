@@ -26,6 +26,14 @@ module.exports = {
       unique: false,
       comment: "密码盐"
     },
+    isFirstAccount: {
+      field: "isInitialized",
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      unique: false,
+      comment: "是否为第一次注册的账户（该账户不能解除绑定）"
+    },
   },
   associations: function() {
     UserLocal.belongsTo(User, {

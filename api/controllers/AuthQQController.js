@@ -23,35 +23,11 @@
  */
 
 const axios = require('axios')
-const { DOMAIN_API, DOMAIN_WEBAPP} = require('../constants/domain.js')
-
-const encodeToken = (token) => {
-	return encodeURIComponent(JSON.stringify(token))
-}
-
-const encodeData = (data) => {
-	const dataPlain = data.get({plain: true})
-	delete dataPlain.password;
-	delete dataPlain.salt;
-	const dataUrlEncoded = encodeURIComponent(JSON.stringify(dataPlain))
-	return dataUrlEncoded
-}
-
-const prepareRedirectUrl = (baseUrl, user) => {
-	const userUrlEncoded = encodeData(user)
-	const tokenEncoded = encodeToken(JwtService.createJwtToken(user))
-	return `${baseUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
-}
-
-const getQueryParam = (query, variable) => {
-	var vars = query.split('&');
-	for (var i = 0; i < vars.length; i++) {
-    var pair = vars[i].split('=');
-    if (decodeURIComponent(pair[0]) == variable) {
-			return decodeURIComponent(pair[1]);
-    }
-	}
-}
+const {
+	DOMAIN_API,
+	URL_OAUTH_SUCCESS,
+	URL_OAUTH_FAILURE,
+} = require('../constants/domain.js')
 
 // sample data: callback( {"client_id":"101410908","openid":"52F837003046BEC4AC09E7DC6EAC1B29"} );
 const getOpenId = (data) => {
@@ -62,20 +38,22 @@ const getOpenId = (data) => {
 
 module.exports = {
 	login: (req, res) => {
-		const controller = req.options.controller
-		const provider = 'qq'
 		const client_id = '101410908'
 		const client_secret = '216357c3962198f0d5f3b6b65cdfcc21'
-		const redirectURI = `${DOMAIN_API}/auth/qq/callback`
-		const webappUrl = `${DOMAIN_WEBAPP}`
+		let userCreated = null
+		let userFound = null
+		let userQQCreated = null
+		let userQQFound = null
 		let access_token = ''
 		let openId = ''
 		let username = ''
 		let avatar = ''
 		let gender = ''
+
 		const code = req.param('code')
-		sails.log.warn("AuthQQController: code", code)
-		sails.log.warn("AuthQQController: redirectURI", redirectURI)
+		sails.log.debug("AuthQQController: code", code)
+		const redirectURI = `${DOMAIN_API}/auth/qq/callback`
+		sails.log.debug("AuthQQController: redirectURI", redirectURI)
 
 		axios({
 		  method: 'get',
@@ -89,8 +67,8 @@ module.exports = {
 		  }
 		})
 	  .then((resp) => {
-			access_token = getQueryParam(resp.data, 'access_token')
-			sails.log.warn("AuthQQController: token", access_token)
+			access_token = OauthService.getQueryParam(resp.data, 'access_token')
+			sails.log.debug("AuthQQController: access token", access_token)
 
 			return axios({
 			  method: 'get',
@@ -102,7 +80,7 @@ module.exports = {
 		})
 		.then((resp) => {
 			openId = getOpenId(resp.data)
-			sails.log.warn("AuthQQController: openID", openId)
+			sails.log.debug("AuthQQController: openID", openId)
 			return axios({
 				method: 'get',
 				url: 'https://graph.qq.com/user/get_simple_userinfo',
@@ -114,36 +92,112 @@ module.exports = {
 			})
 		})
 		.then((resp) => {
-			const userData = resp.data
-			const { nickname, figureurl_2 } = userData
-			username = nickname
-			gender = userData.gender
-			avatar = figureurl_2 || figureurl_qq_2
-			return User.findOne({
-				where: {
-					provider,
-					providerUid: openId,
-				},
-				include: IncludeService.UserInclude('all')
-			})
-		})
-		.then((userFound) => {
+			const {
+				nickname: username,
+				figureurl_qq_2: avatar,
+				gender
+			} = resp.data
 
-			if (userFound) {
-				sails.log.debug("AuthQQController")
-				return res.redirect(prepareRedirectUrl(webappUrl, userFound))
-			} else {
-				// if oauth user not exist, create and return user info
-				User.create({
-					username,
-					password: 'dummy_password',
-					provider,
-					avatar,
-				})
-				.then(function(userCreated){
-					return res.redirect(prepareRedirectUrl(webappUrl, userCreated))
-				})
-			}
+			UserQQ.findOne({
+				where: { providerId: openId }
+			})
+			.then((result) => {
+				userQQFound = result
+				if (!userQQFound) {
+					// if oauth account not found
+					// 	create oauth account
+					// 	if user currently logged in
+					// 		check if desired oauth account type already linked
+					// 		if already linked
+					// 			throw error "cannot bind multiple accounts of the same type"
+					// 		if this oauth type not linked
+					// 			link the oauth account to the current user account
+					// 	else if not already logged in
+					// 		create a new user
+					// 		link the newly created oauth account to the newly created user
+					UserQQ.create({
+						providerId: openId
+					}).then((result) => {
+						userQQCreated = result
+						if (req.user) {
+							sails.log.debug('user logged in + oauth account not exist: create oauth account and link with User')
+							return UserService.getUserFullInfo(req.user.id)
+							.then((result) => {
+								userFound = result
+								return userFound.getUserQQ()
+							})
+							.then((result) => {
+								if (result) {
+									// throw error: cannot bind the same type
+								} else {
+									return userFound.setUserQQ(userQQCreated)
+								}
+							})
+
+						} else {
+							sails.log.debug('user not logged in + oauth account not exist: create user and oauth account')
+							return User.create({
+								avatar, gender,
+								isInitialized: false,
+							}).then((result) => {
+								userCreated = result
+								userQQCreated.isFirstAccount = true
+								userQQCreated.save()
+								return userCreated.setUserQQ(userQQCreated)
+							}).then(() => {
+								return UserService.getUserFullInfo(userCreated.id)
+							}).then((result) => {
+								console.log(result.get({plain: true}))
+							})
+						}
+					})
+				} else {
+					// if oauth account found
+					// 	if user currently logged in
+					// 		get logged in User id
+					// 		get id of the user owns the oauth account
+					// 		if id is the same
+					// 			if not first account unlink the oauth account
+					// 				return user info
+					// 			if first account
+					// 				throw error: cannot unlink first account
+					// 		if different
+					// 			prompt error "this QQ account is already linked to another user"
+					// 	if not already logged in
+					// 		get the user owning the oauth account
+					// 		return user info
+					if (req.user) {
+						sails.log.debug('user logged in + oauth account exist and linked: unlink')
+						userQQFound.getUser()
+						.then((result) => {
+							userFound = result
+							if (userFound.id == req.user.id) {
+								if (!userQQFound.isFirstAccount) {
+									// unlink account
+									userFound.setUserQQ(null)
+								} else {
+									// throw error: cannot unlink first account
+								}
+							} else {
+								// throw error: already linked to another user
+							}
+						})
+
+					} else {
+						sails.log.debug('user not logged in + oauth account exist：return user full info')
+						UserService.getUserFullInfo(userQQFound.user_id)
+						.then((userFullInfo) => {
+							res.cookie('user', OauthService.stringifyData(userFullInfo))
+							return User.findById(userQQFound.user_id)
+						})
+						.then((UserBasicInfo) => {
+							const token = JwtService.createJwtToken(UserBasicInfo)
+							res.cookie('token', token)
+							return res.redirect(OauthService.prepareRedirectUrl(URL_OAUTH_SUCCESS, token))
+						})
+					}
+				}
+			})
 		})
 		.catch((err) => {
 	    sails.log.debug(err)

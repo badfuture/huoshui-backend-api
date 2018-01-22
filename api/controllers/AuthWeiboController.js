@@ -58,25 +58,7 @@
  */
 
 const axios = require('axios')
-const { DOMAIN_API, DOMAIN_WEBAPP} = require('../constants/domain.js')
-
-const encodeToken = (token) => {
-	return encodeURIComponent(JSON.stringify(token))
-}
-
-const encodeData = (data) => {
-	const dataPlain = data.get({plain: true})
-	delete dataPlain.password;
-	delete dataPlain.salt;
-	const dataUrlEncoded = encodeURIComponent(JSON.stringify(dataPlain))
-	return dataUrlEncoded
-}
-
-const prepareRedirectUrl = (baseUrl, user) => {
-	const userUrlEncoded = encodeData(user)
-	const tokenEncoded = encodeToken(JwtService.createJwtToken(user))
-	return `${baseUrl}?token=${tokenEncoded}&user=${userUrlEncoded}`
-}
+const { DOMAIN_API, DOMAIN_WEBAPP, URL_OAUTH_SUCCESS} = require('../constants/domain.js')
 
 // get access token using code, client_id and client_secret
 // get user info using access_token and user id
@@ -140,12 +122,12 @@ module.exports = {
 		.then((userFound) => {
 			if (userFound) {
 				sails.log.debug("AuthWeiboController: logging in existing user")
-				return res.redirect(prepareRedirectUrl(webappUrl, userFound))
+				return res.redirect(OauthService.prepareRedirectUrl(URL_OAUTH_SUCCESS, userFound))
 			} else {
 				sails.log.debug("AuthWeiboController: sign up Oauth user")
 				User.create(userFormatted)
 				.then(function(userCreated){
-					return res.redirect(prepareRedirectUrl(webappUrl, userCreated))
+					return res.redirect(OauthService.prepareRedirectUrl(URL_OAUTH_SUCCESS, userCreated))
 				})
 			}
 		})

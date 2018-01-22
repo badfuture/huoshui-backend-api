@@ -85,10 +85,6 @@ const getAllIncludes = (model) => {
   includeList = []
   _.each(relations, (rel) => {
     const as = rel.options.as
-    if (
-      as == "UserLocal" ||
-      as == "UserQQ" || as == "UserWeibo"
-    ) { return }
     includeList.push(as)
   })
   return includeList

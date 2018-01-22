@@ -38,7 +38,15 @@ module.exports = {
   },
 
   signup: (req, res) => {
-		const { username, email, password } = req.allParams()
+		const {
+      username,
+      email,
+      password,
+      firstYear,
+      deptId,
+      schoolId = '1',
+    } = req.allParams()
+
 		sails.log.debug(`sign up email: ${email} | username ${username}`)
 		let userCreated = null
 		let userLocalCreated = null
@@ -64,7 +72,8 @@ module.exports = {
 		})
 		.then(() => {
 			return User.create({
-				username, email,
+				username, email, firstYear,
+        isInitialized: true,
 			})
 		})
 		.then((result) => {
@@ -83,10 +92,11 @@ module.exports = {
 		}).then((defaultKelist) => {
 			return userCreated.addOwnsKelists(defaultKelist)
 		}).then(() => {
-			return User.findOne({
-				where: { id: userCreated.id },
-				include: IncludeService.UserInclude('all')
-			})
+			return userCreated.setSchool(schoolId)
+		}).then(() => {
+			return userCreated.setDept(deptId)
+		}).then(() => {
+			return UserService.getUserFullInfo(userCreated.id)
 		}).then((userFullInfo) => {
 			return res.ok({
 				token: jwtToken,

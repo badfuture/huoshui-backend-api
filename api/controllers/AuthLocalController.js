@@ -2,8 +2,7 @@
  * AuthLocalController
  * @description :: Server-side logic for manage user's authorization
  */
-const EmailTaken = new ErrorModel.err(ErrorCode.EmailTaken)
-const UsernameTaken = new ErrorModel.err(ErrorCode.UsernameTaken)
+
 
 module.exports = {
 	login: function(req, res) {
@@ -11,6 +10,8 @@ module.exports = {
 	},
 
 	signup: function(req, res) {
+		const EmailTaken = new ErrorModel.err(ErrorCode.EmailTaken)
+		const UsernameTaken = new ErrorModel.err(ErrorCode.UsernameTaken)
 		LocalAuthService.signup(req, res)
 		.catch({code: EmailTaken.code}, (e) => {
 			return res.badRequest(EmailTaken.toJson)

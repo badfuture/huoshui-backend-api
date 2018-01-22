@@ -9,6 +9,14 @@ module.exports = {
       unique: true,
       comment: "weibo idstr"
     },
+    isFirstAccount: {
+      field: "isInitialized",
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      unique: false,
+      comment: "是否为第一次注册的账户（该账户不能解除绑定）"
+    },
   },
   associations: function() {
     UserWeibo.belongsTo(User, {
