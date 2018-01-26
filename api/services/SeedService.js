@@ -379,10 +379,12 @@ var seedReviews = function(userData, reviewData, job, next) {
 
     //optional: exam data
     review.hasExam = entry.exam.touched;
-    review.examprep = entry.exam.examprep.checked;
-    review.openbook = entry.exam.openbook.checked;
-    review.oldquestion = entry.exam.oldquestion.checked;
-    review.easymark = entry.exam.easiness.checked;
+    if (review.hasExam) {
+      review.examprep = entry.exam.examprep.checked;
+      review.openbook = entry.exam.openbook.checked;
+      review.oldquestion = entry.exam.oldquestion.checked;
+      review.easymark = entry.exam.easiness.checked;
+    }
 
     //optional: secondary data
     review.rateAttend = entry.attendance.value + 1;

@@ -27,10 +27,14 @@ class courseStatModel {
 
     // secondary stats
     this.countExamDetails = 0
-    this.countExamPrep = 0
-    this.countExamOpenbook = 0
-    this.countExamOldquestion = 0
-    this.countExamEasymark = 0
+    this.countExamPrepYes = 0
+    this.countExamPrepNo = 0
+    this.countExamOpenbookYes = 0
+    this.countExamOpenbookNo = 0
+    this.countExamOldquestionYes = 0
+    this.countExamOldquestionNo = 0
+    this.countExamEasymarkYes = 0
+    this.countExamEasymarkNo = 0
   }
 
   updateWithReviews(reviews) {
@@ -94,16 +98,24 @@ class courseStatModel {
       this.countExamDetails++
     }
     if (review.examprep) {
-      this.countExamPrep++
+      this.countExamPrepYes++
+    } else if (review.examprep == false) {
+      this.countExamPrepNo++
     }
     if (review.openbook) {
-      this.countExamOpenbook++
+      this.countExamOpenbookYes++
+    } else if (review.openbook == false) {
+      this.countExamOpenbookNo++
     }
     if (review.oldquestion) {
-      this.countExamOldquestion++
+      this.countExamOldquestionYes++
+    } else if (review.oldquestion == false) {
+      this.countExamOldquestionNo++
     }
     if (review.easymark) {
-      this.countExamEasymark++
+      this.countExamEasymarkYes++
+    } else if (review.easymark == false) {
+      this.countExamEasymarkNo++
     }
 
   }

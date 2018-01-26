@@ -19,9 +19,9 @@ module.exports = {
 		}
 	},
 
-  prepareRedirectUrl: (baseUrl, token) => {
+  prepareRedirectUrl: (baseUrl, token, state) => {
   	const tokenEncoded = encodeToken(token)
-  	return `${baseUrl}?token=${tokenEncoded}`
+  	return `${baseUrl}?token=${tokenEncoded}&state=${state}`
   }
 
 }

@@ -162,8 +162,8 @@ module.exports = {
       validate: {min: 0},
       comment: "考试细节（开卷，原题，划重点，题目容易）评论次数"
     },
-    countExamPrep: {
-      field: "countExamPrep",
+    countExamPrepYes: {
+      field: "countExamPrepYes",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -171,8 +171,17 @@ module.exports = {
       validate: {min: 0},
       comment: "划重点 次数"
     },
-    countExamOpenbook: {
-      field: "countExamOpenbook",
+    countExamPrepNo: {
+      field: "countExamPrepNo",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "不 划重点 次数"
+    },
+    countExamOpenbookYes: {
+      field: "countExamOpenbookYes",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -180,8 +189,17 @@ module.exports = {
       validate: {min: 0},
       comment: "开卷 次数"
     },
-    countExamOldquestion: {
-      field: "countExamOldquestion",
+    countExamOpenbookNo: {
+      field: "countExamOpenbookNo",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "不 开卷 次数"
+    },
+    countExamOldquestionYes: {
+      field: "countExamOldquestionYes",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
@@ -189,15 +207,33 @@ module.exports = {
       validate: {min: 0},
       comment: "原题 次数"
     },
-    countExamEasymark: {
-      field: "countExamEasymark",
+    countExamOldquestionNo: {
+      field: "countExamOldquestionNo",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "不是 原题 次数"
+    },
+    countExamEasymarkYes: {
+      field: "countExamEasymarkYes",
       type: Sequelize.INTEGER,
       allowNull: true,
       defaultValue: 0,
       unique: false,
       validate: {min: 0},
       comment: "题目容易 次数"
-    }
+    },
+    countExamEasymarkNo: {
+      field: "countExamEasymarkNo",
+      type: Sequelize.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      unique: false,
+      validate: {min: 0},
+      comment: "非 题目容易 次数"
+    },
   },
   associations: function() {
     ProfStat.belongsTo(Prof, {

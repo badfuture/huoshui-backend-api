@@ -15,7 +15,16 @@ module.exports = (includeList = []) => {
   includeList.forEach((include) => {
     if (!getIncludeModel(model, include)) { return }
     let obj = initInclude(model, include)
-    if (include == "Reviews") {
+    if (include == "Prof") {
+      obj.include = [{
+        model: Position,
+        as: 'Position'
+      },
+      {
+        model: Dept,
+        as: 'Depts'
+      }]
+    } else if (include == "Reviews") {
       delete obj.duplicating
       obj.include = [
         {

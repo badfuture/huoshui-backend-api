@@ -3,7 +3,8 @@ const getScore = ({ targetMean, actualMean, minReviewCount, reviewCount }) => {
   let r = actualMean // actual mean score of the review object
   let M = minReviewCount || 1// minimum # of votes to be considered effective
   let v = reviewCount // # of reviews
-  return (v / (v + M)) * r + (M / (v + M)) * (C)
+  const score = (v / (v + M)) * r + (M / (v + M)) * (C)
+  return (reviewCount != 0) ? score: 0
 }
 
 module.exports = {

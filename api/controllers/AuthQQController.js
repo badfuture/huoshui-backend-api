@@ -52,6 +52,8 @@ module.exports = {
 
 		const code = req.param('code')
 		sails.log.debug("AuthQQController: code", code)
+		const state = req.param('state')
+		sails.log.debug("AuthQQController: state", state)
 		const redirectURI = `${DOMAIN_API}/auth/qq/callback`
 		sails.log.debug("AuthQQController: redirectURI", redirectURI)
 
@@ -193,7 +195,7 @@ module.exports = {
 						.then((UserBasicInfo) => {
 							const token = JwtService.createJwtToken(UserBasicInfo)
 							res.cookie('token', token)
-							return res.redirect(OauthService.prepareRedirectUrl(URL_OAUTH_SUCCESS, token))
+							return res.redirect(OauthService.prepareRedirectUrl(URL_OAUTH_SUCCESS, token, state))
 						})
 					}
 				}
