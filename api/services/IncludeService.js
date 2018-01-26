@@ -23,5 +23,6 @@ module.exports ={
   KelistInclude,
   PositionInclude,
   SchoolInclude,
+  DeptInclude,
   TagInclude,
 }
