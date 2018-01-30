@@ -46,4 +46,28 @@ module.exports = {
     controller: "UserController",
     action: "unlikeProf",
   },
+
+  // like and unlike review
+  'PUT /users/:userId/liked_reviews': {
+    model: "user",
+    controller: "UserController",
+    action: "likeReview",
+  },
+  'DELETE /users/:userId/liked_reviews/:reviewId': {
+    model: "user",
+    controller: "UserController",
+    action: "unlikeReview",
+  },
+
+  // dislike and undislike review
+  'PUT /users/:userId/disliked_reviews': {
+    model: "user",
+    controller: "UserController",
+    action: "dislikeReview",
+  },
+  'DELETE /users/:userId/disliked_reviews/:reviewId': {
+    model: "user",
+    controller: "UserController",
+    action: "undislikeReview",
+  },
 }

@@ -232,4 +232,89 @@ module.exports = {
       }
     })
   },
+
+  /**
+   * likeReview
+   */
+  likeReview: (req, res) => {
+    sails.log.debug('UserController: likeReview')
+    const { userId, reviewId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Review.findById(reviewId),
+    ]).then(([userFound, reviewFound]) => {
+      if (!userFound || !reviewFound) {
+        return res.badRequest('User or review is not found')
+      } else {
+        return userFound.addLikedReviews(reviewFound)
+        .then(() => {
+          return res.ok('review added to user collection')
+        })
+      }
+    })
+  },
+
+  /**
+   * unlikeReview
+   */
+  unlikeReview: (req, res) => {
+    sails.log.debug('UserController: unlikeReview')
+    const { userId, reviewId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Review.findById(reviewId)
+    ]).then(([userFound, reviewFound]) => {
+      if (!userFound || !reviewFound) {
+        return res.badRequest('User or review is not found')
+      } else {
+        return userFound.removeLikedReviews(reviewFound)
+        .then(() => {
+          return res.ok('course removed from user collection')
+        })
+      }
+    })
+  },
+
+  /**
+   * dislikeReview
+   */
+  dislikeReview: (req, res) => {
+    sails.log.debug('UserController: dislikeReview')
+    const { userId, reviewId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Review.findById(reviewId),
+    ]).then(([userFound, reviewFound]) => {
+      if (!userFound || !reviewFound) {
+        return res.badRequest('User or review is not found')
+      } else {
+        return userFound.addDislikedReviews(reviewFound)
+        .then(() => {
+          return res.ok('review added to user collection: DislikedReviews')
+        })
+      }
+    })
+  },
+
+  /**
+   * undislikeReview
+   */
+  undislikeReview: (req, res) => {
+    sails.log.debug('UserController: undislikeReview')
+    const { userId, reviewId } = ActionUtil.parseValues(req)
+    Promise.all([
+      User.findById(userId),
+      Review.findById(reviewId)
+    ]).then(([userFound, reviewFound]) => {
+      if (!userFound || !reviewFound) {
+        return res.badRequest('User or review is not found')
+      } else {
+        return userFound.removeDislikedReviews(reviewFound)
+        .then(() => {
+          return res.ok('review removed from user collection: dislikedReviews')
+        })
+      }
+    })
+  },
+
 };

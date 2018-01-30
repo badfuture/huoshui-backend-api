@@ -85,6 +85,10 @@ module.exports.policies = {
     'unlikeCourse': ['isAuthenticated'],
     'likeProf': ['isAuthenticated'],
     'unlikeProf': ['isAuthenticated'],
+    'likeReview': ['isAuthenticated'],
+    'unlikeReview': ['isAuthenticated'],
+    'dislikeReview': ['isAuthenticated'],
+    'undislikeReview': ['isAuthenticated'],
     '*': false,
   },
   SearchController: {
