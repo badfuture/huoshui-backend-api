@@ -72,7 +72,9 @@ module.exports = function addToCollection (req, res) {
     child = actionUtil.parseValues(req);
   }
   if (!child) {
-    res.badRequest('You must specify the record to add (either the primary key of an existing record to link, or a new object without a primary key which will be used to create a record then link it.)');
+    res.badRequest({
+      messsage: 'You must specify the record to add (either the primary key of an existing record to link, or a new object without a primary key which will be used to create a record then link it.)'
+    });
   }
 
   // add pk parent to child

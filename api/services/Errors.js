@@ -4,7 +4,7 @@ class CustomError extends Error {
     Object.assign(this, input)
   }
 
-  get toJson() {
+  toJson() {
     return {
       error: {
         code: this.code,
@@ -16,5 +16,8 @@ class CustomError extends Error {
 }
 
 module.exports = {
-  err: CustomError
+  create: (errCode) => {
+    return new CustomError(errCode)
+  }
+
 }

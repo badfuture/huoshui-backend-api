@@ -39,7 +39,7 @@ module.exports = {
 
     // return if the comment is malformed
     if (!commentable || !commentableId || !text || !authorId) {
-      return res.badRequest('commentable, commentableId, text and authorId fields are required')
+      return res.badRequest({message: 'commentable, commentableId, text and authorId fields are required'})
     }
 
 		if (parentId != null && parentId != '') {
@@ -73,7 +73,7 @@ module.exports = {
 				      return res.serverError(err)
 				    })
 					} else {
-						return res.badRequest('cannot comment on a subcomment')
+						return res.badRequest(ErrorCode.CannotCommentOnSubcomment)
 					}
 				})
 		} else {

@@ -24,7 +24,7 @@ const preprocessLocalAuth = (email, password, next) => {
     })
 
     // return if password incorrect
-    if (!LocalAuthService.verifyPassword(password, userLocal)) {
+    if (!AuthLocalService.verifyPassword(password, userLocal)) {
       return next(null, false, {
         code: 'E_WRONG_PASSWORD',
         message: 'Password is wrong'

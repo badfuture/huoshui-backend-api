@@ -34,7 +34,10 @@ module.exports = {
 	authenticate: (req, res, next) => {
 	  passport.authenticate('jwt', function(error, user, info) {
 	    if (error) return res.serverError(error)
-	    if (!user) return res.unauthenticated(null, info && info.code, info && info.message)
+	    if (!user) return res.notAuthenticated({
+        code: info && info.code,
+        message: info && info.message,
+      })
 
 			// inject user into req, to be used further down in the pipeline
 	    req.user = user
@@ -46,7 +49,9 @@ module.exports = {
 				}
 			}).then((token) => {
 				if (token) {
-					return res.unauthenticated(null, null, "token already revoked")
+					return res.notAuthenticated({
+            message: "token already revoked"
+          })
 				} else {
 					next()
 				}

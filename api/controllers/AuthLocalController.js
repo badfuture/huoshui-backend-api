@@ -6,18 +6,16 @@
 
 module.exports = {
 	login: function(req, res) {
-		LocalAuthService.login(req, res)
+		AuthLocalService.login(req, res)
 	},
 
 	signup: function(req, res) {
-		const EmailTaken = new ErrorModel.err(ErrorCode.EmailTaken)
-		const UsernameTaken = new ErrorModel.err(ErrorCode.UsernameTaken)
-		LocalAuthService.signup(req, res)
-		.catch({code: EmailTaken.code}, (e) => {
-			return res.badRequest(EmailTaken.toJson)
+		AuthLocalService.signup(req, res)
+		.catch({code: ErrorCode.EmailTaken.code}, (e) => {
+			return res.badRequest(ErrorCode.EmailTaken)
 		})
-		.catch({code: UsernameTaken.code}, (e) => {
-			return res.badRequest(UsernameTaken.toJson)
+		.catch({code: ErrorCode.UsernameTaken.code}, (e) => {
+			return res.badRequest(ErrorCode.UsernameTaken)
 		})
 		.catch((e) => {
      	return res.serverError(e)
@@ -36,7 +34,7 @@ module.exports = {
 				token.save()
 				res.ok("token revoked")
 			} else {
-				res.badRequest("token not found")
+				res.notFound(ErrorCode.BlacklistTokenNotFound)
 			}
 		})
 	}

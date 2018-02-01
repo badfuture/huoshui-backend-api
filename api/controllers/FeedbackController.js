@@ -38,7 +38,7 @@ module.exports = {
     let newFeedback = null
 
     if (!content) {
-      return res.badRequest("feedback content cannot be empty")
+      return res.badRequest(ErrorCode.FeedbackContentMissing)
     }
 
     Feedback.create({

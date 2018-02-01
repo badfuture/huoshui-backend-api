@@ -123,7 +123,7 @@ module.exports = {
         return res.negotiate(err)
       }
       if (files.length === 0){
-        return res.badRequest('No file was uploaded')
+        return res.badRequest(ErrorCode.UploadFileEmpty)
       }
 
       localPath = files[0].fd
@@ -159,8 +159,10 @@ module.exports = {
       User.findById(userId),
       Course.findById(courseId),
     ]).then(([userFound, courseFound]) => {
-      if (!userFound || !courseFound) {
-        return res.badRequest('User or course is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!courseFound) {
+        return res.badRequest(ErrorCode.CourseNotFound)
       } else {
         return userFound.addLikedCourses(courseFound)
         .then(() => {
@@ -180,8 +182,10 @@ module.exports = {
       User.findById(userId),
       Course.findById(courseId)
     ]).then(([userFound, courseFound]) => {
-      if (!userFound || !courseFound) {
-        return res.badRequest('User or course is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!courseFound) {
+        return res.badRequest(ErrorCode.CourseNotFound)
       } else {
         return userFound.removeLikedCourses(courseFound)
         .then(() => {
@@ -201,8 +205,10 @@ module.exports = {
       User.findById(userId),
       Prof.findById(profId)
     ]).then(([userFound, profFound]) => {
-      if (!userFound || !profFound) {
-        return res.badRequest('User or Prof is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!profFound) {
+        return res.badRequest(ErrorCode.ProfNotFound)
       } else {
         return userFound.addLikedProfs(profFound)
         .then(() => {
@@ -222,8 +228,10 @@ module.exports = {
       User.findById(userId),
       Prof.findById(profId)
     ]).then(([userFound, profFound]) => {
-      if (!userFound || !profFound) {
-        return res.badRequest('User or Prof is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!profFound) {
+        return res.badRequest(ErrorCode.ProfNotFound)
       } else {
         return userFound.removeLikedProfs(profFound)
         .then(() => {
@@ -243,12 +251,23 @@ module.exports = {
       User.findById(userId),
       Review.findById(reviewId),
     ]).then(([userFound, reviewFound]) => {
-      if (!userFound || !reviewFound) {
-        return res.badRequest('User or review is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!reviewFound) {
+        return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
-        return userFound.addLikedReviews(reviewFound)
-        .then(() => {
-          return res.ok('review added to user collection')
+        userFound.getDislikedReviews({
+          where: { id: reviewId }
+        })
+        .then((dislikedReviews) => {
+          if (dislikedReviews.length != 0) {
+            return res.badRequest(ErrorCode.CannotBothLikeAndDislikeReview)
+          } else {
+            userFound.addLikedReviews(reviewFound)
+            .then(() => {
+              return res.ok('review added to user collection: LikedReviews')
+            })
+          }
         })
       }
     })
@@ -264,12 +283,14 @@ module.exports = {
       User.findById(userId),
       Review.findById(reviewId)
     ]).then(([userFound, reviewFound]) => {
-      if (!userFound || !reviewFound) {
-        return res.badRequest('User or review is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!reviewFound) {
+        return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
         return userFound.removeLikedReviews(reviewFound)
         .then(() => {
-          return res.ok('course removed from user collection')
+          return res.ok('review removed from user collection: LikedReviews')
         })
       }
     })
@@ -285,12 +306,23 @@ module.exports = {
       User.findById(userId),
       Review.findById(reviewId),
     ]).then(([userFound, reviewFound]) => {
-      if (!userFound || !reviewFound) {
-        return res.badRequest('User or review is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!reviewFound) {
+        return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
-        return userFound.addDislikedReviews(reviewFound)
-        .then(() => {
-          return res.ok('review added to user collection: DislikedReviews')
+        userFound.getLikedReviews({
+          where: { id: reviewId }
+        })
+        .then((likedReviews) => {
+          if (likedReviews.length != 0) {
+            return res.badRequest(ErrorCode.CannotBothLikeAndDislikeReview)
+          } else {
+            userFound.addLikedReviews(reviewFound)
+            .then(() => {
+              return res.ok('review added to user collection: DislikedReviews')
+            })
+          }
         })
       }
     })
@@ -306,12 +338,14 @@ module.exports = {
       User.findById(userId),
       Review.findById(reviewId)
     ]).then(([userFound, reviewFound]) => {
-      if (!userFound || !reviewFound) {
-        return res.badRequest('User or review is not found')
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!reviewFound) {
+        return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
         return userFound.removeDislikedReviews(reviewFound)
         .then(() => {
-          return res.ok('review removed from user collection: dislikedReviews')
+          return res.ok('review removed from user collection: DislikedReviews')
         })
       }
     })

@@ -13,7 +13,7 @@ module.exports = {
     // get search query string
     const query = req.allParams().query
     if (!query) {
-      return res.badRequest('query parameter is required')
+      return res.badRequest(ErrorCode.SearchQueryParamMissing)
     }
 
     // get search scope

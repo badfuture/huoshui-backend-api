@@ -13,7 +13,10 @@ const sha512Encode = (password, salt) => {
 
 const _onLocalAuth = (req, res, error, userLocal, info) => {
 	if (error) return res.serverError(error)
-	if (!userLocal) return res.unauthenticated(null, info && info.code, info && info.message)
+	if (!userLocal) return res.notAuthenticated({
+    code: info && info.code,
+    message: info && info.message
+  })
 
 	let user = null
 	userLocal.getUser()
@@ -57,7 +60,7 @@ module.exports = {
 		})
 		.then((userLocal) => {
 			if (userLocal) {
-				throw new ErrorModel.err(ErrorCode.EmailTaken)
+				throw Errors.create(ErrorCode.EmailTaken)
 			}
 		})
     .then(() => {
@@ -67,7 +70,7 @@ module.exports = {
     })
 		.then((user) => {
 			if (user) {
-				throw new ErrorModel.err(ErrorCode.UsernameTaken)
+				throw Errors.create(ErrorCode.UsernameTaken)
 			}
 		})
 		.then(() => {

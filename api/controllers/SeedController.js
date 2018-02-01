@@ -11,7 +11,7 @@ module.exports = {
 		.then((results) => {
       let meta = results[0]
       if (meta && meta.seeded){
-        res.badRequest("Database is seeding or has already been seeded!")
+        return res.badRequest(ErrorCode.DatabaseAlreadySeeded)
       } else {
         if (mode === 'prod') {
           res.ok(`Starting to seed DB in ${mode} mode with full data!`)
@@ -20,7 +20,7 @@ module.exports = {
           res.ok(`Starting to seed DB in ${mode} mode with partial data!`)
           SeedService.seedDB(mode)
         } else {
-          res.badRequest('Seeding needs to be in either "dev" or "prod" mode!')
+          return res.badRequest(ErrorCode.SeedModeNotRecognized)
         }
 
 			}
@@ -29,6 +29,7 @@ module.exports = {
       res.serverError(err)
     })
 	},
+
   cleanDB: (req, res) => {
     sequelize.sync({
       force: true

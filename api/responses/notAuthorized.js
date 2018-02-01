@@ -1,6 +1,6 @@
 
-module.exports = function notFound ({code, type, message}) {
-  this.res.status(404)
+module.exports = function notAuthorized ({code, type, message}) {
+  this.res.status(403)
   const errorJson = _.merge(ErrorCode.NotAuthorized, {
     code,
     type,

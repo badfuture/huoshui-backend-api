@@ -43,7 +43,7 @@ module.exports = {
 
     // return if try to create a default kelist
     if (category === 'default_personal_kelist') {
-      return res.badRequest('The default kelist is created on user registration');
+      return res.badRequest(ErrorCode.CannotCreateDefaultKelist)
     }
 
     Kelist.create({

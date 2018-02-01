@@ -12,7 +12,7 @@ module.exports = function(req, res, next) {
   })
   .then((user) => {
     if (!user) {
-      res.unauthorized()
+      res.notAuthorized({})
     } else {
       next()
     }

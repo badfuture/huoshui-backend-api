@@ -60,10 +60,10 @@ module.exports = {
     },
     hooks: {
       beforeCreate: (userLocal, options) => {
-        return LocalAuthService.hashPassword(userLocal)
+        return AuthLocalService.hashPassword(userLocal)
       },
       beforeUpdate: (userLocal, options) => {
-        return LocalAuthService.hashPassword(userLocal)
+        return AuthLocalService.hashPassword(userLocal)
       }
     }
   }

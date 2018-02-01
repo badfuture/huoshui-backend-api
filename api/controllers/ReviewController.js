@@ -103,7 +103,7 @@ module.exports = {
 
     // bad request if required params not found
     if (!courseId || !professional || !expressive || !kind || !text) {
-      return res.badRequest('courseId, professional, expressive, kind, text fields are required')
+      return res.badRequest(ErrorCode.ReviewRequiredFieldMissing)
     }
 
     // determine if hasExam based on rateExam
@@ -114,7 +114,7 @@ module.exports = {
       .isReviewDuplicate(userId, courseId)
       .then((isDuplicate) => {
         if (isDuplicate) {
-          res.badRequest('User can only review the same course once')
+          res.badRequest(ErrorCode.ReviewSameCourseOnce)
         } else {
           // create new review and set asscoiations for:
           // course, prof, user
