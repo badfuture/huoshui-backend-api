@@ -149,9 +149,6 @@ module.exports = {
     })
   },
 
-  /**
-   * add Prof to User's LikedProfs
-   */
   likeCourse: (req, res) => {
     sails.log.debug("UserController likeCourse")
     const { userId, courseId } = ActionUtil.parseValues(req)
@@ -172,9 +169,6 @@ module.exports = {
     })
   },
 
-  /**
-   * add Prof to User's LikedProfs
-   */
   unlikeCourse: (req, res) => {
     sails.log.debug("UserController unlikeCourse")
     const { userId, courseId } = ActionUtil.parseValues(req)
@@ -195,9 +189,6 @@ module.exports = {
     })
   },
 
-  /**
-   * add Prof to User's LikedProfs
-   */
   likeProf: (req, res) => {
     sails.log.debug("UserController likeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
@@ -218,9 +209,6 @@ module.exports = {
     })
   },
 
-  /**
-   * remove Prof from User's LikedProf
-   */
   unlikeProf: (req, res) => {
     sails.log.debug("UserController unlikeProf")
     const { userId, profId } = ActionUtil.parseValues(req)
@@ -241,9 +229,6 @@ module.exports = {
     })
   },
 
-  /**
-   * likeReview
-   */
   likeReview: (req, res) => {
     sails.log.debug('UserController: likeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
@@ -273,9 +258,6 @@ module.exports = {
     })
   },
 
-  /**
-   * unlikeReview
-   */
   unlikeReview: (req, res) => {
     sails.log.debug('UserController: unlikeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
@@ -296,9 +278,6 @@ module.exports = {
     })
   },
 
-  /**
-   * dislikeReview
-   */
   dislikeReview: (req, res) => {
     sails.log.debug('UserController: dislikeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
@@ -328,9 +307,6 @@ module.exports = {
     })
   },
 
-  /**
-   * undislikeReview
-   */
   undislikeReview: (req, res) => {
     sails.log.debug('UserController: undislikeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
