@@ -133,7 +133,7 @@ module.exports = {
       .upload(filename, localPath)
       .then((resp) => {
         ObjectStorageService.refreshCdn(filename)
-        return User.findById(userId)
+        return UserService.getUserFullInfo(userId)
       })
       .then((userFound) => {
         userFound.update({

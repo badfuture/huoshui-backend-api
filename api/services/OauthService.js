@@ -22,6 +22,21 @@ module.exports = {
   prepareRedirectUrl: (baseUrl, token, state) => {
   	const tokenEncoded = encodeToken(token)
   	return `${baseUrl}?token=${tokenEncoded}&state=${state}`
-  }
+  },
 
+  getUrlAccountLinked: (baseUrl) => {
+  	return `${baseUrl}?error=true&is_account_linked=true`
+  },
+
+  getUrlAccountUnlinked: (baseUrl) => {
+  	return `${baseUrl}?error=true&is_account_unlinked=true`
+  },
+
+  getUrlCannotUnlink: (baseUrl) => {
+  	return `${baseUrl}?error=true&cannot_unlink=true`
+  },
+
+  getUrlAlreadyLinked: (baseUrl) => {
+  	return `${baseUrl}?error=true&already_linked_another_account=true`
+  },
 }

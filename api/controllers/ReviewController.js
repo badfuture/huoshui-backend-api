@@ -114,7 +114,7 @@ module.exports = {
       .isReviewDuplicate(userId, courseId)
       .then((isDuplicate) => {
         if (isDuplicate) {
-          res.badRequest(ErrorCode.ReviewSameCourseOnce)
+          res.badRequest(ErrorCode.ReviewSameCourseTwice)
         } else {
           // create new review and set asscoiations for:
           // course, prof, user

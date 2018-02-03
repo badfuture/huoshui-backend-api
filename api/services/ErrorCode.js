@@ -24,13 +24,18 @@ module.exports = {
     type: "BadRequest",
     message: "The request is invalid. Double check the params used in the request"
   },
+  BindSameAccountTypeTwice: {
+    code: "BindSameAccountTypeTwice",
+    type: "BadRequest",
+    message: "Cannot bind multiple social accounts of the same type to a user"
+  },
   ReviewRequiredFieldMissing: {
     code: "ReviewRequiredFieldMissing",
     type: "BadRequest",
     message: "courseId, professional, expressive, kind, text fields are required"
   },
-  ReviewSameCourseOnce: {
-    code: "ReviewSameCourseOnce",
+  ReviewSameCourseTwice: {
+    code: "ReviewSameCourseTwice",
     type: "BadRequest",
     message: "User can only review the same course once"
   },
