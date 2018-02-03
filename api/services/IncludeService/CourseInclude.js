@@ -18,11 +18,13 @@ module.exports = (includeList = []) => {
     if (include == "Prof") {
       obj.include = [{
         model: Position,
-        as: 'Position'
+        as: 'Position',
+        duplicating: false
       },
       {
         model: Dept,
-        as: 'Depts'
+        as: 'Depts',
+        duplicating: false
       }]
     } else if (include == "Reviews") {
       delete obj.duplicating
