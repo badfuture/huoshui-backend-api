@@ -39,7 +39,7 @@ module.exports = {
     const pk = ActionUtil.requirePk(req)
     const includes = ActionUtil.parsePopulate(req)
     const sort = ActionUtil.parseSort(req) || [
-      [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
+      [{ model: Review, as: 'Reviews' }, 'upVote', 'DESC'],
     ]
 
     Course.findById(pk, {

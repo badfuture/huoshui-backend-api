@@ -20,7 +20,7 @@ module.exports = (includeList = []) => {
         model: Dept,
         as: 'Dept',
       }]
-    } else if (include == "Comment") {
+    } else if (include == "Comments") {
       obj.separate = false
       obj.include = [{
         model: Comment,
