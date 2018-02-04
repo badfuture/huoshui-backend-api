@@ -3,8 +3,6 @@ JWT Token shape
 { user:
    { id: 8,
      username: 'pala2',
-     provider: 'local',
-     providerUid: null,
      email: 'paladinze@hotmail.com',
      firstYear: null,
      avatar: null,

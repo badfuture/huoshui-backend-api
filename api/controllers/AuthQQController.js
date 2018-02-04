@@ -144,7 +144,7 @@ module.exports = {
 						} else {
 							sails.log.debug('user not logged in + oauth account not exist: create user and oauth account')
 							return User.create({
-								username, avatar, gender,
+								avatar, gender,
 								isInitialized: false,
 							}).then((result) => {
 								userCreated = result
