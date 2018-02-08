@@ -30,22 +30,25 @@ const getToken = (req) => {
 module.exports = {
 
 	authenticate: (req, res, next) => {
-	  passport.authenticate('jwt', function(error, user, info) {
+	  passport.authenticate('jwt', function(error, userInJwt, info) {
 	    if (error) return res.serverError(error)
-	    if (!user) return res.notAuthenticated({
+	    if (!userInJwt) return res.notAuthenticated({
         code: info && info.code,
         message: info && info.message,
       })
 
 			// inject user into req, to be used further down in the pipeline
-	    req.user = user
-
-			Token.findOne({
-				where: {
-					jwtId: JwtService.getJwtId(req),
-					revoked: true,
-				}
-			}).then((token) => {
+			User.findById(userInJwt.id)
+      .then((result) => {
+        req.user = result
+			  return Token.findOne({
+  				where: {
+  					jwtId: JwtService.getJwtId(req),
+  					revoked: true,
+  				}
+			  })
+      })
+      .then((token) => {
 				if (token) {
 					return res.notAuthenticated({
             message: "token already revoked"

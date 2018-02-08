@@ -6,24 +6,39 @@
 
 module.exports = {
   find: function(req,res){
-    Prof.findAll({
+    const queryParams = {
       where: ActionUtil.parseWhere(req),
       limit: ActionUtil.parseLimit(req),
       offset: ActionUtil.parseSkip(req),
       order: ActionUtil.parseSort(req),
       include: ActionUtil.parsePopulate(req),
-    }).then(function(recordsFound){
-      return res.ok(recordsFound)
-    }).catch(function(err){
-      return res.serverError(err)
-    });
+      distinct: true
+    }
+
+    const isPaginateFormat =  ActionUtil.parsePaginate(req)
+
+    if (isPaginateFormat) {
+      Prof.findAndCountAll(queryParams)
+      .then(function(recordsFound){
+        return res.ok(recordsFound);
+      }).catch(function(err){
+        return res.serverError(err);
+      })
+    } else {
+      Prof.findAll(queryParams)
+      .then(function(recordsFound){
+        return res.ok(recordsFound)
+      }).catch(function(err){
+        return res.serverError(err)
+      })
+    }
   },
 
   findOne: function(req,res){
     const pk = ActionUtil.requirePk(req)
     const includes = ActionUtil.parsePopulate(req)
     const sort = ActionUtil.parseSort(req) || [
-      [{ model: Review, as: 'Reviews' }, 'createdAt', 'DESC'],
+      [{ model: Review, as: 'Reviews' }, 'upVote', 'DESC'],
     ]
 
     Prof.findById(pk, {

@@ -71,7 +71,7 @@ module.exports = {
 
     Review.findById(pk, {
       include: includes,
-      order: OrderService.validateOrder(includes, 'Reviews') ? sort : null
+      order: OrderService.validateOrder(includes, 'Comments') ? sort : null
     }).then(function(recordFound) {
       if(!recordFound) return res.notFound('No record found with the specified `id`.');
       recordFound.set('Comments', getNormalizedComments(recordFound.Comments))

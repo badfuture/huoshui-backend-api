@@ -33,36 +33,22 @@ module.exports = {
   },
 
 	create: function(req,res){
-		var data = ActionUtil.parseValues(req);
-    var name = data.name;
-    var author_id = data.author_id;
-    var description = data.description;
-    var coverImage = data.coverImage;
-    var category = data.category;
-    var kelistCreated = null;
-
-    // return if try to create a default kelist
-    if (category === 'default_personal_kelist') {
-      return res.badRequest(ErrorCode.CannotCreateDefaultKelist)
-    }
+		const { name, description, isPublic} = ActionUtil.parseValues(req)
+		const user = req.user
+    let kelistCreated = null;
 
     Kelist.create({
-      name: name,
-      description: description,
-      coverImage: coverImage
+      name,
+      description,
+      isPublic
     }).then((newKelist)=> {
       kelistCreated = newKelist;
-      return User.findOne({where:{id: author_id}})
-      .then((userFound)=> {
-        return userFound.addOwnsKelists(kelistCreated);
-      })
+      user.addOwnsKelists(kelistCreated)
     }).then(()=> {
       return Kelist.findOne({
         where: {id: kelistCreated.id},
-        include: [{model: User, as: 'Author',
-          attributes: {exclude: ['password', 'salt']}
-        }]
-      });
+        include: [{model: User, as: 'Author'}]
+      })
     }).then((results)=> {
       return res.created(results);
     }).catch((err)=> {

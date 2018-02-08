@@ -16,7 +16,7 @@ module.exports = {
   'POST /kelists': {
     model: "kelist",
     controller: "KelistController",
-    action: "find",
+    action: "create",
     isPlural: true,
     swagger: {}
   },

@@ -577,7 +577,7 @@ var seedKelists = function(seedData, job, next) {
     .then((results)=> {
       userFound = results;
       return userFound.getOwnsKelists({
-        where: {category: 'default_personal_kelist'}
+        where: {category: 'default_liked_courses'}
       });
     })
     .then((results)=> {

@@ -8,7 +8,10 @@
 const getIncludeModel = (model, include) => {
   const rels = model.associations
   const rel = rels[include]
-  return rel.target || false
+  if (rel) {
+    return rel.target
+  }
+  return false
 }
 
 /**

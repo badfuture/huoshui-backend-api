@@ -12,9 +12,9 @@ module.exports = {
     },
     category: {
       field: "category",
-      type: Sequelize.ENUM('default_personal_kelist'),
+      type: Sequelize.ENUM('default_liked_courses', 'custom_kelist'),
       allowNull: true,
-      defaultValue: null,
+      defaultValue: 'custom_kelist',
       unique: false,
       comment: "课列类别"
     },
