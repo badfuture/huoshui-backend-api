@@ -22,12 +22,12 @@ module.exports = {
   getScoreRepute: ({ countNetGoodTag }) => {
     return countNetGoodTag
   },
-  getScoreBirdy: ({ meanBirdy, countBird }) => {
+  getScoreBirdy: ({ meanBirdy, countBirdy }) => {
     return getScore({
       targetMean: 3.5,
       actualMean: meanBirdy,
       minReviewCount: 1,
-      reviewCount: countBird
+      reviewCount: countBirdy
     })
   },
   getScoreAttend: ({ meanAttend, countAttend }) => {

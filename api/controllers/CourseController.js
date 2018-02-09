@@ -3,6 +3,7 @@
  *
  * @description :: Server-side logic for managing Course
  */
+const Sequelize = require('sequelize')
 
 module.exports = {
 
@@ -16,8 +17,16 @@ module.exports = {
       distinct: true
     }
 
-    const isPaginateFormat =  ActionUtil.parsePaginate(req);
+    const reviewedOnly = req.param('reviewedOnly')
+    if (reviewedOnly) {
+      queryParams.where = _.extend(queryParams.where, {
+        "$Stat.countReview$": {
+          [Sequelize.Op.gte]: 1,
+        }
+      })
+    }
 
+    const isPaginateFormat =  ActionUtil.parsePaginate(req)
     if (isPaginateFormat) {
       Course.findAndCountAll(queryParams)
       .then(function(recordsFound){

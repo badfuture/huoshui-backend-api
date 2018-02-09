@@ -155,7 +155,7 @@ module.exports = {
   },
 
   parseWhere: function ( req ) {
-    var blacklist = ['limit', 'skip', 'sort', 'populate', 'paginate'];
+    var blacklist = ['limit', 'skip', 'sort', 'populate', 'paginate', 'reviewedOnly'];
     var where = req.allParams().where;
 
     // If `where` parameter is a string, try to interpret it as JSON.
