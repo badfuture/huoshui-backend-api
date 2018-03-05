@@ -232,6 +232,11 @@ module.exports = {
   likeReview: (req, res) => {
     sails.log.debug('UserController: likeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
+
+    if (!userId || !reviewId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
     Promise.all([
       User.findById(userId),
       Review.findById(reviewId),
@@ -241,18 +246,26 @@ module.exports = {
       } else if (!reviewFound) {
         return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
-        userFound.getDislikedReviews({
-          where: { id: reviewId }
-        })
-        .then((dislikedReviews) => {
-          if (dislikedReviews.length != 0) {
+        Promise.all([
+          userFound.getLikedReviews({
+            where: { id: reviewId }
+          }),
+          userFound.getDislikedReviews({
+            where: { id: reviewId }
+          }),
+        ]).then(([likedReviews, dislikedReviews]) => {
+          if (likedReviews.length != 0) {
+            return res.badRequest(ErrorCode.LikeOrDislikeReviewTwice)
+          } else if (dislikedReviews.length != 0) {
             return res.badRequest(ErrorCode.CannotBothLikeAndDislikeReview)
-          } else {
-            userFound.addLikedReviews(reviewFound)
-            .then(() => {
-              return res.ok('review added to user collection: LikedReviews')
-            })
           }
+          reviewFound.increment({'upVote': 1})
+          .then(() => {
+            return userFound.addLikedReviews(reviewFound)
+          })
+          .then(() => {
+            return res.ok('review added to user collection: LikedReviews')
+          })
         })
       }
     })
@@ -261,26 +274,11 @@ module.exports = {
   unlikeReview: (req, res) => {
     sails.log.debug('UserController: unlikeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
-    Promise.all([
-      User.findById(userId),
-      Review.findById(reviewId)
-    ]).then(([userFound, reviewFound]) => {
-      if (!userFound) {
-        return res.badRequest(ErrorCode.UserNotFound)
-      } else if (!reviewFound) {
-        return res.badRequest(ErrorCode.ReviewNotFound)
-      } else {
-        return userFound.removeLikedReviews(reviewFound)
-        .then(() => {
-          return res.ok('review removed from user collection: LikedReviews')
-        })
-      }
-    })
-  },
 
-  dislikeReview: (req, res) => {
-    sails.log.debug('UserController: dislikeReview')
-    const { userId, reviewId } = ActionUtil.parseValues(req)
+    if (!userId || !reviewId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
     Promise.all([
       User.findById(userId),
       Review.findById(reviewId),
@@ -290,18 +288,68 @@ module.exports = {
       } else if (!reviewFound) {
         return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
-        userFound.getLikedReviews({
-          where: { id: reviewId }
+        Promise.all([
+          userFound.getLikedReviews({
+            where: { id: reviewId }
+          }),
+          userFound.getDislikedReviews({
+            where: { id: reviewId }
+          }),
+        ]).then(([likedReviews, dislikedReviews]) => {
+          if (likedReviews.length == 0) {
+            return res.badRequest(ErrorCode.CannotUnlikeOrUndislike)
+          } else if (dislikedReviews.length != 0) {
+            return res.badRequest(ErrorCode.LikeOrDislikeReviewTwice)
+          }
+          reviewFound.decrement({'upVote': 1})
+          .then(() => {
+            return userFound.removeLikedReviews(reviewFound)
+          })
+          .then(() => {
+            return res.ok('review removed from user collection: LikedReviews')
+          })
         })
-        .then((likedReviews) => {
+      }
+    })
+  },
+
+  dislikeReview: (req, res) => {
+    sails.log.debug('UserController: dislikeReview')
+    const { userId, reviewId } = ActionUtil.parseValues(req)
+
+    if (!userId || !reviewId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
+    Promise.all([
+      User.findById(userId),
+      Review.findById(reviewId),
+    ]).then(([userFound, reviewFound]) => {
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!reviewFound) {
+        return res.badRequest(ErrorCode.ReviewNotFound)
+      } else {
+        Promise.all([
+          userFound.getLikedReviews({
+            where: { id: reviewId }
+          }),
+          userFound.getDislikedReviews({
+            where: { id: reviewId }
+          }),
+        ]).then(([likedReviews, dislikedReviews]) => {
           if (likedReviews.length != 0) {
             return res.badRequest(ErrorCode.CannotBothLikeAndDislikeReview)
-          } else {
-            userFound.addLikedReviews(reviewFound)
-            .then(() => {
-              return res.ok('review added to user collection: DislikedReviews')
-            })
+          } else if (dislikedReviews.length != 0) {
+            return res.badRequest(ErrorCode.LikeOrDislikeReviewTwice)
           }
+          reviewFound.increment({'downVote': 1})
+          .then(() => {
+            return userFound.addDislikedReviews(reviewFound)
+          })
+          .then(() => {
+            return res.ok('review added to user collection: DislikedReviews')
+          })
         })
       }
     })
@@ -310,21 +358,42 @@ module.exports = {
   undislikeReview: (req, res) => {
     sails.log.debug('UserController: undislikeReview')
     const { userId, reviewId } = ActionUtil.parseValues(req)
+
+    if (!userId || !reviewId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
     Promise.all([
       User.findById(userId),
-      Review.findById(reviewId)
+      Review.findById(reviewId),
     ]).then(([userFound, reviewFound]) => {
       if (!userFound) {
         return res.badRequest(ErrorCode.UserNotFound)
       } else if (!reviewFound) {
         return res.badRequest(ErrorCode.ReviewNotFound)
       } else {
-        return userFound.removeDislikedReviews(reviewFound)
-        .then(() => {
-          return res.ok('review removed from user collection: DislikedReviews')
+        Promise.all([
+          userFound.getLikedReviews({
+            where: { id: reviewId }
+          }),
+          userFound.getDislikedReviews({
+            where: { id: reviewId }
+          }),
+        ]).then(([likedReviews, dislikedReviews]) => {
+          if (likedReviews.length != 0) {
+            return res.badRequest(ErrorCode.CannotBothLikeAndDislikeReview)
+          } else if (dislikedReviews.length == 0) {
+            return res.badRequest(ErrorCode.CannotUnlikeOrUndislike)
+          }
+          reviewFound.decrement({'downVote': 1})
+          .then(() => {
+            return userFound.removeDislikedReviews(reviewFound)
+          })
+          .then(() => {
+            return res.ok('review removed from user collection: DislikedReviews')
+          })
         })
       }
     })
   },
-
 };

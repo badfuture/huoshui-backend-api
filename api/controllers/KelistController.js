@@ -1,7 +1,7 @@
 /**
  * PositionController
  *
- * @description :: Server-side logic for managing positions
+ * @description :: Server-side logic for managing Kelists
  */
 
 module.exports = {
@@ -33,17 +33,32 @@ module.exports = {
   },
 
 	create: function(req,res){
-		const { name, description, isPublic} = ActionUtil.parseValues(req)
+		const { name, description, isPublic=false } = ActionUtil.parseValues(req)
 		const user = req.user
     let kelistCreated = null;
+
+    // bad request if required params not found
+    if (!name) {
+      return res.badRequest(ErrorCode.KelistRequiredFieldMissing)
+    }
+
+		// randomly assign cover image
+		let coverImage = ''
+		const Domain = require('../constants/domain.js')
+		const OS_URL = Domain.OBJECT_STORAGE
+		const MAX = 5
+		const MIN = 1
+    const img_num = Math.floor(Math.random() * (MAX - MIN)) + MIN
+    coverImage = `${OS_URL}/site/images/pattern/pattern${img_num}.jpg`
 
     Kelist.create({
       name,
       description,
+      coverImage,
       isPublic
     }).then((newKelist)=> {
       kelistCreated = newKelist;
-      user.addOwnsKelists(kelistCreated)
+      return user.addOwnsKelists(kelistCreated)
     }).then(()=> {
       return Kelist.findOne({
         where: {id: kelistCreated.id},
@@ -54,5 +69,26 @@ module.exports = {
     }).catch((err)=> {
       return res.negotiate(err);
     });
+	},
+
+	addToKelist: function(req, res) {
+		const { courseId, briefComment, id } = ActionUtil.parseValues(req)
+		const user = req.user
+
+    // bad request if required params not found
+    if (!courseId) {
+      return res.badRequest(ErrorCode.InvalidOrMissingParams)
+    }
+
+    Kelist.findById(id)
+    .then((result) => {
+      if (!result) {
+        return res.notFound(ErrorCode.NotFound)
+      }
+      return result.addCourses(courseId, { through: { brief_comment: briefComment }})
+    })
+    .then(() => {
+      res.created("Course added to kelist")
+    })
 	}
 };

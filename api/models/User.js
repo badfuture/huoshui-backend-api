@@ -2,11 +2,7 @@
 const url = require('url')
 const domain = require('../constants/domain')
 
-const defaultAvatarIcon = 'default_avatar.jpg'
-const defaultAvatar = url.resolve(domain.OBJECT_STORAGE, defaultAvatarIcon)
-const defaultAvatarSmall = defaultAvatar + '?imageView2/1/w/50/h/50'
-const defaultAvatarLarge = defaultAvatar + '?imageView2/1/w/180/h/180'
-
+const defaultAvatar = 'default_avatar.jpg'
 
 module.exports = {
   attributes: {
@@ -48,14 +44,14 @@ module.exports = {
     },
     avatarSmall: {
       type: Sequelize.VIRTUAL,
-      comment: "头像 (50x50)",
+      comment: "小头像",
       get() {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/50/h/50'
       }
     },
     avatarLarge: {
       type: Sequelize.VIRTUAL,
-      comment: "头像 (180x180)",
+      comment: "大头像",
       get() {
         return url.resolve(domain.OBJECT_STORAGE, this.getDataValue('avatar')) + '?imageView2/1/w/180/h/180'
       }

@@ -5,6 +5,7 @@
 var indexRoute = require('../api/routes/indexRoute');
 var authRoute = require('../api/routes/authRoute');
 var commentRoute = require('../api/routes/commentRoute');
+var kelistRoute = require('../api/routes/kelistRoute');
 var courseRoute = require('../api/routes/courseRoute');
 var deptRoute = require('../api/routes/deptRoute');
 var positionRoute = require('../api/routes/positionRoute');
@@ -36,6 +37,7 @@ module.exports.routes = routes([
   indexRoute,
   authRoute,
   commentRoute,
+  kelistRoute,
   courseRoute,
   deptRoute,
   positionRoute,

@@ -20,4 +20,11 @@ module.exports = {
     isPlural: true,
     swagger: {}
   },
+  'POST /kelists/:id': {
+    model: "kelist",
+    controller: "KelistController",
+    action: "addToKelist",
+    isPlural: false,
+    swagger: {}
+  }
 }

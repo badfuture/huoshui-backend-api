@@ -24,10 +24,30 @@ module.exports = {
     type: "BadRequest",
     message: "The request is invalid. Double check the params used in the request"
   },
+  InvalidOrMissingParams: {
+    code: "InvalidOrMissingParams",
+    type: "BadRequest",
+    message: "The request is invalid. Double check the params used in the request"
+  },
+  CannotUnlikeOrUndislike: {
+    code: "CannotUnlikeOrUndislike",
+    type: "BadRequest",
+    message: "Cannot unlike or undislike a review if it is not liked or disliked in the first place"
+  },
+  LikeOrDislikeReviewTwice: {
+    code: "LikeOrDislikeReviewTwice",
+    type: "BadRequest",
+    message: "The request is invalid. Cannot like or dislike the same review twice"
+  },
   BindSameAccountTypeTwice: {
     code: "BindSameAccountTypeTwice",
     type: "BadRequest",
     message: "Cannot bind multiple social accounts of the same type to a user"
+  },
+  KelistRequiredFieldMissing: {
+    code: "KelistRequiredFieldMissing",
+    type: "BadRequest",
+    message: "name of Kelist is required"
   },
   ReviewRequiredFieldMissing: {
     code: "ReviewRequiredFieldMissing",
