@@ -38,6 +38,45 @@ module.exports = {
     //handled in AuthLocalController.signup
   },
 
+  updateBasic: function(req,res){
+		const {
+      username,
+      email,
+      firstYear,
+      deptId,
+      schoolId = '1'
+    } = req.allParams()
+    const user = req.user
+
+		sails.log.debug(`updating user info for: ${user.id} | username ${user.username}`)
+
+    User.findOne({
+      where: { username }
+    })
+    .then((result) => {
+      if (result && result.id != user.id) {
+        return res.badRequest(ErrorCode.UsernameTaken)
+      }
+    })
+
+    User.findOne({
+      where: { email }
+    })
+    .then((result) => {
+      if (result && result.id != user.id) {
+        return res.badRequest(ErrorCode.EmailTaken)
+      }
+    })
+
+		return user.update({
+			username, email, firstYear,
+      dept_id: deptId, school_id: schoolId
+		})
+    .then(() => {
+			return res.ok("user updated")
+		})
+  },
+
   update: function(req,res){
     var Model = ActionUtil.parseModel(req);
     var pk = ActionUtil.requirePk(req);

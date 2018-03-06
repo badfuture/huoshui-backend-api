@@ -15,6 +15,16 @@ module.exports = {
     isPlural: false,
     swagger: {}
   },
+
+  // update user info
+  'PATCH /user': {
+    model: "user",
+    controller: "UserController",
+    action: "updateBasic",
+    isPlural: false,
+    swagger: {}
+  },
+
   // upload avatar
   'POST /user/avatar': {
     model: "user",

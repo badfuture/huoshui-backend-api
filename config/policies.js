@@ -87,6 +87,7 @@ module.exports.policies = {
   UserController: {
     'find': true,
     'findOne': true,
+    'updateBasic': ['isAuthenticated'],
     'uploadAvatar': ['isAuthenticated'],
     'likeCourse': ['isAuthenticated', 'isOwner'],
     'unlikeCourse': ['isAuthenticated', 'isOwner'],
