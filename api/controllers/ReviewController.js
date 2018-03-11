@@ -148,7 +148,7 @@ module.exports = {
           }).then(() => {
             return newReview.setTags(tagsArr)
           }).then(() => {
-            res.created()
+            res.created(newReview)
           }).catch((err) => {
             return res.serverError(err)
           })

@@ -66,5 +66,11 @@ module.exports = {
         }
       }
     }
+  },
+  'GET /random_prof': {
+    model: "prof",
+    controller: "ProfController",
+    action: "findOneRandom",
+    swagger: {},
   }
 }

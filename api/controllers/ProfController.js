@@ -3,6 +3,8 @@
  *
  * @description :: Server-side logic for managing Prof
  */
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 
 module.exports = {
   find: function(req,res){
@@ -50,5 +52,24 @@ module.exports = {
     }).catch(function(err){
       return res.serverError(err);
     });
+  },
+
+  findOneRandom: function(req, res) {
+    Prof.findOne({
+      include: ActionUtil.parsePopulate(req),
+      where: {
+        motto: {
+          [Op.or]: {
+            [Op.ne]: null,
+            [Op.ne]: "",
+          }
+        }
+      },
+      order: sequelize.random()
+    }).then((prof) => {
+      return res.ok(prof)
+    }).catch(function(err){
+      return res.serverError(err)
+    })
   },
 };

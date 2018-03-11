@@ -1,7 +1,6 @@
 "use strict";
 const url = require('url')
 const domain = require('../constants/domain')
-
 const defaultAvatar = 'default_avatar.jpg'
 
 module.exports = {
@@ -147,6 +146,14 @@ module.exports = {
     freezeTableName: true,
     classMethods: {},
     instanceMethods: {},
-    hooks: {}
+    hooks: {
+      beforeCreate: (user, options) => {
+        const MAX = 5
+        const MIN = 1
+        const img_num = Math.floor(Math.random() * (MAX - MIN)) + MIN
+        const img = `site/images/default_avatar/${img_num}.png`
+        user.avatar = img
+      },
+    }
   }
 };

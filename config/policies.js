@@ -54,6 +54,7 @@ module.exports.policies = {
   ProfController: {
     'find': true,
     'findOne': true,
+    'findOneRandom': true,
     '*': false,
   },
   ReviewController: {
