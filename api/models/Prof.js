@@ -1,4 +1,6 @@
 "use strict";
+const url = require('url')
+const domain = require('../constants/domain')
 const PROF_HOME = "http://202.115.71.132/servlet/TeacherHomepageAction?TeacherID="
 
 module.exports = {
@@ -30,6 +32,20 @@ module.exports = {
       exampleValue: "男",
       unique: false,
       comment: "性别"
+    },
+    avatar: {
+      type: Sequelize.VIRTUAL,
+      comment: "头像",
+      get() {
+        const gender = this.getDataValue('gender')
+        let img = 'site/images/prof_avatar/male_2.png'
+        if (gender == '男') {
+          img = 'site/images/prof_avatar/male_1.png'
+        } else if (gender == '女') {
+          img = 'site/images/prof_avatar/female_1.png'
+        }
+        return url.resolve(domain.OBJECT_STORAGE, img)
+      }
     },
     birth: {
       field: "birth",
