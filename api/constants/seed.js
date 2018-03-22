@@ -12,7 +12,7 @@ module.exports = {
   file_school: "school.json",
   file_tag: "tag.json",
   file_role: "role.json",
-  file_prof: "prof.csv",
+  file_prof: "prof.xls",
 
   //leancloud Data
   file_user: "_User.json",

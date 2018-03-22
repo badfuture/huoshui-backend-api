@@ -13,6 +13,12 @@ module.exports = {
     isPlural: false,
     swagger: {}
   },
+  'PATCH /kelists/:id': {
+    model: "kelist",
+    controller: "KelistController",
+    action: "updateKelist",
+    swagger: {}
+  },
   'POST /kelists': {
     model: "kelist",
     controller: "KelistController",

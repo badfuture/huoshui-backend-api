@@ -87,6 +87,16 @@ module.exports = {
     paranoid: false,
     classMethods: {},
     instanceMethods: {},
-    hooks: {}
+    hooks: {
+      beforeCreate: (obj, options) => {
+        // randomly assign cover image
+    		let coverImage = ''
+    		const OS_URL = require('../constants/domain.js').OBJECT_STORAGE
+    		const MAX = 6
+    		const MIN = 1
+        const img_num = Math.floor(Math.random() * (MAX - MIN)) + MIN
+        obj.coverImage = `${OS_URL}/site/images/pattern/pattern${img_num}.jpg`
+      },
+    }
   }
 };

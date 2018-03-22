@@ -147,12 +147,12 @@ module.exports = {
     classMethods: {},
     instanceMethods: {},
     hooks: {
-      beforeCreate: (user, options) => {
+      beforeCreate: (obj, options) => {
         const MAX = 5
         const MIN = 1
         const img_num = Math.floor(Math.random() * (MAX - MIN)) + MIN
         const img = `site/images/default_avatar/${img_num}.png`
-        user.avatar = img
+        obj.avatar = img
       },
     }
   }

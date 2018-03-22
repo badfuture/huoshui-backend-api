@@ -24,6 +24,11 @@ module.exports = {
     type: "BadRequest",
     message: "The request is invalid. Double check the params used in the request"
   },
+  NameTaken: {
+    code: "NameTaken",
+    type: "BadRequest",
+    message: "The request is invalid. Name is already taken"
+  },
   InvalidOrMissingParams: {
     code: "InvalidOrMissingParams",
     type: "BadRequest",
@@ -48,6 +53,11 @@ module.exports = {
     code: "KelistRequiredFieldMissing",
     type: "BadRequest",
     message: "name of Kelist is required"
+  },
+  CannotModifyDefaultKelist: {
+    code: "CannotModifyDefaultKelist",
+    type: "BadRequest",
+    message: "cannot modify default kelist. You can only modify custom kelist user created"
   },
   ReviewRequiredFieldMissing: {
     code: "ReviewRequiredFieldMissing",

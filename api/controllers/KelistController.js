@@ -32,7 +32,22 @@ module.exports = {
     });
   },
 
-	create: function(req,res){
+  updateKelist: async function(req, res) {
+		const { id, name, description, isPublic } = ActionUtil.parseValues(req)
+    let kelist = await Kelist.findById(id)
+
+    // return if default kelist
+    if (kelist.category == 'default_liked_courses') {
+			return res.badRequest(ErrorCode.CannotModifyDefaultKelist)
+		}
+
+		await kelist.update({
+			name, description, isPublic
+		})
+		return res.ok("Kelist updated")
+  },
+
+	create: async function(req,res){
 		const { name, description, isPublic=false } = ActionUtil.parseValues(req)
 		const user = req.user
     let kelistCreated = null;
@@ -41,34 +56,16 @@ module.exports = {
     if (!name) {
       return res.badRequest(ErrorCode.KelistRequiredFieldMissing)
     }
-
-		// randomly assign cover image
-		let coverImage = ''
-		const Domain = require('../constants/domain.js')
-		const OS_URL = Domain.OBJECT_STORAGE
-		const MAX = 5
-		const MIN = 1
-    const img_num = Math.floor(Math.random() * (MAX - MIN)) + MIN
-    coverImage = `${OS_URL}/site/images/pattern/pattern${img_num}.jpg`
-
-    Kelist.create({
+    kelistCreated = await Kelist.create({
       name,
       description,
-      coverImage,
       isPublic
-    }).then((newKelist)=> {
-      kelistCreated = newKelist;
-      return user.addOwnsKelists(kelistCreated)
-    }).then(()=> {
-      return Kelist.findOne({
-        where: {id: kelistCreated.id},
-        include: [{model: User, as: 'Author'}]
-      })
-    }).then((results)=> {
-      return res.created(results);
-    }).catch((err)=> {
-      return res.negotiate(err);
-    });
+    })
+    await user.addOwnsKelists(kelistCreated)
+    await kelistCreated.reload({
+      include: [{model: User, as: 'Author'}]
+    })
+    return res.created(kelistCreated)
 	},
 
 	addToKelist: function(req, res) {

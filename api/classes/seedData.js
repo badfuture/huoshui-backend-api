@@ -1,6 +1,6 @@
 const fs = require("fs")
 const path = require('path')
-const csv_parse = require('csv-parse/lib/sync')
+
 const {
   path_common,
   path_full,
@@ -69,12 +69,27 @@ class seedData {
   }
 
   _readCSV(filepath) {
-    const fileData= fs.readFileSync(filepath)
-    let parsedData =  csv_parse(fileData, {columns: true}) // columns in the first line will be used as keys
+    // parse csv format
+    //
+    // const csv_parse = require('csv-parse/lib/sync')
+    // const fileData= fs.readFileSync(filepath)
+    // let parsedData =  csv_parse(fileData, {columns: true}) // columns in the first line will be used as keys
+    // parsedData.splice(0, 2) // remove two addtional lines of header
+    // return parsedData
+    //
+
+    // parse xlsx format
+    const XLSX = require('xlsx');
+    const workbook = XLSX.readFile(filepath);
+    const sheet_name_list = workbook.SheetNames;
+    let parsedData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
     parsedData.splice(0, 2) // remove two addtional lines of header
+    console.log(parsedData)
     return parsedData
   }
 
 }
+
+
 
 module.exports = seedData
