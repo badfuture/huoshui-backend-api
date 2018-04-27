@@ -68,24 +68,61 @@ module.exports = {
     return res.created(kelistCreated)
 	},
 
-	addToKelist: function(req, res) {
+	addToKelist: async function(req, res) {
 		const { courseId, briefComment, id } = ActionUtil.parseValues(req)
 		const user = req.user
 
-    // bad request if required params not found
     if (!courseId) {
       return res.badRequest(ErrorCode.InvalidOrMissingParams)
     }
 
-    Kelist.findById(id)
-    .then((result) => {
-      if (!result) {
-        return res.notFound(ErrorCode.NotFound)
+		let kelist
+		kelist = await Kelist.findById(id)
+		if (!kelist) {
+			res.notFound(ErrorCode.NotFound)
+		} else {
+      let coursesFound = null
+      coursesFound = await kelist.getCourses({where: { id: courseId}})
+      if (coursesFound.length < 1) {
+        await kelist.addCourses(courseId, { through: { brief_comment: briefComment }})
+        return res.created("Course added to kelist")
+      } else {
+        return res.badRequest(ErrorCode.KelistCourseAlreadyAdded)
       }
-      return result.addCourses(courseId, { through: { brief_comment: briefComment }})
-    })
-    .then(() => {
-      res.created("Course added to kelist")
-    })
-	}
-};
+		}
+	},
+
+  removeFromKelist: async function(req, res) {
+		const { courseId, id } = ActionUtil.parseValues(req)
+		const user = req.user
+
+    if (!courseId) {
+      return res.badRequest(ErrorCode.InvalidOrMissingParams)
+    }
+
+    let kelist = null
+    kelist = await Kelist.findById(id)
+    if (kelist) {
+      await kelist.removeCourses(courseId)
+      return res.created("Course added to kelist")
+    } else {
+      return res.notFound(ErrorCode.NotFound)
+    }
+  },
+
+	deleteKelist: async function(req, res) {
+		const { id } = ActionUtil.parseValues(req)
+		const user = req.user
+
+		let result
+    try {
+      result = await Kelist.destroy({
+				where: { id }
+			})
+    } catch(e) {
+			sails.log.error(e)
+      return res.badRequest(ErrorCode.DeleteFailed)
+    }
+    return res.ok("Kelist deleted successfully!")
+	},
+}

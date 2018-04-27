@@ -74,6 +74,7 @@ module.exports.policies = {
     'findOne': true,
     'addToKelist': ['isAuthenticated'],
     'updateKelist': ['isAuthenticated'],
+    'deleteKelist': ['isAuthenticated'],
     '*': false,
   },
   SeedController: {

@@ -24,6 +24,16 @@ module.exports = {
     type: "BadRequest",
     message: "The request is invalid. Double check the params used in the request"
   },
+  DeleteFailed: {
+    code: "DeleteFailed",
+    type: "BadRequest",
+    message: "Delete failed"
+  },
+  KelistCourseAlreadyAdded: {
+    code: "KelistCourseAlreadyAdded",
+    type: "BadRequest",
+    message: "Course already added to kelist"
+  },
   NameTaken: {
     code: "NameTaken",
     type: "BadRequest",

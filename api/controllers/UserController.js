@@ -188,6 +188,12 @@ module.exports = {
     })
   },
 
+  collectKelist: (req, res) => {
+
+
+  },
+
+
   likeCourse: (req, res) => {
     sails.log.debug("UserController likeCourse")
     const { userId, courseId } = ActionUtil.parseValues(req)

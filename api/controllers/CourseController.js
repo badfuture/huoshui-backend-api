@@ -4,9 +4,9 @@
  * @description :: Server-side logic for managing Course
  */
 const Sequelize = require('sequelize')
+const Op = Sequelize.Op
 
 module.exports = {
-
   find: function(req,res){
     const queryParams = {
       where: ActionUtil.parseWhere(req),

@@ -84,7 +84,6 @@ class seedData {
     const sheet_name_list = workbook.SheetNames;
     let parsedData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]])
     parsedData.splice(0, 2) // remove two addtional lines of header
-    console.log(parsedData)
     return parsedData
   }
 
