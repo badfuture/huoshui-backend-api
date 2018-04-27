@@ -139,6 +139,11 @@ module.exports = {
     type: "NotFound",
     message: "The course is not found"
   },
+  KelistNotFound: {
+    code: "KelistNotFound",
+    type: "NotFound",
+    message: "The kelist is not found"
+  },
   BlacklistTokenNotFound: {
     code: "BlacklistTokenNotFound",
     type: "NotFound",

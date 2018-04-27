@@ -441,4 +441,52 @@ module.exports = {
       }
     })
   },
+
+	collectKelist: function(req, res) {
+    sails.log.debug('UserController: add to CollectedKelists')
+    const { userId, kelistId } = ActionUtil.parseValues(req)
+
+    if (!userId || !kelistId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
+    Promise.all([
+      User.findById(userId),
+      Kelist.findById(kelistId),
+    ]).then(([userFound, kelistFound]) => {
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!kelistFound) {
+        return res.badRequest(ErrorCode.KelistNotFound)
+      } else {
+        userFound.addCollectedKelists(kelistFound).then(() => {
+          return res.ok('kelist added to user collection')
+        })
+      }
+    })
+	},
+
+	uncollectKelist: async function(req, res) {
+    sails.log.debug('UserController: remove from CollectedKelists')
+    const { userId, kelistId } = ActionUtil.parseValues(req)
+
+    if (!userId || !kelistId) {
+      res.badRequest(ErrorCode.BadRequest)
+    }
+
+    Promise.all([
+      User.findById(userId),
+      Kelist.findById(kelistId),
+    ]).then(([userFound, kelistFound]) => {
+      if (!userFound) {
+        return res.badRequest(ErrorCode.UserNotFound)
+      } else if (!kelistFound) {
+        return res.badRequest(ErrorCode.KelistNotFound)
+      } else {
+        userFound.removeCollectedKelists(kelistFound).then(() => {
+          return res.ok('kelist removed from user collection')
+        })
+      }
+    })
+	},
 };

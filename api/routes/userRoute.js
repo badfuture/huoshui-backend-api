@@ -80,4 +80,16 @@ module.exports = {
     controller: "UserController",
     action: "undislikeReview",
   },
+
+  // collect and uncollect kelist
+  'PUT /users/:userId/collected_kelists/:kelistId': {
+    model: "user",
+    controller: "UserController",
+    action: "collectKelist",
+  },
+  'DELETE /users/:userId/collected_kelists/:kelistId': {
+    model: "user",
+    controller: "UserController",
+    action: "uncollectKelist",
+  },
 }

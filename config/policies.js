@@ -101,6 +101,8 @@ module.exports.policies = {
     'unlikeReview': ['isAuthenticated','isOwner'],
     'dislikeReview': ['isAuthenticated','isOwner'],
     'undislikeReview': ['isAuthenticated','isOwner'],
+    'collectKelist': ['isAuthenticated'],
+    'uncollectKelist': ['isAuthenticated'],
     '*': false,
   },
   SearchController: {
