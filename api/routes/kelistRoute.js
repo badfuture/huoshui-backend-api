@@ -39,5 +39,12 @@ module.exports = {
     action: "deleteKelist",
     isPlural: false,
     swagger: {}
+  },
+  'DELETE /kelists/:id/courses/:courseId': {
+    model: "kelist",
+    controller: "KelistController",
+    action: "removeFromKelist",
+    isPlural: false,
+    swagger: {}
   }
 }

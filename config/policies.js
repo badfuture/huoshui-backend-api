@@ -75,6 +75,7 @@ module.exports.policies = {
     'addToKelist': ['isAuthenticated'],
     'updateKelist': ['isAuthenticated'],
     'deleteKelist': ['isAuthenticated'],
+    'removeFromKelist': ['isAuthenticated'],
     '*': false,
   },
   SeedController: {

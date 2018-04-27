@@ -104,7 +104,7 @@ module.exports = {
     kelist = await Kelist.findById(id)
     if (kelist) {
       await kelist.removeCourses(courseId)
-      return res.created("Course added to kelist")
+      return res.ok("Course removed from kelist")
     } else {
       return res.notFound(ErrorCode.NotFound)
     }
